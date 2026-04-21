@@ -93,6 +93,23 @@ BACKOFF_BASE = 2.0
 # should still fail loudly instead of silently eating disk/RAM.
 MAX_PDF_CONVERT_MB = 800
 
+# PDFs above this size use pymupdf as the PRIMARY converter rather than
+# markitdown. Rationale: markitdown delegates to pdfminer.six, which
+# materializes the per-page DOM (LTTextBox/LTChar trees) in-memory. On
+# image-heavy, figure-rich PDFs the tree grows superlinearly with page
+# count and the process balloons to 10s of GB of RSS (statug.pdf at
+# 608 MB / 928 pages pushes pdfminer past 28 GB RSS on an M-series mac
+# and takes 7+ minutes even when it succeeds). pymupdf (fitz) is
+# streaming — it extracts ``page.get_text("text")`` per page and lets
+# each page's structures go out of scope immediately, so memory stays
+# flat (~1 GB RSS) and wall time is ~1s per 100 pages. Above the
+# threshold the quality/fidelity loss (no table-cell unwinding, no
+# heading inference) is worth it because the alternative is OOM.
+# Below the threshold markitdown is still preferred for richer
+# structure. 400 MB picks up statug and any future docset of similar
+# scale without affecting the current eight's small-to-medium PDFs.
+SIZE_THRESHOLD_FOR_STREAMING = 400 * 1024 * 1024
+
 # --- Minimum success bar ----------------------------------------------------
 
 MIN_SUCCESSFUL_DOCSETS = 5
@@ -423,31 +440,78 @@ def _convert_via_pymupdf(pdf_path: Path) -> tuple[str, int]:
     return "\n\n".join(chunks), page_count
 
 
+def _run_markitdown(
+    pdf_path: Path, md_path: Path
+) -> tuple[bool, str | None, int | None]:
+    """Try markitdown; write output on success. Returns (ok, err, page_count)."""
+    try:
+        text, page_count = _convert_via_markitdown(pdf_path, md_path)
+    except Exception as exc:  # noqa: BLE001 - markitdown raises bare Exception
+        return False, f"markitdown: {exc}", None
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(text, encoding="utf-8")
+    log.info(
+        "converted %s -> %s (%d chars, markitdown)",
+        pdf_path.name,
+        md_path.name,
+        len(text),
+    )
+    return True, None, page_count
+
+
+def _run_pymupdf(
+    pdf_path: Path, md_path: Path
+) -> tuple[bool, str | None, int | None]:
+    """Try pymupdf; write output on success. Returns (ok, err, page_count)."""
+    try:
+        text, page_count = _convert_via_pymupdf(pdf_path)
+    except Exception as exc:  # noqa: BLE001 - pymupdf may raise FileDataError
+        return False, f"pymupdf: {exc}", None
+    if not text.strip():
+        return False, "pymupdf: empty output", None
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(text, encoding="utf-8")
+    log.info(
+        "converted %s -> %s (%d chars, pymupdf)",
+        pdf_path.name,
+        md_path.name,
+        len(text),
+    )
+    return True, None, page_count
+
+
 def _convert_pdf(
     pdf_path: Path,
     md_path: Path,
     *,
     cached_converter: Literal["markitdown", "pymupdf"] | None = None,
+    cached_page_count: int | None = None,
 ) -> tuple[bool, str | None, int | None, Literal["markitdown", "pymupdf"]]:
     """Convert PDF -> markdown. Returns (ok, err, page_count, converter).
 
-    markitdown is the primary converter (higher fidelity on small
-    docs). If it raises (typically OOM on image-heavy PDFs), fall
-    back to pymupdf, which streams text per-page with flat memory.
+    Backend selection is size-driven:
+      - PDFs larger than ``SIZE_THRESHOLD_FOR_STREAMING`` go to pymupdf
+        first (streaming, flat memory, handles 600+ MB docs in ~60s).
+      - Smaller PDFs go to markitdown first (higher structural fidelity
+        — heading inference, table unwinding).
+    The non-primary backend remains available as fallback if primary
+    errors out.
 
-    ``cached_converter`` (prior-manifest lookup) preserves which
-    backend produced an already-cached .md so re-runs are idempotent.
+    ``cached_converter`` / ``cached_page_count`` (prior-manifest
+    lookup) preserve the original backend attribution and page count
+    on cache hits so re-runs are byte-identical.
     """
     if md_path.exists() and md_path.stat().st_size > 0:
         log.info("cache hit md:  %s", md_path.name)
-        # On cache hit we can't re-derive the backend from the file
-        # alone. Prefer the prior manifest's recorded value so re-runs
-        # stay byte-identical; fall back to "markitdown" only when
-        # there's no prior manifest (first ever run reusing an
-        # externally-placed .md — unlikely but handled).
-        return True, None, None, cached_converter or "markitdown"
+        # On cache hit we can't re-derive the backend or page count
+        # from the file alone. Prefer the prior manifest's recorded
+        # values so re-runs stay byte-identical; fall back to
+        # "markitdown" only when there's no prior manifest (first ever
+        # run reusing an externally-placed .md — unlikely but handled).
+        return True, None, cached_page_count, cached_converter or "markitdown"
 
-    pdf_mb = pdf_path.stat().st_size / (1024 * 1024)
+    pdf_size_bytes = pdf_path.stat().st_size
+    pdf_mb = pdf_size_bytes / (1024 * 1024)
     if pdf_mb > MAX_PDF_CONVERT_MB:
         msg = (
             f"pdf {pdf_mb:.0f} MB exceeds convert cap "
@@ -456,43 +520,55 @@ def _convert_pdf(
         log.warning("skip convert %s: %s", pdf_path.name, msg)
         return False, msg, None, "markitdown"
 
-    # Primary: markitdown.
-    try:
-        text, page_count = _convert_via_markitdown(pdf_path, md_path)
-        md_path.parent.mkdir(parents=True, exist_ok=True)
-        md_path.write_text(text, encoding="utf-8")
-        log.info(
-            "converted %s -> %s (%d chars, markitdown)",
-            pdf_path.name,
-            md_path.name,
-            len(text),
-        )
-        return True, None, page_count, "markitdown"
-    except Exception as exc:  # noqa: BLE001 - markitdown raises bare Exception
-        log.warning(
-            "markitdown failed on %s: %s; falling back to pymupdf",
-            pdf_path.name,
-            exc,
-        )
-        markitdown_err = f"markitdown: {exc}"
+    # Size-driven primary selection. Above the threshold pdfminer's DOM
+    # materialization is the dominant cost (and the most common way
+    # this pipeline dies); below it, markitdown's structural fidelity
+    # is worth the modest memory overhead.
+    if pdf_size_bytes > SIZE_THRESHOLD_FOR_STREAMING:
+        primary: Literal["markitdown", "pymupdf"] = "pymupdf"
+        fallback: Literal["markitdown", "pymupdf"] = "markitdown"
+    else:
+        primary = "markitdown"
+        fallback = "pymupdf"
+    log.info(
+        "backend selection for %s: %.0f MB -> primary=%s, fallback=%s",
+        pdf_path.name,
+        pdf_mb,
+        primary,
+        fallback,
+    )
 
-    # Fallback: pymupdf.
-    try:
-        text, page_count = _convert_via_pymupdf(pdf_path)
-        if not text.strip():
-            return False, f"{markitdown_err}; pymupdf: empty output", None, "pymupdf"
-        md_path.parent.mkdir(parents=True, exist_ok=True)
-        md_path.write_text(text, encoding="utf-8")
-        log.info(
-            "converted %s -> %s (%d chars, pymupdf)",
-            pdf_path.name,
-            md_path.name,
-            len(text),
-        )
-        return True, None, page_count, "pymupdf"
-    except Exception as exc:  # noqa: BLE001 - pymupdf may raise FileDataError
-        log.exception("pymupdf fallback failed on %s: %s", pdf_path.name, exc)
-        return False, f"{markitdown_err}; pymupdf: {exc}", None, "pymupdf"
+    runners = {
+        "markitdown": _run_markitdown,
+        "pymupdf": _run_pymupdf,
+    }
+
+    # Primary attempt.
+    ok, primary_err, page_count = runners[primary](pdf_path, md_path)
+    if ok:
+        return True, None, page_count, primary
+
+    log.warning(
+        "%s (primary) failed on %s: %s; falling back to %s",
+        primary,
+        pdf_path.name,
+        primary_err,
+        fallback,
+    )
+
+    # Fallback attempt.
+    ok, fallback_err, page_count = runners[fallback](pdf_path, md_path)
+    if ok:
+        return True, None, page_count, fallback
+
+    log.exception(
+        "%s fallback also failed on %s: %s",
+        fallback,
+        pdf_path.name,
+        fallback_err,
+    )
+    combined = f"{primary_err}; {fallback_err}"
+    return False, combined, None, fallback
 
 
 # --- Orchestration ----------------------------------------------------------
@@ -519,6 +595,28 @@ def _load_prior_converters() -> dict[str, Literal["markitdown", "pymupdf"]]:
     return out
 
 
+def _load_prior_page_counts() -> dict[str, int]:
+    """Load {name: page_count} from the prior manifest, if any.
+
+    markitdown doesn't reliably expose page counts, so cache-hit entries
+    historically carried ``page_count=null``. pymupdf does surface a
+    real count — we preserve it across re-runs for idempotency.
+    """
+    if not OUT_FILE.exists():
+        return {}
+    try:
+        prior = json.loads(OUT_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: dict[str, int] = {}
+    for doc in prior.get("docsets", []) or []:
+        name = doc.get("name")
+        pc = doc.get("page_count")
+        if isinstance(name, str) and isinstance(pc, int) and pc > 0:
+            out[name] = pc
+    return out
+
+
 def run() -> int:
     _configure_logging()
 
@@ -526,6 +624,7 @@ def run() -> int:
     EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
 
     prior_converters = _load_prior_converters()
+    prior_page_counts = _load_prior_page_counts()
 
     headers = {
         "User-Agent": USER_AGENT,
@@ -577,6 +676,7 @@ def run() -> int:
                 pdf_path,
                 md_path,
                 cached_converter=prior_converters.get(name),
+                cached_page_count=prior_page_counts.get(name),
             )
 
             assert fetch.source is not None  # narrowing for type-checkers
