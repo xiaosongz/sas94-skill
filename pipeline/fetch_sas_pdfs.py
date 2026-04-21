@@ -295,6 +295,7 @@ def _fetch_pdf(
     dest: Path,
     *,
     first_fetch_this_run: bool,
+    prior_entry: dict | None = None,
 ) -> FetchResult:
     """Acquire PDF for docset `name` into `dest`.
 
@@ -302,19 +303,41 @@ def _fetch_pdf(
       1. Cache-hit: if dest already exists non-empty, reuse. No network.
       2. Local-copy: if ~/Downloads/<name>.pdf exists, copy. No network.
       3. Network: iterate VERSION_FALLBACKS, 404 -> next version.
+
+    ``prior_entry`` (from the previous manifest, if any) is consulted on
+    cache hits to pin the recorded url and source. Without it, a re-run
+    after a fallback-version fetch (9.4_3.5 or v_001) would silently
+    revert the url to the 9.4_3.4 template, and a local_copy entry
+    would flip to "network" if ~/Downloads/*.pdf is deleted between
+    runs.
     """
+    prior = prior_entry or {}
     if dest.exists() and dest.stat().st_size > 0:
         # Cache hit. We can't tell after-the-fact whether the original
-        # acquisition was network or local_copy, so we default to
-        # reporting the cached entry as "network" UNLESS the user still
-        # has a matching ~/Downloads file AND the sha matches — we
-        # conservatively just keep "network" (the prior manifest carries
-        # the ground truth for a sophisticated diff). Simpler: re-detect
-        # via Downloads presence to stay consistent across re-runs.
-        if name in LOCAL_COPY_CANDIDATES:
+        # acquisition was network or local_copy from the cached bytes
+        # alone. Prefer the prior manifest's recorded source + url so
+        # re-runs stay byte-identical even if ~/Downloads/*.pdf is
+        # deleted or the original fetch used a fallback version.
+        prior_source = prior.get("source")
+        prior_url = prior.get("url")
+        if prior_source == "local_copy":
+            # Pin the recorded source to "local_copy" from prior run,
+            # even if the Downloads file is now gone — the on-disk
+            # PDF + sha are stable so the entry remains truthful.
+            log.info("cache hit pdf (local_copy, pinned): %s", dest.name)
+            src = DOWNLOADS_DIR / f"{name}.pdf"
+            return FetchResult(
+                ok=True,
+                source="local_copy",
+                url=prior_url if isinstance(prior_url, str) and prior_url else str(src),
+                http_status=None,
+                error=None,
+                did_network=False,
+            )
+        if name in LOCAL_COPY_CANDIDATES and prior_source is None:
+            # No prior manifest: fall back to live Downloads detection.
             src = DOWNLOADS_DIR / f"{name}.pdf"
             if src.exists() and src.stat().st_size > 0:
-                # Keep label stable: this docset is served by local copy.
                 log.info("cache hit pdf (local_copy): %s", dest.name)
                 return FetchResult(
                     ok=True,
@@ -325,14 +348,19 @@ def _fetch_pdf(
                     did_network=False,
                 )
         log.info("cache hit pdf: %s", dest.name)
-        # The version/URL recorded for this cached PDF: we pick the
-        # first fallback we'd try. This only matters if the Downloads
-        # copy is gone AND the cache is a network one — idempotency is
-        # preserved because dest + sha stay identical.
+        # Pin url to the prior manifest's recorded URL if present
+        # (protects against fallback-version drift: original fetch may
+        # have succeeded on 9.4_3.5 or v_001, not the first fallback).
+        # Otherwise default to the first fallback template.
+        url = (
+            prior_url
+            if isinstance(prior_url, str) and prior_url
+            else URL_TEMPLATE.format(version=VERSION_FALLBACKS[0], name=name)
+        )
         return FetchResult(
             ok=True,
             source="network",
-            url=URL_TEMPLATE.format(version=VERSION_FALLBACKS[0], name=name),
+            url=url,
             http_status=200,
             error=None,
             did_network=False,
@@ -400,9 +428,7 @@ def _fetch_pdf(
 # --- Convert ----------------------------------------------------------------
 
 
-def _convert_via_markitdown(
-    pdf_path: Path, md_path: Path
-) -> tuple[str, int | None]:
+def _convert_via_markitdown(pdf_path: Path) -> tuple[str, int | None]:
     """Convert via markitdown. Returns (text, page_count). Raises on failure."""
     from markitdown import MarkItDown
 
@@ -445,8 +471,9 @@ def _run_markitdown(
 ) -> tuple[bool, str | None, int | None]:
     """Try markitdown; write output on success. Returns (ok, err, page_count)."""
     try:
-        text, page_count = _convert_via_markitdown(pdf_path, md_path)
+        text, page_count = _convert_via_markitdown(pdf_path)
     except Exception as exc:  # noqa: BLE001 - markitdown raises bare Exception
+        log.exception("markitdown failed on %s: %s", pdf_path.name, exc)
         return False, f"markitdown: {exc}", None
     md_path.parent.mkdir(parents=True, exist_ok=True)
     md_path.write_text(text, encoding="utf-8")
@@ -466,6 +493,7 @@ def _run_pymupdf(
     try:
         text, page_count = _convert_via_pymupdf(pdf_path)
     except Exception as exc:  # noqa: BLE001 - pymupdf may raise FileDataError
+        log.exception("pymupdf failed on %s: %s", pdf_path.name, exc)
         return False, f"pymupdf: {exc}", None
     if not text.strip():
         return False, "pymupdf: empty output", None
@@ -574,11 +602,13 @@ def _convert_pdf(
 # --- Orchestration ----------------------------------------------------------
 
 
-def _load_prior_converters() -> dict[str, Literal["markitdown", "pymupdf"]]:
-    """Load {name: converter} from the prior manifest, if any.
+def _load_prior_manifest_entries() -> dict[str, dict]:
+    """Read prior manifest. Returns {name: {"converter", "page_count", "url", "source"}}.
 
-    Lets cache-hit runs preserve the original converter attribution so
-    the manifest stays byte-identical across re-runs.
+    Empty dict if no prior manifest. Never raises — missing fields
+    default sensibly. One parse pass, shared across cache-hit
+    preservation for converter / page_count (manifest idempotency) and
+    url / source (fallback-version + local-copy drift protection).
     """
     if not OUT_FILE.exists():
         return {}
@@ -586,34 +616,25 @@ def _load_prior_converters() -> dict[str, Literal["markitdown", "pymupdf"]]:
         prior = json.loads(OUT_FILE.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
-    out: dict[str, Literal["markitdown", "pymupdf"]] = {}
+    out: dict[str, dict] = {}
     for doc in prior.get("docsets", []) or []:
         name = doc.get("name")
+        if not isinstance(name, str):
+            continue
+        entry: dict = {}
         conv = doc.get("converter")
-        if isinstance(name, str) and conv in ("markitdown", "pymupdf"):
-            out[name] = conv
-    return out
-
-
-def _load_prior_page_counts() -> dict[str, int]:
-    """Load {name: page_count} from the prior manifest, if any.
-
-    markitdown doesn't reliably expose page counts, so cache-hit entries
-    historically carried ``page_count=null``. pymupdf does surface a
-    real count — we preserve it across re-runs for idempotency.
-    """
-    if not OUT_FILE.exists():
-        return {}
-    try:
-        prior = json.loads(OUT_FILE.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
-    out: dict[str, int] = {}
-    for doc in prior.get("docsets", []) or []:
-        name = doc.get("name")
+        if conv in ("markitdown", "pymupdf"):
+            entry["converter"] = conv
         pc = doc.get("page_count")
-        if isinstance(name, str) and isinstance(pc, int) and pc > 0:
-            out[name] = pc
+        if isinstance(pc, int) and pc > 0:
+            entry["page_count"] = pc
+        url = doc.get("url")
+        if isinstance(url, str) and url:
+            entry["url"] = url
+        source = doc.get("source")
+        if source in ("network", "local_copy"):
+            entry["source"] = source
+        out[name] = entry
     return out
 
 
@@ -623,8 +644,7 @@ def run() -> int:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
 
-    prior_converters = _load_prior_converters()
-    prior_page_counts = _load_prior_page_counts()
+    prior_entries = _load_prior_manifest_entries()
 
     headers = {
         "User-Agent": USER_AGENT,
@@ -644,11 +664,13 @@ def run() -> int:
             pdf_path = CACHE_DIR / f"{name}.pdf"
             md_path = CACHE_DIR / f"{name}.md"
 
+            prior_entry = prior_entries.get(name)
             fetch = _fetch_pdf(
                 client,
                 name,
                 pdf_path,
                 first_fetch_this_run=(network_fetches_done == 0),
+                prior_entry=prior_entry,
             )
             if fetch.did_network:
                 network_fetches_done += 1
@@ -672,11 +694,13 @@ def run() -> int:
 
             sha = _sha256_file(pdf_path)
 
+            prior_converter = (prior_entry or {}).get("converter")
+            prior_page_count = (prior_entry or {}).get("page_count")
             conv_ok, conv_err, page_count, converter = _convert_pdf(
                 pdf_path,
                 md_path,
-                cached_converter=prior_converters.get(name),
-                cached_page_count=prior_page_counts.get(name),
+                cached_converter=prior_converter,
+                cached_page_count=prior_page_count,
             )
 
             assert fetch.source is not None  # narrowing for type-checkers
