@@ -1,0 +1,34 @@
+name: validate-sources
+
+# Weekly health check on every upstream `Source:` URL plus every URL in
+# docs/rule-provenance.md. Also runs on PRs that change reference content
+# so stale/broken URLs are caught before merge.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Monday 06:00 UTC
+  pull_request:
+    paths:
+      - 'references/**/*.md'
+      - 'docs/rule-provenance.md'
+      - 'pipeline/hooks/validate_source_urls.py'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install pipeline deps
+        run: uv --directory pipeline sync
+
+      - name: Run link check
+        run: uv --directory pipeline run python hooks/validate_source_urls.py

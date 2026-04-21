@@ -1,0 +1,46 @@
+name: lint-markdown
+
+# Markdown lint + per-file size check. Runs on every PR and on push to
+# main when a markdown file or the lint config changes.
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '.markdownlint.json'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - '.markdownlint.json'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run markdownlint-cli2
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          config: .markdownlint.json
+          globs: |
+            **/*.md
+            !pipeline/cache/**
+            !docs/design.md
+
+      - name: Reference-file size check
+        run: |
+          set -e
+          fail=0
+          for f in $(find references -name '*.md'); do
+            size=$(wc -c < "$f")
+            if [ "$size" -gt 40000 ]; then
+              echo "::error file=$f::FAIL: $f is ${size} bytes (> 40KB)"
+              fail=1
+            elif [ "$size" -gt 20000 ]; then
+              echo "::warning file=$f::$f is ${size} bytes (> 20KB)"
+            fi
+          done
+          exit $fail

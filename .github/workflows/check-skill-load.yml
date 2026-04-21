@@ -1,0 +1,75 @@
+name: check-skill-load
+
+# Asserts that SKILL.md parses as a valid Anthropic-skill manifest and
+# that every reference file named in the routing table exists on disk.
+# Also enforces the Phase 1 invariant of exactly 11 reference files.
+
+on:
+  pull_request:
+    paths:
+      - 'SKILL.md'
+      - 'references/**'
+  push:
+    branches: [main]
+    paths:
+      - 'SKILL.md'
+      - 'references/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pyyaml
+        run: pip install pyyaml
+
+      - name: Parse SKILL.md and verify reference files
+        run: |
+          python3 <<'PY'
+          import re
+          import sys
+          import yaml
+          from pathlib import Path
+
+          skill = Path('SKILL.md').read_text(encoding='utf-8')
+          m = re.match(r'---\n(.*?)\n---', skill, re.DOTALL)
+          if not m:
+              print('FAIL: SKILL.md missing YAML frontmatter')
+              sys.exit(1)
+
+          data = yaml.safe_load(m.group(1))
+          for key in ('name', 'description'):
+              if key not in data:
+                  print(f'FAIL: SKILL.md frontmatter missing `{key}`')
+                  sys.exit(1)
+
+          # Reference filenames are quoted in backticks in the routing table.
+          refs_in_skill = set(re.findall(r'`([\w\-]+\.md)`', skill))
+
+          ref_dir = Path('references')
+          refs_on_disk = {p.name for p in ref_dir.glob('*.md')}
+
+          missing = refs_in_skill - refs_on_disk
+          if missing:
+              print(f'FAIL: SKILL.md references missing files: {sorted(missing)}')
+              sys.exit(1)
+
+          if len(refs_on_disk) < 11:
+              print(
+                  f'FAIL: references/ has {len(refs_on_disk)} .md files, '
+                  'expected at least 11'
+              )
+              sys.exit(1)
+
+          print(
+              f'OK: SKILL.md frontmatter valid; '
+              f'{len(refs_on_disk)} reference files on disk; '
+              f'{len(refs_in_skill)} referenced in SKILL.md.'
+          )
+          PY

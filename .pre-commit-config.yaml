@@ -1,0 +1,50 @@
+# Pre-commit configuration for sas94-skill.
+#
+# Install once per clone:
+#     uv tool install pre-commit && pre-commit install
+#
+# Run manually against the whole tree:
+#     pre-commit run --all-files
+#
+# Hooks in order:
+#   1. Standard whitespace / EOF / YAML sanity checks.
+#   2. `check-source-urls` — fails if a `### Rule` / `### Idiom` heading
+#      in `references/*.md` lacks a Source URL within 5 lines.
+#   3. `markdownlint-cli2` — with our own relaxed `.markdownlint.json`.
+#
+# The `regen-coverage` / `regen-provenance` hooks that the Phase 1 plan
+# contemplated are intentionally NOT wired up here. The pre-commit stage
+# that re-runs generators and re-stages `docs/*.md` has subtle ordering
+# interactions with the standard fixers above; we catch stale auto-gen
+# docs in CI (`check-skill-load.yml` + the regeneration step documented
+# in CONTRIBUTING.md) instead. Revisit in v0.0.2.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+
+  - repo: local
+    hooks:
+      - id: check-source-urls
+        name: check-source-urls
+        description: >
+          Every `### Rule N:` / `### Idiom:` heading in references/*.md
+          must carry a Source URL within 5 lines.
+        entry: python3 pipeline/hooks/check_source_urls.py
+        language: system
+        files: ^references/.*\.md$
+        pass_filenames: true
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.18.1
+    hooks:
+      - id: markdownlint-cli2
+        args: ['--config', '.markdownlint.json']
+        # Skip build/cache dirs and the free-form design doc.
+        exclude: '^(pipeline/cache/|docs/design\.md$)'

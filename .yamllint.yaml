@@ -1,0 +1,21 @@
+---
+# yamllint config tuned for this repo.
+#
+# We relax three defaults:
+#   - `truthy` → allow GitHub Actions' `on:` key (yamllint 1.x treats
+#     `on` as a truthy literal by default; GH Actions requires it).
+#   - `document-start` → not required; the workflow files omit it for
+#     readability and GH Actions does not care.
+#   - `line-length` → our YAML files embed Python heredocs with
+#     80+ char lines; the parser tolerates it.
+
+extends: default
+
+rules:
+  truthy:
+    allowed-values: ['true', 'false', 'on', 'off']
+    check-keys: false
+  document-start: disable
+  line-length:
+    max: 120
+    level: warning
