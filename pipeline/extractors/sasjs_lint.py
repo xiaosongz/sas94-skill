@@ -4,7 +4,7 @@ Run from repo root or pipeline dir:
 
     uv run python pipeline/extractors/sasjs_lint.py
 
-Emits pipeline/cache/extracted/sasjs_lint_rules.json — 15 rules expected.
+Emits pipeline/cache/extracted/sasjs_lint_rules.json.
 Output is deterministic: rules sorted by (scope, name), JSON with sort_keys.
 """
 

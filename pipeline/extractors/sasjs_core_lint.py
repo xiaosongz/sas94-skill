@@ -5,8 +5,7 @@ Source: `pipeline/cache/github/sasjs-core/.sasjslint` (JSON).
 Run:
     uv run python pipeline/extractors/sasjs_core_lint.py
 
-The source file has 13 keys (plan text said 8, but the on-disk file is the
-source of truth). Extractor emits all keys faithfully.
+Emits every key from the source file faithfully.
 """
 
 from __future__ import annotations
