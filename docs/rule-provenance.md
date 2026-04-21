@@ -36,16 +36,16 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | data-step.md | Critical Rules | 5 | No "gremlin" non-printable characters | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noGremlins.ts | 2026-04-21 |
 | data-step.md | Critical Rules | 6 | Never commit encoded-password literals (`{SAS001}`, `{SAS002}`, `{SASENC}`) | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noEncodedPasswords.ts | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | Deduplication via `check()` + `add()` — keep the first row per composite key | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
-| hash-tables.md | Canonical Idioms | idiom | In-memory counter — tally per-key frequencies with `find()` + `replace()` | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | In-memory counter — tally per-key frequencies with `find()` + `replace()` | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | One-to-many equi-join via `multidata: 'Y'` + `find_next()` | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
-| hash-tables.md | Canonical Idioms | idiom | Reference-table lookup — attach ICD-10 description to every claim row | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | Reference-table lookup — attach ICD-10 description to every claim row | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Critical Rules | 1 | The hash must be declared and loaded inside `if _N_ = 1 then do; ... end;` — or… | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
 | hash-tables.md | Critical Rules | 2 | Omitting `definedone()` is a silent error — every subsequent method call fails | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
-| hash-tables.md | Critical Rules | 3 | Always check the `find()` return code — ignoring it means silent use of the las… | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 3 | Always check the `find()` return code — ignoring it means silent use of the las… | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Critical Rules | 4 | Hash objects do NOT persist across DATA steps — their lifetime is exactly one s… | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
 | hash-tables.md | Critical Rules | 5 | Without `multidata: 'Y'`, only the first row per key loads — silent dedup on th… | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
-| hash-tables.md | Critical Rules | 6 | `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
-| hash-tables.md | Critical Rules | 7 | The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only upd… | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 6 | `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 7 | The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only upd… | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Critical Rules | 8 | Hash memory grows with the loaded rowcount — claims-scale lookups can OOM the s… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `%local` discipline — declare every non-parameter symbol at top | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `/*/STORE SOURCE*/` inline option — one-line signature close | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_abort.sas | 2026-04-21 |

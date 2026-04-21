@@ -112,7 +112,7 @@ end;
 
 ### Rule 3: Always check the `find()` return code — ignoring it means silent use of the last-retrieved values
 
-Source: https://www.lexjansen.com/sugi30/236-30.pdf
+Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 `rc = h.find();` returns 0 on a hit and non-zero on a miss. When the
 call hits, SAS copies the data-portion values into the PDV; when it
@@ -184,7 +184,7 @@ run;
 
 data report;
   /* no declare; counts is undefined here */
-  rc = counts.find();  /* syntax error at compile time */
+  rc = counts.find();  /* run-time error: "Object 'counts' is not defined" */
 run;
 ```
 
@@ -235,7 +235,7 @@ if elig.find() = 0 then output;
 
 ### Rule 6: `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately
 
-Source: https://www.lexjansen.com/sugi30/236-30.pdf
+Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 With the default (non-multidata) hash, `add()` returns a non-zero code
 and discards the incoming row when the key already exists; `replace()`
@@ -264,7 +264,7 @@ end;
 
 ### Rule 7: The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only updates data-portion variables, NOT the key
 
-Source: https://www.lexjansen.com/sugi30/236-30.pdf
+Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 A `declare hiter` binds an iterator to a hash and makes entries
 accessible in the order defined by `ordered:` ('a' ascending, 'd'
@@ -339,7 +339,7 @@ rc = big.find();
 
 ### Idiom: Reference-table lookup — attach ICD-10 description to every claim row
 
-Source: https://www.lexjansen.com/sugi30/236-30.pdf
+Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 Purpose: the bread-and-butter many-to-one hash lookup — pull a
 descriptive column from a small reference table onto every row of a
@@ -393,7 +393,7 @@ run;
 
 ### Idiom: In-memory counter — tally per-key frequencies with `find()` + `replace()`
 
-Source: https://www.lexjansen.com/sugi30/236-30.pdf
+Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 Purpose: count occurrences per key without an explicit PROC FREQ +
 re-sort pass. On a miss, initialize the count to 1 and `add()`; on a
@@ -480,13 +480,13 @@ run;
   hit's values on a miss, so the output looks 100% matched when in
   fact half the rows are false positives. See Rule 3. Always branch
   on `rc` or `call missing()` before every `find()`.
-  Source: https://www.lexjansen.com/sugi30/236-30.pdf
+  Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 - **Parameter-type mismatch** — a `definekey('k')` where the PDV has
   not been given `k`'s type (no `length`, no `if 0 then set`) fails
   silently at run time; the hash exists but every `find()` returns a
   miss. Always type-match the PDV before `definekey`.
-  Source: https://www.lexjansen.com/sugi30/236-30.pdf
+  Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 - **Forgotten `definedone()`** — no error at compile, but every
   `add()` / `find()` / `output()` below is a no-op. See Rule 2.
@@ -501,7 +501,7 @@ run;
 - **Hash iterator middle rows carry stale key** — `hi.next()` only
   updates data-portion variables; omitting the key from `definedata`
   leaves `first()`-set key frozen across the iteration. See Rule 7.
-  Source: https://www.lexjansen.com/sugi30/236-30.pdf
+  Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
 - **OOM on claims-scale hash** — a hash sized to the full claims
   table exhausts MEMSIZE. Hash is for the small side only; see
@@ -538,6 +538,6 @@ runs, but the results are almost certainly not what the author meant:
 - [idioms-from-lexjansen.md](idioms-from-lexjansen.md) — deeper hash
   treatments from Dorfman and other authors.
 - [SAS Language Reference: Processing Guide](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm)
-- [Dorfman (2005) — Data Step Hash Objects as Programming Tools](https://www.lexjansen.com/sugi30/236-30.pdf)
+- [Dorfman (2005) — Data Step Hash Objects as Programming Tools](https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf)
 - [Dorfman (2007) — Hash Crash and Beyond](https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf)
 - [Dorfman (2015) — Using the SAS Hash Object with Duplicate Key Entries](https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf)
