@@ -1,7 +1,7 @@
 [project]
 name = "sas94-skill-pipeline"
 version = "0.1.0"
-description = "Add your description here"
+description = "Build-time extractors and manifest for sas94-skill reference content"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
