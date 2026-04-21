@@ -20,9 +20,13 @@
 - target: data-step.md
   github:
     - repo: https://github.com/sasjs/lint
+      tag: v2.4.3
+      sha: 6172b3a64125db6995509d4e5102f2c41b9e4294
       path: src/rules/**/*.ts
       scope: "Line/file-level lint rules that apply to DATA-step code"
     - repo: https://github.com/sasjs/core
+      tag: v4.63.0
+      sha: 3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2
       path: base/mp_*.sas
       scope: "DATA-step-oriented macros"
     - repo: https://github.com/jphall663/GWU_data_mining
@@ -43,9 +47,13 @@
 - target: macros.md
   github:
     - repo: https://github.com/sasjs/lint
+      tag: v2.4.3
+      sha: 6172b3a64125db6995509d4e5102f2c41b9e4294
       path: src/rules/**/*.ts
       scope: "Macro-related lint rules (hasMacroParentheses, hasMacroNameInMend, noNestedMacros, strictMacroDefinition, hasDoxygenHeader, hasRequiredMacroOptions)"
     - repo: https://github.com/sasjs/core
+      tag: v4.63.0
+      sha: 3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2
       path: base/*.sas
       scope: "Doxygen-headed base macros — idiom corpus"
   official_docs: []
