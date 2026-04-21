@@ -71,6 +71,17 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | hash-tables.md | Critical Rules | 6 | `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Critical Rules | 7 | The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only upd… | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Critical Rules | 8 | Hash memory grows with the loaded rowcount — claims-scale lookups can OOM the s… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman `check()` + `add()` deduplication (hash cluster) | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman MULTIDATA + `find_next()` for one-to-many joins (hash cluster) | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman streaming reference-table lookup (hash cluster) | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman summary-less summarization with `find()` + `replace()` (hash cluster) | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler `LEFT JOIN` + `COALESCE` for reference-table attach (proc-sql cluster) | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler searched CASE for inline claim-cost bucketing (proc-sql cluster) | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lepp `%SUPERQ` for one-shot "freeze the value exactly" reads (macro-quoting clu… | https://www.lexjansen.com/phuse/2019/sm/SM04.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Whitlock `%NRSTR` + `%UNQUOTE` to build a macro object at run time (macro-quoti… | https://www.lexjansen.com/nesug/nesug09/bb/BB02.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Critical Rules | 1 | `%STR` / `%NRSTR` mask at compile time; `%BQUOTE` / `%NRBQUOTE` / `%SUPERQ` mas… | https://www.lexjansen.com/phuse/2019/sm/SM04.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Critical Rules | 2 | Load the SMALL side into the hash and stream the LARGE side with `set` — never… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
+| idioms-from-lexjansen.md | Critical Rules | 3 | Searched CASE is the general form; simple CASE is for equality buckets only — p… | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `%local` discipline — declare every non-parameter symbol at top | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `/*/STORE SOURCE*/` inline option — one-line signature close | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_abort.sas | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | Guarded-execution `iftrue=` parameter | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
@@ -140,4 +151,4 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | stat-procs.md | Critical Rules | 7 | None of these procs return data to macros — use `ODS OUTPUT` to capture structu… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 | stat-procs.md | Critical Rules | 8 | `LSMEANS` in GLM / MIXED / GENMOD produces covariate-adjusted (marginal) means… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 
-Total rows: 129.
+Total rows: 140.

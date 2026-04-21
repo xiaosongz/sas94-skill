@@ -15,11 +15,11 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 | formats-informats.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | functions-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | hash-tables.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| idioms-from-lexjansen.md | no | no | no | no | no | no | no | 0% | stub |
+| idioms-from-lexjansen.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | macros.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | ods-and-output.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | proc-sql.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | sas-master-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | stat-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 
-Populated: 10 / 11; Stubs: 1 / 11.
+Populated: 11 / 11; Stubs: 0 / 11.
