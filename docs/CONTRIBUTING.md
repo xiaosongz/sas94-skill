@@ -51,7 +51,7 @@ Copy this checklist into your PR body:
       changed)
 - [ ] `last_reviewed` in the reference-file frontmatter updated to
       today's ISO date
-- [ ] Pre-commit hook passes locally (`pre-commit run --all-files`)
+- [ ] Pre-commit hook passes locally, once installed (`pre-commit run --all-files` — hook arrives in v0.0.2+)
 ```
 
 ## Issue Template — Rule Dispute

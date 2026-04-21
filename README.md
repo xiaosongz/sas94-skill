@@ -24,7 +24,7 @@ When activated, Claude Code can:
 - **Catch** silent-failure patterns before code ships — MERGE overwrite,
   LAG-inside-IF, missing `retain` on accumulators, macro-quoting errors,
   `PROC APPEND` shape mismatches, and more
-- **Enforce** the 16 rules from `sasjs/lint` v2.4.3 covering macro
+- **Enforce** the 15 rules from `sasjs/lint` v2.4.3 covering macro
   definition, file headers, line formatting, and source hygiene
 - **Apply** `sasjs/core` macro patterns — positional-required +
   keyword-optional signatures, `%local` discipline, `iftrue=` guards,
@@ -86,7 +86,7 @@ for index events.
 sas94-skill/
 ├── SKILL.md                               # Thin router — trigger, routing table, workflow
 ├── permissions.json                       # File-access scope
-├── .skillignore                           # Excludes pipeline/, docs/, cache/ from install
+├── .skillignore                           # Excludes pipeline/ and docs/design.md from install
 ├── assets/
 │   ├── data-step-template.sas             # DATA step skeleton with Doxygen header
 │   ├── proc-sql-template.sas              # PROC SQL skeleton

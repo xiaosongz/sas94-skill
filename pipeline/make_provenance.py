@@ -98,7 +98,7 @@ def scan_reference(path: Path) -> list[ProvenanceRow]:
     """Walk a single reference file, yielding one ProvenanceRow per
     `### Rule` / `### Idiom` heading."""
     fm = load_frontmatter(path)
-    last_verified = fm.get("last_reviewed", "unknown")
+    last_verified = str(fm.get("last_reviewed", "unknown"))
 
     body = body_after_frontmatter(path)
     lines = body.splitlines()
@@ -209,6 +209,22 @@ def render_markdown(rows: list[ProvenanceRow]) -> str:
 
 def main() -> int:
     rows = collect_all_rows()
+
+    # Fail loud if any Rule/Idiom heading lacks a Source URL within
+    # the 5-line window — silent empty `source` cells are the single
+    # most destructive failure mode for an audit trail.
+    missing = [r for r in rows if not r.source]
+    if missing:
+        sys.stderr.write(
+            f"ERROR: {len(missing)} Rule/Idiom heading(s) lack a Source URL within 5 lines:\n"
+        )
+        for r in sorted(missing, key=lambda r: (r.file, r.section, r.claim)):
+            sys.stderr.write(f"  - {r.file} | {r.section} | {r.claim}\n")
+        sys.stderr.write(
+            "\nAdd a 'Source: <URL>' line within 5 lines after the heading, then re-run.\n"
+        )
+        sys.exit(1)
+
     sys.stdout.write(render_markdown(rows))
     return 0
 
