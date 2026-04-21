@@ -1,0 +1,22 @@
+# Build-time pipeline cache (not shipped with skill)
+pipeline/cache/
+pipeline/.venv/
+pipeline/__pycache__/
+pipeline/**/__pycache__/
+
+# Python
+*.pyc
+.python-version
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Draft reference files pending colleague review
+references/*.md.draft
