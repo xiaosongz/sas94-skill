@@ -84,13 +84,14 @@ RATE_LIMIT_SECONDS = 1.0
 MAX_RETRIES = 4
 BACKOFF_BASE = 2.0
 
-# markitdown converts via pdfminer.six in-memory — feeding it the full
-# 638 MB statug.pdf eats 30+ GB of RAM with no end in sight. Cap the
-# PDFs we'll attempt to convert so a pathologically large docset cannot
-# wedge the run. Anything above this is recorded as convert_error with
-# a clear message and the PDF is still cached (SHA256 captured) so
-# downstream tooling can pick it up manually.
-MAX_PDF_CONVERT_MB = 200
+# Sanity ceiling on PDF size for conversion. markitdown/pdfminer OOMs
+# on image-heavy docs (statug.pdf, 608 MB, 928 pages), but pymupdf
+# streams text per-page with flat memory and handles statug in ~60s
+# / <1 GB RSS. 800 MB gives headroom above statug without removing
+# the guard entirely — anything that exceeds this is almost certainly
+# a runaway fetch (corrupt download, unexpected giant docset) and
+# should still fail loudly instead of silently eating disk/RAM.
+MAX_PDF_CONVERT_MB = 800
 
 # --- Minimum success bar ----------------------------------------------------
 
@@ -142,6 +143,7 @@ class DocsetEntry(BaseModel):
     status: Literal["ok", "http_error", "convert_error"]
     http_status: int | None = None
     error: str | None = None
+    converter: Literal["markitdown", "pymupdf"] = "markitdown"
 
 
 class SasPdfsOutput(BaseModel):
@@ -381,57 +383,140 @@ def _fetch_pdf(
 # --- Convert ----------------------------------------------------------------
 
 
-def _convert_pdf(
+def _convert_via_markitdown(
     pdf_path: Path, md_path: Path
-) -> tuple[bool, str | None, int | None]:
-    """Convert PDF -> markdown via markitdown Python API. Returns (ok, err, page_count).
+) -> tuple[str, int | None]:
+    """Convert via markitdown. Returns (text, page_count). Raises on failure."""
+    from markitdown import MarkItDown
 
-    page_count is extracted if markitdown surfaces it via a
-    ``page_count`` / ``pages`` attribute on the result; otherwise None.
+    md = MarkItDown()
+    result = md.convert(str(pdf_path))
+    text = result.text_content or ""
+    if not text.strip():
+        raise RuntimeError("empty markdown output")
+    page_count: int | None = None
+    for attr in ("page_count", "pages", "num_pages"):
+        val = getattr(result, attr, None)
+        if isinstance(val, int) and val > 0:
+            page_count = val
+            break
+    return text, page_count
+
+
+def _convert_via_pymupdf(pdf_path: Path) -> tuple[str, int]:
+    """Stream text per-page via pymupdf. Returns (text, page_count).
+
+    pymupdf is streaming — flat memory, ~1s per 100 pages — so this
+    scales to 600+ MB PDFs (statug) where pdfminer dies at 28+ GB RSS.
+    Output fidelity is lower than markitdown (no heading inference, no
+    table structure), but for plain-text retrieval it's sufficient.
+    """
+    import fitz  # pymupdf
+
+    chunks: list[str] = []
+    with fitz.open(pdf_path) as doc:
+        page_count = doc.page_count
+        for page in doc:
+            txt = page.get_text("text")
+            if txt:
+                chunks.append(txt)
+    return "\n\n".join(chunks), page_count
+
+
+def _convert_pdf(
+    pdf_path: Path,
+    md_path: Path,
+    *,
+    cached_converter: Literal["markitdown", "pymupdf"] | None = None,
+) -> tuple[bool, str | None, int | None, Literal["markitdown", "pymupdf"]]:
+    """Convert PDF -> markdown. Returns (ok, err, page_count, converter).
+
+    markitdown is the primary converter (higher fidelity on small
+    docs). If it raises (typically OOM on image-heavy PDFs), fall
+    back to pymupdf, which streams text per-page with flat memory.
+
+    ``cached_converter`` (prior-manifest lookup) preserves which
+    backend produced an already-cached .md so re-runs are idempotent.
     """
     if md_path.exists() and md_path.stat().st_size > 0:
         log.info("cache hit md:  %s", md_path.name)
-        return True, None, None
+        # On cache hit we can't re-derive the backend from the file
+        # alone. Prefer the prior manifest's recorded value so re-runs
+        # stay byte-identical; fall back to "markitdown" only when
+        # there's no prior manifest (first ever run reusing an
+        # externally-placed .md — unlikely but handled).
+        return True, None, None, cached_converter or "markitdown"
 
     pdf_mb = pdf_path.stat().st_size / (1024 * 1024)
     if pdf_mb > MAX_PDF_CONVERT_MB:
         msg = (
-            f"pdf {pdf_mb:.0f} MB exceeds markitdown convert cap "
-            f"{MAX_PDF_CONVERT_MB} MB (pdfminer OOMs)"
+            f"pdf {pdf_mb:.0f} MB exceeds convert cap "
+            f"{MAX_PDF_CONVERT_MB} MB"
         )
         log.warning("skip convert %s: %s", pdf_path.name, msg)
-        return False, msg, None
+        return False, msg, None, "markitdown"
 
+    # Primary: markitdown.
     try:
-        from markitdown import MarkItDown
-
-        md = MarkItDown()
-        result = md.convert(str(pdf_path))
-        text = result.text_content or ""
-        if not text.strip():
-            return False, "empty markdown output", None
+        text, page_count = _convert_via_markitdown(pdf_path, md_path)
         md_path.parent.mkdir(parents=True, exist_ok=True)
         md_path.write_text(text, encoding="utf-8")
         log.info(
-            "converted %s -> %s (%d chars)",
+            "converted %s -> %s (%d chars, markitdown)",
             pdf_path.name,
             md_path.name,
             len(text),
         )
-        # Surface page_count if the markitdown result exposes one.
-        page_count: int | None = None
-        for attr in ("page_count", "pages", "num_pages"):
-            val = getattr(result, attr, None)
-            if isinstance(val, int) and val > 0:
-                page_count = val
-                break
-        return True, None, page_count
+        return True, None, page_count, "markitdown"
     except Exception as exc:  # noqa: BLE001 - markitdown raises bare Exception
-        log.exception("markitdown failed on %s: %s", pdf_path.name, exc)
-        return False, f"markitdown: {exc}", None
+        log.warning(
+            "markitdown failed on %s: %s; falling back to pymupdf",
+            pdf_path.name,
+            exc,
+        )
+        markitdown_err = f"markitdown: {exc}"
+
+    # Fallback: pymupdf.
+    try:
+        text, page_count = _convert_via_pymupdf(pdf_path)
+        if not text.strip():
+            return False, f"{markitdown_err}; pymupdf: empty output", None, "pymupdf"
+        md_path.parent.mkdir(parents=True, exist_ok=True)
+        md_path.write_text(text, encoding="utf-8")
+        log.info(
+            "converted %s -> %s (%d chars, pymupdf)",
+            pdf_path.name,
+            md_path.name,
+            len(text),
+        )
+        return True, None, page_count, "pymupdf"
+    except Exception as exc:  # noqa: BLE001 - pymupdf may raise FileDataError
+        log.exception("pymupdf fallback failed on %s: %s", pdf_path.name, exc)
+        return False, f"{markitdown_err}; pymupdf: {exc}", None, "pymupdf"
 
 
 # --- Orchestration ----------------------------------------------------------
+
+
+def _load_prior_converters() -> dict[str, Literal["markitdown", "pymupdf"]]:
+    """Load {name: converter} from the prior manifest, if any.
+
+    Lets cache-hit runs preserve the original converter attribution so
+    the manifest stays byte-identical across re-runs.
+    """
+    if not OUT_FILE.exists():
+        return {}
+    try:
+        prior = json.loads(OUT_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: dict[str, Literal["markitdown", "pymupdf"]] = {}
+    for doc in prior.get("docsets", []) or []:
+        name = doc.get("name")
+        conv = doc.get("converter")
+        if isinstance(name, str) and conv in ("markitdown", "pymupdf"):
+            out[name] = conv
+    return out
 
 
 def run() -> int:
@@ -439,6 +524,8 @@ def run() -> int:
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
+
+    prior_converters = _load_prior_converters()
 
     headers = {
         "User-Agent": USER_AGENT,
@@ -486,7 +573,11 @@ def run() -> int:
 
             sha = _sha256_file(pdf_path)
 
-            conv_ok, conv_err, page_count = _convert_pdf(pdf_path, md_path)
+            conv_ok, conv_err, page_count, converter = _convert_pdf(
+                pdf_path,
+                md_path,
+                cached_converter=prior_converters.get(name),
+            )
 
             assert fetch.source is not None  # narrowing for type-checkers
             if not conv_ok:
@@ -501,6 +592,7 @@ def run() -> int:
                         status="convert_error",
                         http_status=fetch.http_status,
                         error=conv_err,
+                        converter=converter,
                     )
                 )
                 errors.append(f"{name}: convert failed: {conv_err}")
@@ -519,6 +611,7 @@ def run() -> int:
                     word_count=_word_count(text),
                     status="ok",
                     http_status=fetch.http_status,
+                    converter=converter,
                 )
             )
 
