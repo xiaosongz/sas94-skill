@@ -14,12 +14,12 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 | data-step.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | formats-informats.md | no | no | no | no | no | no | no | 0% | stub |
 | functions-reference.md | no | no | no | no | no | no | no | 0% | stub |
-| hash-tables.md | no | no | no | no | no | no | no | 0% | stub |
+| hash-tables.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | idioms-from-lexjansen.md | no | no | no | no | no | no | no | 0% | stub |
 | macros.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | ods-and-output.md | no | no | no | no | no | no | no | 0% | stub |
 | proc-sql.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | sas-master-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| stat-procs.md | no | no | no | no | no | no | no | 0% | stub |
+| stat-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 
-Populated: 5 / 11; Stubs: 6 / 11.
+Populated: 7 / 11; Stubs: 4 / 11.

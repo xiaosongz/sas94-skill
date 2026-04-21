@@ -35,6 +35,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | data-step.md | Critical Rules | 4 | Strip trailing whitespace from every line | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noTrailingSpaces.ts | 2026-04-21 |
 | data-step.md | Critical Rules | 5 | No "gremlin" non-printable characters | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noGremlins.ts | 2026-04-21 |
 | data-step.md | Critical Rules | 6 | Never commit encoded-password literals (`{SAS001}`, `{SAS002}`, `{SASENC}`) | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noEncodedPasswords.ts | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | Deduplication via `check()` + `add()` — keep the first row per composite key | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | In-memory counter — tally per-key frequencies with `find()` + `replace()` | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | One-to-many equi-join via `multidata: 'Y'` + `find_next()` | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
+| hash-tables.md | Canonical Idioms | idiom | Reference-table lookup — attach ICD-10 description to every claim row | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 1 | The hash must be declared and loaded inside `if _N_ = 1 then do; ... end;` — or… | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
+| hash-tables.md | Critical Rules | 2 | Omitting `definedone()` is a silent error — every subsequent method call fails | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
+| hash-tables.md | Critical Rules | 3 | Always check the `find()` return code — ignoring it means silent use of the las… | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 4 | Hash objects do NOT persist across DATA steps — their lifetime is exactly one s… | https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm | 2026-04-21 |
+| hash-tables.md | Critical Rules | 5 | Without `multidata: 'Y'`, only the first row per key loads — silent dedup on th… | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 6 | `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 7 | The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only upd… | https://www.lexjansen.com/sugi30/236-30.pdf | 2026-04-21 |
+| hash-tables.md | Critical Rules | 8 | Hash memory grows with the loaded rowcount — claims-scale lookups can OOM the s… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `%local` discipline — declare every non-parameter symbol at top | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | `/*/STORE SOURCE*/` inline option — one-line signature close | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_abort.sas | 2026-04-21 |
 | macros.md | Canonical Idioms | idiom | Guarded-execution `iftrue=` parameter | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
@@ -78,5 +90,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | sas-master-reference.md | Critical Rules | 18 | Macro resolution and quote semantics (GWU §5) | https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`. | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 19 | Declare `%local` for every non-parameter symbol inside a macro | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 20 | Structure every macro signature as positional-required + keyword-optional, and… | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_existds.sas | 2026-04-21 |
+| stat-procs.md | Canonical Idioms | idiom | Complex-survey proportion via SURVEYFREQ with STRATA / CLUSTER / WEIGHT | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Canonical Idioms | idiom | Cox proportional hazards via PHREG with hazard ratios | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Canonical Idioms | idiom | Kaplan-Meier survival curve by treatment with log-rank test | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Canonical Idioms | idiom | Logistic regression for a binary claims outcome with CLASS + ODS OUTPUT capture | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Canonical Idioms | idiom | Mixed model for panel claims with random patient intercept | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 1 | `CLASS` is required for every categorical predictor — a numeric categorical in… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 2 | LOGISTIC defaults to modeling `P(Y = lowest ordinal value)` — use `descending`… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 3 | GENMOD defaults to `DIST=NORMAL LINK=IDENTITY` — specify both for logistic, Poi… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 4 | MIXED `REPEATED` models R-side (within-subject residual correlation); `RANDOM`… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 5 | LIFETEST `TIME t*status(code)` — the value in parentheses is the CENSORED code,… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 6 | SURVEY* procs require design variables — no `STRATA` / `CLUSTER` / `WEIGHT` ass… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 7 | None of these procs return data to macros — use `ODS OUTPUT` to capture structu… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
+| stat-procs.md | Critical Rules | 8 | `LSMEANS` in GLM / MIXED / GENMOD produces covariate-adjusted (marginal) means… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 
-Total rows: 68.
+Total rows: 93.
