@@ -1,7 +1,7 @@
 ---
 title: PROC SQL reference
 scope: Joins, deduplication, `INTO :macvar` list targets, `RESET`, and claims-style multi-table SQL idioms.
-loaded_when: "PROC SQL", "join claims", "dedup", "INTO :macvar", or any PROC SQL authoring or debugging task.
+loaded_when: '"PROC SQL", "join claims", "dedup", "INTO :macvar", or any PROC SQL authoring or debugging task.'
 last_reviewed: 2026-04-21
 reviewer: xiaosongz
 ---

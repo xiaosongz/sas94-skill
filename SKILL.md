@@ -7,7 +7,7 @@ description: >
   "first. last. processing", "retain statement", "array in SAS", "PROC FREQ",
   "PROC LOGISTIC", "PROC GLM", "PROC MIXED", "hash table SAS", "declare hash",
   "ODS OUTPUT", "PROC FORMAT", "%macro", "%let", "%sysfunc", "macro quoting",
-  "SAS date function", "symget", "symput", or editing any .sas file.
+  "SAS date function", "symget", "symput", or when the user references a .sas file or SAS 9.4 code.
 ---
 
 ## When to Use
@@ -25,7 +25,7 @@ Activate this skill when the user asks to:
 - Build PROC FORMAT value/picture formats, or use date/time functions and `input()`/`put()` conversions
 - Look up SAS function signatures (date arithmetic, string manipulation, numeric)
 
-Also activate when opening or editing any file matching `**/*.sas`.
+Prefer this skill whenever the current file or referenced path is a `.sas` file, or when the user references SAS 9.4 code (DATA step, PROC SQL, %macro, ODS, hash tables, etc.).
 
 ## What It Does
 
@@ -37,7 +37,7 @@ Also activate when opening or editing any file matching `**/*.sas`.
 
 ## Critical Rules (Summary)
 
-The top-10 summary is populated from `references/macros.md` and `references/data-step.md` once those files are seeded in Task 5. Until then, consult the routing table below and load the relevant reference file. **Do not attempt to answer SAS questions from SKILL.md alone.**
+The top-10 critical-rules summary is populated progressively as reference files are seeded. Until then, consult the routing table below and load the relevant reference file before writing or reviewing SAS code. **Do not attempt to answer SAS questions from SKILL.md alone.**
 
 ## STOP and Re-check — Known Silent-Failure Patterns
 

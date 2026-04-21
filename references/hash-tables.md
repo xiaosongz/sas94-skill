@@ -1,7 +1,7 @@
 ---
 title: Hash objects reference
-scope: `declare hash`, `definekey` / `definedata` / `definedone`, `find` / `check` / `add` / `replace`, and hash iterators (`hiter`).
-loaded_when: "hash join", "hash lookup", `declare hash`, `definekey`, `hashiter`, or any DATA-step hash-object task.
+scope: '`declare hash`, `definekey` / `definedata` / `definedone`, `find` / `check` / `add` / `replace`, and hash iterators (`hiter`).'
+loaded_when: '"hash join", "hash lookup", `declare hash`, `definekey`, `hashiter`, or any DATA-step hash-object task.'
 last_reviewed: 2026-04-21
 reviewer: xiaosongz
 ---
