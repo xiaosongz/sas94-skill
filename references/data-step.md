@@ -106,7 +106,7 @@ data out;
 run;
 ```
 
-```
+```sas
 /* WRONG - trailing whitespace on code lines (invisible, but present)
 
    After the semicolon on each code line below, the source file carries
@@ -168,6 +168,7 @@ libname db oracle user=svc password="&env_db_pw" path=prod;
 /* WRONG - committed to source; noEncodedPasswords fires */
 libname db oracle user=svc password="{SAS002}D41D8CD98F00B204E9800998ECF8427E" path=prod;
 ```
+
 ## Canonical Idioms
 
 ### Idiom: Guarded predicate macro for DATA-step assertions
@@ -351,6 +352,7 @@ run;
 %let name = claims;
 %put 'table: &name';   /* writes: table: claims — quotes are literal output chars */
 ```
+
 ## Function / Statement Quick Ref
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |

@@ -56,33 +56,33 @@ The skill activates on `.sas` files and on SAS-flavored prompt keywords
 
 ### Example prompts
 
-```
+```text
 Write a SAS macro that returns an unused libref name, following sasjs/core
 conventions.
 ```
 
-```
+```text
 Merge two claims datasets by member_id; both carry a `paid_amt` column —
 make sure the left-side value is preserved.
 ```
 
-```
+```text
 Review my macro for %local discipline and quote-function usage.
 ```
 
-```
+```text
 Help me debug a PROC APPEND that errors with "Variable X in DATA set not in
 BASE set."
 ```
 
-```
+```text
 Write a DATA step that computes a lagged diagnosis-date difference, only
 for index events.
 ```
 
 ## Contents
 
-```
+```text
 sas94-skill/
 ├── SKILL.md                               # Thin router — trigger, routing table, workflow
 ├── permissions.json                       # File-access scope

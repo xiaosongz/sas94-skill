@@ -162,6 +162,7 @@ CURE` is not the same as `SECURE`.
 /* WRONG - SECURE split by whitespace; hasRequiredMacroOptions fires */
 %macro somemacro(var1, var2) / SE CURE;
 ```
+
 ## Canonical Idioms
 
 ### Idiom: Positional-required + keyword-optional parameter pattern
@@ -242,6 +243,7 @@ when false.
   /* real work */
 %mend mp_hashdataset;
 ```
+
 ## Function / Statement Quick Ref
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |

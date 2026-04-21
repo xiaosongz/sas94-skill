@@ -1,26 +1,18 @@
 {
-  "_comment_header": "Relaxations are intentional. Do not tighten without reviewing references/*.md — most rules fire on provenance/source-citation style (bare URLs in `Source:` lines + autogen tables) and on heavy SAS code blocks.",
   "default": true,
   "MD010": {
-    "_comment": "Hard tabs appear inside ```sas blocks copied from upstream repos; leave untouched.",
+    "_comment": "Hard tabs appear inside `WRONG` ```sas demo blocks that illustrate the noTabs rule; leave untouched.",
     "code_blocks": false
   },
   "MD013": false,
-  "MD022": false,
-  "MD024": {
-    "_comment": "Rule N headings repeat across reference files; only flag same-level duplicates.",
-    "siblings_only": true
-  },
   "MD025": false,
   "MD031": false,
-  "MD032": false,
   "MD033": {
-    "_comment": "h4 comes from sasjs/core Doxygen; br occasionally needed for table cells; `<paste>` placeholder used in CONTRIBUTING.md.",
-    "allowed_elements": ["h4", "br", "paste"]
+    "_comment": "`<paste>` placeholder appears in CONTRIBUTING.md issue template.",
+    "allowed_elements": ["paste"]
   },
   "MD034": false,
   "MD040": false,
   "MD041": false,
-  "MD046": false,
   "MD056": false
 }

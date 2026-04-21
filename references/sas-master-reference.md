@@ -227,7 +227,7 @@ conflicts.
 data out; set in; run;
 ```
 
-```
+```sas
 /* WRONG - trailing whitespace on code lines (invisible, but present)
 
    After the semicolon on each code line below, the source file carries
@@ -493,6 +493,7 @@ one line is the `sasjs/core` signature convention.
 %macro mf_existds(libds=);
 %mend mf_existds;
 ```
+
 ## Reference-file Pointers
 
 Load the topic-specific reference when the task matches its scope.
@@ -536,6 +537,7 @@ Load the topic-specific reference when the task matches its scope.
 ## Silent Pitfalls
 
 See topic-specific reference files for full lists:
+
 - Macro scope and resolution pitfalls — `references/macros.md`.
 - MERGE / LAG / PROC APPEND / SQL-join pitfalls —
   `references/data-step.md` and
