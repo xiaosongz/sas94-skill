@@ -47,6 +47,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | formats-informats.md | Critical Rules | 6 | FORMAT (display) and INFORMAT (parse) are distinct attributes — using `FORMAT`… | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
 | formats-informats.md | Critical Rules | 7 | Format width controls display truncation but NOT stored precision | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
 | formats-informats.md | Critical Rules | 8 | `PICTURE` digit selectors — `9` is a required digit, `0` is leading-zero-filled… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| functions-reference.md | Canonical Idioms | idiom | `%SYSFUNC` bridge — calling DATA-step functions from macro context | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Canonical Idioms | idiom | `CATX`-assembled composite key for dedup or merge | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Canonical Idioms | idiom | ICD-10 code prefix match with `SUBSTRN` | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Canonical Idioms | idiom | Month-end alignment for claims billing cycles | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 1 | `SCAN(str, n)` without an explicit delimiter uses SAS's default delimiter set —… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 2 | `SUBSTR` errors on nonpositive position; `SUBSTRN` returns a zero-length result… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 3 | `INTNX('interval', dt, 0)` with no `alignment` returns the **beginning** of the… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 4 | `SUM(of x1-x5)` treats missing as zero; `x1+x2+x3+x4+x5` propagates missing — u… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 5 | `ROUND(x, unit)` rounds to the nearest **multiple of unit**, not to a number of… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 6 | `COMPRESS(str, list, 'k')` **keeps** only chars in `list` — the `k` modifier in… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 7 | `MOD(-7, 3)` returns `-1`, not `2` — SAS uses sign-of-dividend, not the mathema… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
+| functions-reference.md | Critical Rules | 8 | `CATS`, `CATT`, and `CATX` differ in which blanks they strip — pick deliberatel… | https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | Deduplication via `check()` + `add()` — keep the first row per composite key | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | In-memory counter — tally per-key frequencies with `find()` + `replace()` | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | One-to-many equi-join via `multidata: 'Y'` + `find_next()` | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
@@ -128,4 +140,4 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | stat-procs.md | Critical Rules | 7 | None of these procs return data to macros — use `ODS OUTPUT` to capture structu… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 | stat-procs.md | Critical Rules | 8 | `LSMEANS` in GLM / MIXED / GENMOD produces covariate-adjusted (marginal) means… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 
-Total rows: 117.
+Total rows: 129.
