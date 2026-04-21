@@ -88,26 +88,42 @@ examples.
 
 ---
 
-## 3. PROC APPEND base-set rule
+## 3. PROC APPEND variable-shape rules
 
-**Pattern.** `PROC APPEND BASE=a DATA=b;` uses the BASE dataset's variable
-attributes (length, type) as the contract. Any variable in DATA that is not
-in BASE is **dropped silently** unless `FORCE` is specified. If a char
-variable in DATA is longer than the same-named variable in BASE, it is
-truncated. No WARNING without `FORCE`.
+**Pattern.** `PROC APPEND BASE=a DATA=b` uses BASE's variable definitions.
+Without `FORCE`, any variable in DATA= that is absent from BASE= causes
+the step to **fail with ERROR** — nothing is appended. With `FORCE`, the
+extra variable is **dropped with a WARNING** and the step proceeds. The
+silent failure mode is different: when BASE= carries a variable absent
+from DATA=, appended rows get missing values in that column, no
+diagnostic — easy to miss when BASE= has been recently extended. Char
+length mismatches (DATA's var wider than BASE's) produce truncation with
+a NOTE.
 
 ```sas
-/* WRONG — new_col in b is silently dropped */
-proc append base=a data=b; run;
+/* WRONG — DATA has a column absent from BASE; step errors without FORCE */
+proc append base=claims data=claims_new;
+run;
+/* ERROR: Variable new_flag in DATA set not in BASE set. No appending done. */
+
+/* Subtler silent mode: BASE has a column absent from DATA */
+proc append base=claims_v2 data=claims_v1;   /* v2 added new_flag; v1 lacks it */
+run;
+/* Step succeeds; new_flag is missing for every v1 row — no WARNING. */
 ```
 
 ```sas
-/* CORRECT — add missing columns to base first, or use FORCE */
-data a;
-  set a;
-  length new_col $32;
+/* CORRECT — align DATA columns to BASE before appending, or use FORCE knowingly */
+proc append base=claims data=claims_new force;   /* drops new-in-DATA vars w/ WARNING */
 run;
-proc append base=a data=b; run;  /* now keeps new_col */
+
+/* or: explicitly reshape DATA to match BASE */
+data claims_aligned;
+  set claims_new;
+  keep patient_id claim_dt cost;   /* whatever BASE=claims has */
+run;
+proc append base=claims data=claims_aligned;    /* no FORCE needed */
+run;
 ```
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed;
@@ -147,25 +163,38 @@ MERGE-vs-SQL contrast is explicit in the repo's data-prep lessons.
 
 ---
 
-## 5. Macro quoting: single vs double quotes
+## 5. Macro resolution and quote semantics
 
-**Pattern.** In the macro language, `'&var'` is literal — single quotes
-suppress macro resolution — while `"&var"` resolves. `%str('...')` holds a
-literal string including any `&var` tokens; `%str("...")` still resolves
-`&var` because the inner quotes are double. `%nrstr(...)` quotes the `&`
-and `%` triggers and prevents resolution at macro-compile time.
+**Pattern.** In DATA/PROC step string literals, single quotes keep `&var`
+literal while double quotes resolve it — this is the real single-vs-double
+rule. In macro-context statements (`%put`, `%let`, `%if`), the macro
+processor scans for `&` and `%` triggers *before* the statement receives
+its argument, so quote type does not suppress resolution — the common
+misconception that `%put 'table: &var';` holds `&var` literal is wrong.
+Use `%nrstr(...)` or `%str(%&...)` to mask triggers in macro context.
 
 ```sas
-/* WRONG — single quotes block resolution, wanted literal with &var expanded */
+/* CORRECT — single-quoted DATA-step literal: &name is not resolved */
 %let name = claims;
-%put 'table: &name';                /* prints: table: &name */
+data _null_;
+  x = 'table: &name';
+  put x;          /* writes: table: &name */
+run;
+
+/* CORRECT — double-quoted DATA-step literal: &name resolves */
+data _null_;
+  x = "table: &name";
+  put x;          /* writes: table: claims */
+run;
+
+/* CORRECT — macro-context masking requires %nrstr, not quotes */
+%put %nrstr(literal &name is unresolved);     /* writes: literal &name is unresolved */
 ```
 
 ```sas
-/* CORRECT — use double quotes when you want &name to resolve */
+/* WRONG — single quotes in %put do NOT suppress resolution */
 %let name = claims;
-%put "table: &name";                /* prints: table: claims */
-%put %nrstr(literal &name unresolved);  /* prints: literal &name unresolved */
+%put 'table: &name';   /* writes: table: claims — quotes are literal output chars */
 ```
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed;

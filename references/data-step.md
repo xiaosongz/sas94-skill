@@ -106,12 +106,17 @@ data out;
 run;
 ```
 
-```sas
-/* WRONG - two trailing spaces on the %put line */
-data out;
-  set in;
-%put 'hello';··
-run;
+```
+/* WRONG - trailing whitespace on code lines (invisible, but present)
+
+   After the semicolon on each code line below, the source file carries
+   trailing ASCII space characters (0x20). `sasjs/lint noTrailingSpaces`
+   auto-fixes these. Git history diffs flood with whitespace-only churn
+   when left in.
+*/
+%put 'hello';
+%put 'world';
+/* imagine two or more 0x20 bytes after each semicolon, before the newline */
 ```
 
 ### Rule 5: No "gremlin" non-printable characters
@@ -132,10 +137,16 @@ run;
 ```
 
 ```sas
-/* WRONG - zero-width no-break space inside 'A12345' */
+/* WRONG - gremlin bytes inside the quoted string (invisible in most editors)
+
+   The literal bytes between 'A' and '12345' below include U+FEFF (BOM,
+   three bytes: EF BB BF) copied from an Excel export. `sasjs/lint noGremlins`
+   flags the token; the WHERE clause silently fails to match cleanly-typed
+   'A12345' rows.
+*/
 data out;
   set in;
-  where member_id = 'A12345';  /* contains invisible U+FEFF */
+  where member_id = 'A<U+FEFF>12345';   /* actual file would have invisible bytes */
 run;
 ```
 
@@ -242,27 +253,42 @@ data both;
 run;
 ```
 
-### Idiom: PROC APPEND base-set rule (GWU §3)
+### Idiom: PROC APPEND variable-shape rules (GWU §3)
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`.
 
-Purpose: `PROC APPEND BASE=a DATA=b;` uses BASE as the schema contract.
-Columns present in DATA but not BASE are dropped silently without
-`FORCE`. Always pre-define BASE's schema, or add explicit `LENGTH`
-statements.
+Purpose: `PROC APPEND BASE=a DATA=b` uses BASE's variable definitions.
+Without `FORCE`, any variable in DATA= that is absent from BASE= causes
+the step to **fail with ERROR** — nothing is appended. With `FORCE`, the
+extra variable is **dropped with a WARNING** and the step proceeds. The
+silent failure mode is different: when BASE= carries a variable absent
+from DATA=, appended rows get missing values in that column, no
+diagnostic — easy to miss when BASE= has been recently extended.
 
 ```sas
-/* CORRECT - add missing columns to base first */
-data a;
-  set a;
-  length new_col $32;
+/* CORRECT — align DATA columns to BASE before appending, or use FORCE knowingly */
+proc append base=claims data=claims_new force;   /* drops new-in-DATA vars w/ WARNING */
 run;
-proc append base=a data=b; run;  /* now keeps new_col */
+
+/* or: explicitly reshape DATA to match BASE */
+data claims_aligned;
+  set claims_new;
+  keep patient_id claim_dt cost;   /* whatever BASE=claims has */
+run;
+proc append base=claims data=claims_aligned;    /* no FORCE needed */
+run;
 ```
 
 ```sas
-/* WRONG - new_col in b is silently dropped */
-proc append base=a data=b; run;
+/* WRONG — DATA has a column absent from BASE; step errors without FORCE */
+proc append base=claims data=claims_new;
+run;
+/* ERROR: Variable new_flag in DATA set not in BASE set. No appending done. */
+
+/* Subtler silent mode: BASE has a column absent from DATA */
+proc append base=claims_v2 data=claims_v1;   /* v2 added new_flag; v1 lacks it */
+run;
+/* Step succeeds; new_flag is missing for every v1 row — no WARNING. */
 ```
 
 ### Idiom: SQL join vs MERGE distinction (GWU §4)
@@ -291,25 +317,39 @@ proc sql;
 quit;
 ```
 
-### Idiom: Macro-quote `'` vs `"` (GWU §5)
+### Idiom: Macro resolution and quote semantics (GWU §5)
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`.
 
-Purpose: single quotes suppress macro resolution; double quotes resolve
-`&var`. `%str('text')` does NOT unquote the inner `&var`. Use `%nrstr` to
-explicitly hold `&` and `%` triggers literal.
+Purpose: in DATA/PROC step string literals, single quotes keep `&var`
+literal while double quotes resolve it. In macro-context statements
+(`%put`, `%let`, `%if`), the macro processor scans for `&` and `%`
+triggers *before* the statement receives its argument, so quote type does
+not suppress resolution — use `%nrstr(...)` or `%str(%&...)` to mask
+triggers.
 
 ```sas
-/* CORRECT - double quotes resolve &name */
+/* CORRECT — single-quoted DATA-step literal: &name is not resolved */
 %let name = claims;
-%put "table: &name";                /* prints: table: claims */
-%put %nrstr(literal &name unresolved); /* prints: literal &name unresolved */
+data _null_;
+  x = 'table: &name';
+  put x;          /* writes: table: &name */
+run;
+
+/* CORRECT — double-quoted DATA-step literal: &name resolves */
+data _null_;
+  x = "table: &name";
+  put x;          /* writes: table: claims */
+run;
+
+/* CORRECT — macro-context masking requires %nrstr, not quotes */
+%put %nrstr(literal &name is unresolved);     /* writes: literal &name is unresolved */
 ```
 
 ```sas
-/* WRONG - single quotes block resolution */
+/* WRONG — single quotes in %put do NOT suppress resolution */
 %let name = claims;
-%put 'table: &name';                 /* prints: table: &name */
+%put 'table: &name';   /* writes: table: claims — quotes are literal output chars */
 ```
 ## Function / Statement Quick Ref
 
@@ -355,8 +395,12 @@ explicitly hold `&` and `%` triggers literal.
   Source: https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas
   (example of `retain &prevkeyvar;` for cross-row state).
 
-- **PROC APPEND drops columns silently without FORCE** — see Canonical
-  Idiom "PROC APPEND base-set rule" and GWU §3.
+- **PROC APPEND mismatched-shape modes** — without `FORCE`, a column in
+  DATA= absent from BASE= ERRORs (step fails, nothing appended); with
+  `FORCE` the extra column drops with a WARNING. The silent mode is
+  BASE-has-extra: appended rows get missing values in that column, no
+  diagnostic. See Canonical Idiom "PROC APPEND variable-shape rules" and
+  GWU §3.
   Source: https://github.com/jphall663/GWU_data_mining
 
 - **Trailing spaces / tabs / gremlins** — invisible-character bugs in
@@ -374,7 +418,7 @@ produces output, but the output is almost certainly wrong:
 - `data out; set in; cum = cum + x; run;` with no `retain cum 0;` → see
   Silent Pitfalls.
 - `proc append base=a data=b;` where `b` has a column not in `a`, no
-  `FORCE` specified → column dropped silently; GWU §3.
+  `FORCE` specified → step ERRORs, nothing appended; GWU §3.
 - `select a.*, b.*` in a PROC SQL join where `a` and `b` share column
   names other than the join key → ambiguous; GWU §4.
 

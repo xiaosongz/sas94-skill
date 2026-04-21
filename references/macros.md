@@ -22,10 +22,10 @@ macro code is well-formed by construction.
 
 Source: https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasMacroParentheses.ts
 
-Without `()`, `sasjs/lint` flags `hasMacroParentheses`. More importantly,
-SAS will parse a bare `%macro foo;` differently from `%macro foo();` —
-positional-parameter calls and the `des=` / `STORE SOURCE` option slot
-both require the `()` form.
+Without `()`, `sasjs/lint hasMacroParentheses` fires. The `()` form is a
+`sasjs/core` convention that keeps the signature shape stable whether the
+macro takes zero or many parameters, and it's the slot that
+`/*/STORE SOURCE*/` and `/des=` idioms plug into.
 
 ```sas
 /* CORRECT */
@@ -51,14 +51,14 @@ nested, or edited across hands. `sasjs/lint hasMacroNameInMend` requires
 
 ```sas
 /* CORRECT */
-%macro somemacro;
+%macro somemacro();
   %put &sysmacroname;
 %mend somemacro;
 ```
 
 ```sas
 /* WRONG - bare %mend; hasMacroNameInMend fires */
-%macro somemacro;
+%macro somemacro();
   %put &sysmacroname;
 %mend;
 ```
@@ -154,8 +154,8 @@ CURE` is not the same as `SECURE`.
 
 ```sas
 /* CORRECT */
-%macro somemacro / SECURE;
-%macro another  / SECURE SRC;
+%macro somemacro() / SECURE;
+%macro another()  / SECURE SRC;
 ```
 
 ```sas
@@ -287,11 +287,15 @@ when false.
   `sasjs/lint noGremlins` flags non-allowed-list non-printables.
   Source: https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noGremlins.ts
 
-- **`'&var'` with single quotes** — single quotes suppress macro
-  resolution; the text `&var` is stored literally. Use double quotes to
-  resolve, `%nrstr(...)` when you explicitly want the literal.
-  See GWU item 5. Source:
-  `pipeline/manual/gwu-data-mining-5-items.md`.
+- **`'&var'` quote-suppression myth in macro context** — in DATA/PROC
+  step string literals, single quotes keep `&var` literal while double
+  quotes resolve it; in macro-context statements (`%put`, `%let`, `%if`),
+  the macro processor scans for `&` and `%` triggers *before* the
+  statement receives its argument, so quote type does not suppress
+  resolution. `%put 'table: &name';` still resolves `&name` — the single
+  quotes become literal output characters. Use `%nrstr(...)` or
+  `%str(%&...)` to mask triggers in macro context. See GWU item 5.
+  Source: `pipeline/manual/gwu-data-mining-5-items.md`.
 
 ## Anti-patterns (STOP signs)
 
@@ -302,9 +306,10 @@ almost certainly wrong:
 - `%macro ...; %macro ...; %mend; %mend;` (nested) → see Rule 3.
 - `%let x = &y;` inside a `%macro` with no `%local x;` → scope leak; see
   Silent Pitfalls.
-- `%str('text with &var')` expecting `&var` to stay literal → single
-  quotes inside `%str` do NOT suppress resolution; use `%nrstr(...)`. See
-  GWU item 5 in `pipeline/manual/gwu-data-mining-5-items.md`.
+- `%put 'text with &var';` expecting `&var` to stay literal → quotes in
+  macro-context statements do NOT suppress resolution; the macro processor
+  scans triggers before the statement sees its argument. Use `%nrstr(...)`
+  to mask. See GWU item 5 in `pipeline/manual/gwu-data-mining-5-items.md`.
 - Encoded-password literals `{SAS001}`, `{SAS002}`, `{SASENC}` in source →
   see Silent Pitfalls.
 

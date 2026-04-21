@@ -26,9 +26,10 @@ hand-transcribed pitfalls in
 
 Source: https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasMacroParentheses.ts
 
-Positional parameters and `/STORE SOURCE`, `/des=`, `/SECURE` options all
-require the `()` form; without it `sasjs/lint hasMacroParentheses` fires
-and many call-site bugs become silent.
+Without `()`, `sasjs/lint hasMacroParentheses` fires. The `()` form is a
+`sasjs/core` convention that keeps the signature shape stable whether the
+macro takes zero or many parameters, and it's the slot that
+`/*/STORE SOURCE*/` and `/des=` idioms plug into.
 
 ```sas
 /* CORRECT */
@@ -53,14 +54,14 @@ Ambiguous `%mend;` breaks code navigation and silently masks missing
 
 ```sas
 /* CORRECT */
-%macro somemacro;
+%macro somemacro();
   %put &sysmacroname;
 %mend somemacro;
 ```
 
 ```sas
 /* WRONG */
-%macro somemacro;
+%macro somemacro();
   %put &sysmacroname;
 %mend;
 ```
@@ -143,8 +144,8 @@ list. Whitespace-sensitive: `SE CURE` is not `SECURE`.
 
 ```sas
 /* CORRECT */
-%macro somemacro / SECURE;
-%macro another  / SECURE SRC;
+%macro somemacro() / SECURE;
+%macro another()  / SECURE SRC;
 ```
 
 ```sas
@@ -226,9 +227,17 @@ conflicts.
 data out; set in; run;
 ```
 
-```sas
-/* WRONG - trailing space after semicolon */
-data out; set in; run;··
+```
+/* WRONG - trailing whitespace on code lines (invisible, but present)
+
+   After the semicolon on each code line below, the source file carries
+   trailing ASCII space characters (0x20). `sasjs/lint noTrailingSpaces`
+   auto-fixes these. Git history diffs flood with whitespace-only churn
+   when left in.
+*/
+%put 'hello';
+%put 'world';
+/* imagine two or more 0x20 bytes after each semicolon, before the newline */
 ```
 
 ### Rule 11: No "gremlin" non-printable characters in source
@@ -244,8 +253,14 @@ where member_id = 'A12345';
 ```
 
 ```sas
-/* WRONG - zero-width no-break space inside literal */
-where member_id = 'A12345';  /* contains invisible U+FEFF */
+/* WRONG - gremlin bytes inside the quoted string (invisible in most editors)
+
+   The literal bytes between 'A' and '12345' below include U+FEFF (BOM,
+   three bytes: EF BB BF) copied from an Excel export. `sasjs/lint noGremlins`
+   flags the token; the WHERE clause silently fails to match cleanly-typed
+   'A12345' rows.
+*/
+where member_id = 'A<U+FEFF>12345';   /* actual file would have invisible bytes */
 ```
 
 ### Rule 12: Never commit encoded-password literals (`{SAS001}`, `{SAS002}`, `{SASENC}`)
@@ -265,22 +280,23 @@ libname db oracle user=svc password="&env_db_pw" path=prod;
 libname db oracle user=svc password="{SAS002}D41D8CD98F00B204E9800998ECF8427E" path=prod;
 ```
 
-### Rule 13: Configure consistent line endings (`lineEndings`)
+### Rule 13: Use Unix LF (\n) line endings, never CRLF
 
 Source: https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/lineEndings.ts
 
-`sasjs/lint lineEndings` enforces a single convention (LF or CRLF).
-Mixed endings within one file break some SAS-server line counters and
-every diff tool.
+Why: `sasjs/lint lineEndings` enforces the configured terminator. Most SAS
+Unix/Linux hosts choke on Windows CRLF in macros that splice strings byte
+by byte; mixed endings in a single file produce inconsistent diffs and
+break downstream tools that rely on line counts.
 
-```sas
-/* CORRECT - single LF ending */
-%put 'hello';\n%put 'world';\n
-```
+Verification (shell):
 
-```sas
-/* WRONG - mixed CRLF + LF */
-%put 'hello';\r\n%put 'test';\n%put 'world';\r\n
+```bash
+# CORRECT — pure LF
+hexdump -C foo.sas | grep '0a$' | head -1      # trailing bytes: ... 3b 0a
+
+# WRONG — CRLF remnants
+hexdump -C foo.sas | grep '0d 0a' | head -1   # found CR (0d) before LF (0a)
 ```
 
 ### Rule 14: LAG is queue-based — call unconditionally, gate usage afterwards (GWU §1)
@@ -332,25 +348,42 @@ data both;
 run;
 ```
 
-### Rule 16: PROC APPEND uses BASE's schema — new columns dropped without FORCE (GWU §3)
+### Rule 16: PROC APPEND variable-shape rules (GWU §3)
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`.
 
-`PROC APPEND` uses `BASE` as the column contract. Columns present in
-`DATA` but not `BASE` vanish silently unless `FORCE` is specified.
+`PROC APPEND BASE=a DATA=b` uses BASE's variable definitions. Without
+`FORCE`, any variable in DATA= that is absent from BASE= causes the step
+to **fail with ERROR** — nothing is appended. With `FORCE`, the extra
+variable is **dropped with a WARNING** and the step proceeds. The silent
+failure mode is different: when BASE= carries a variable absent from
+DATA=, appended rows get missing values in that column, no diagnostic —
+easy to miss when BASE= has been recently extended.
 
 ```sas
-/* CORRECT */
-data a;
-  set a;
-  length new_col $32;
+/* CORRECT — align DATA columns to BASE before appending, or use FORCE knowingly */
+proc append base=claims data=claims_new force;   /* drops new-in-DATA vars w/ WARNING */
 run;
-proc append base=a data=b; run;
+
+/* or: explicitly reshape DATA to match BASE */
+data claims_aligned;
+  set claims_new;
+  keep patient_id claim_dt cost;   /* whatever BASE=claims has */
+run;
+proc append base=claims data=claims_aligned;    /* no FORCE needed */
+run;
 ```
 
 ```sas
-/* WRONG */
-proc append base=a data=b; run;  /* b.new_col silently dropped */
+/* WRONG — DATA has a column absent from BASE; step errors without FORCE */
+proc append base=claims data=claims_new;
+run;
+/* ERROR: Variable new_flag in DATA set not in BASE set. No appending done. */
+
+/* Subtler silent mode: BASE has a column absent from DATA */
+proc append base=claims_v2 data=claims_v1;   /* v2 added new_flag; v1 lacks it */
+run;
+/* Step succeeds; new_flag is missing for every v1 row — no WARNING. */
 ```
 
 ### Rule 17: SQL join vs MERGE — different semantics, different failure modes (GWU §4)
@@ -378,25 +411,38 @@ proc sql;
 quit;
 ```
 
-### Rule 18: Macro-quote single vs double — `'&var'` is literal, `"&var"` resolves (GWU §5)
+### Rule 18: Macro resolution and quote semantics (GWU §5)
 
 Source: https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`.
 
-Single quotes suppress macro resolution; double quotes resolve. `%str`
-does NOT override this. Use `%nrstr` when you want `&` and `%` to stay
-literal.
+In DATA/PROC step string literals, single quotes keep `&var` literal while
+double quotes resolve it. In macro-context statements (`%put`, `%let`,
+`%if`), the macro processor scans for `&` and `%` triggers *before* the
+statement receives its argument, so quote type does not suppress
+resolution — use `%nrstr(...)` or `%str(%&...)` to mask triggers.
 
 ```sas
-/* CORRECT */
+/* CORRECT — single-quoted DATA-step literal: &name is not resolved */
 %let name = claims;
-%put "table: &name";                 /* prints: table: claims */
-%put %nrstr(literal &name unresolved);
+data _null_;
+  x = 'table: &name';
+  put x;          /* writes: table: &name */
+run;
+
+/* CORRECT — double-quoted DATA-step literal: &name resolves */
+data _null_;
+  x = "table: &name";
+  put x;          /* writes: table: claims */
+run;
+
+/* CORRECT — macro-context masking requires %nrstr, not quotes */
+%put %nrstr(literal &name is unresolved);     /* writes: literal &name is unresolved */
 ```
 
 ```sas
-/* WRONG */
+/* WRONG — single quotes in %put do NOT suppress resolution */
 %let name = claims;
-%put 'table: &name';                 /* prints: table: &name */
+%put 'table: &name';   /* writes: table: claims — quotes are literal output chars */
 ```
 
 ### Rule 19: Declare `%local` for every non-parameter symbol inside a macro
@@ -508,9 +554,10 @@ the 20 rules above:
 - Encoded password `{SAS00X}` in source → Rule 12.
 - `if cond then lagx = lag(x);` → Rule 14.
 - `merge a b; by id; run;` without handling same-named columns → Rule 15.
-- `proc append base=a data=b;` with mismatched schema → Rule 16.
+- `proc append base=a data=b;` where DATA has a column not in BASE, no
+  `FORCE` → ERROR, step fails → Rule 16.
 - `select a.*, b.*` across a shared-column join → Rule 17.
-- `'&var'` when you wanted resolution → Rule 18.
+- `%put 'text with &var';` expecting quotes to suppress resolution → Rule 18.
 - `%let x = ...;` inside a macro with no `%local x;` → Rule 19.
 
 ## See Also
