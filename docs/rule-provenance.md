@@ -10,6 +10,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 
 | File | Section | # | Claim | Source | Last verified |
 |------|---------|---|-------|--------|---------------|
+| base-procs.md | Canonical Idioms | idiom | PROC FREQ minimum-count filter via `OUT=` + `WHERE=` | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Canonical Idioms | idiom | PROC MEANS CLASS-level summary → flat output dataset | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Canonical Idioms | idiom | PROC SORT NODUPKEY dedup with audit tail | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Canonical Idioms | idiom | PROC TRANSPOSE long → wide by `ID` | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 1 | `PROC FREQ TABLES a*b;` drops rows with missing in `a` or `b` by default — add… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 2 | `PROC MEANS` prints by default — use `NOPRINT` when you only want `OUTPUT OUT=` | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 3 | `PROC SORT NODUPKEY` dedups on BY vars only — `NODUPRECS` dedups on the full row | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 4 | `PROC SORT` without `OUT=` **replaces** the input dataset in place | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 5 | `PROC TRANSPOSE` with no `VAR` transposes every numeric variable — and silently… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 6 | `PROC REPORT DEFINE` type determines aggregation — `DISPLAY` / `ANALYSIS` / `GR… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 7 | `PROC UNIVARIATE` produces a long default report — use `NOPRINT` + `OUTPUT OUT=… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| base-procs.md | Critical Rules | 8 | `PROC PRINT VAR a b c;` orders columns; `NOOBS` drops the row-number column | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
 | data-step.md | Canonical Idioms | idiom | `mf_nobs` — observation-count one-liner for open code | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_nobs.sas | 2026-04-21 |
 | data-step.md | Canonical Idioms | idiom | Guarded predicate macro for DATA-step assertions | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_assertdsobs.sas | 2026-04-21 |
 | data-step.md | Canonical Idioms | idiom | LAG missing-value trap (GWU §1) | https://github.com/jphall663/GWU_data_mining — hand-transcribed in `pipeline/manual/gwu-data-mining-5-items.md`. | 2026-04-21 |
@@ -33,6 +45,19 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | macros.md | Critical Rules | 4 | Strict macro-definition syntax — no spaces inside parameter names or invalid op… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/strictMacroDefinition.ts | 2026-04-21 |
 | macros.md | Critical Rules | 5 | Every macro file starts with a Doxygen header (`@file`, `@brief`, `@param`, `@v… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasDoxygenHeader.ts | 2026-04-21 |
 | macros.md | Critical Rules | 6 | Macros that are shared, stored, or security-sensitive carry required options (`… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasRequiredMacroOptions.ts | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for… | https://support.sas.com/resources/papers/proceedings11/101-2011.pdf | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | Canonical left join — reference-table lookup with `COALESCE` defaulting | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | CASE expression for row-level conditional classification | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | Claims dedup by earliest-row-per-key via `MIN(date)` + self-join | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | Dictionary-table introspection — list every variable in every WORK dataset | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| proc-sql.md | Critical Rules | 1 | Always qualify shared columns in multi-table SELECT lists — never `a.*, b.*` wi… | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 2 | `FULL JOIN` requires `COALESCE` on the join key — SAS does not merge it automat… | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 3 | `WHERE` filters rows before grouping; `HAVING` filters groups after | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| proc-sql.md | Critical Rules | 4 | `INTO :macvar SEPARATED BY ','` needs `%trim` / `strip()` before going into an… | https://support.sas.com/resources/papers/proceedings11/101-2011.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 5 | Use `FEEDBACK` to surface the expanded query — catches `*` expansion and outer-… | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 6 | `NOEXEC` is a dry-run — parses and plans the query without reading data | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 7 | `RESET` changes options mid-query block — scope is the current PROC SQL, not th… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| proc-sql.md | Critical Rules | 8 | Prefer `CREATE TABLE t AS SELECT ...` over `CREATE TABLE t (cols)` + `INSERT IN… | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 1 | Every `%macro` signature must carry parentheses `()` | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasMacroParentheses.ts | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 2 | Close every `%mend` with its macro name | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasMacroNameInMend.ts | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 3 | Never nest `%macro` definitions | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/noNestedMacros.ts | 2026-04-21 |
@@ -54,4 +79,4 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | sas-master-reference.md | Critical Rules | 19 | Declare `%local` for every non-parameter symbol inside a macro | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mp_hashdataset.sas | 2026-04-21 |
 | sas-master-reference.md | Critical Rules | 20 | Structure every macro signature as positional-required + keyword-optional, and… | https://github.com/sasjs/core/blob/3a54b9c796c0bfe477d1aefc1e22b9ff9f2c96c2/base/mf_existds.sas | 2026-04-21 |
 
-Total rows: 43.
+Total rows: 68.
