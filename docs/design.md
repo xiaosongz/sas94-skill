@@ -183,7 +183,7 @@ Consistency rules:
 - All pipeline scripts run in Claude Code session (me + subagents). **Zero Claude API spend.** Extraction = session time + Python via `uv`.
 - HTTP scraping library stack: `httpx[asyncio]` + `beautifulsoup4[lxml]` + `requests-cache` (SQLite backend)
 - Rate limit: 1 req/sec semaphore, exponential backoff on 429/5xx
-- User-Agent: `"SAS-Doc-Ingester/1.0 (research pipeline; contact: <email>)"`
+- User-Agent: `"sas94-skill/0.0.1 (+https://github.com/xiaosongz/sas94-skill)"` (GitHub URL as contact path; no email required)
 - Path: `/doc/en/` default (explicitly permitted by robots.txt)
 - Extraction selectors (from SAS doc HTML): `div.xisDoc-syntaxSimple`, `div.xisDoc-requiredArgGroup`, `div.xisDoc-exampleBlock`, `div.xisDoc-seeAlsoList`, `p.xisDoc-shortDescription`, `h1.xisDoc-title`
 
@@ -285,7 +285,7 @@ Week 1 post Phase 1:
 - **v1.0.0** = every `references/*.md` has all REQUIRED sections populated from verified sources (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also).
 - **v1.x** = additions to OPTIONAL sections (Silent Pitfalls, Anti-patterns), plus net-new idioms.
 
-## Phase 1 completion criteria (v0.1.0 tag)
+## Phase 1 completion criteria (v0.0.1 tag)
 
 1. SKILL.md router + routing table complete for all 11 reference files
 2. Critical Rules + Silent Pitfalls for `macros.md` + `data-step.md` sourced 100% from `sasjs/lint` + `sasjs/core`
@@ -293,7 +293,9 @@ Week 1 post Phase 1:
 4. Function/Statement Quick Ref marked `TODO (source pending)` rather than fabricated
 5. `permissions.json`, `.skillignore`, pre-commit hooks, CI workflows committed
 6. `README.md` + `docs/CONTRIBUTING.md` + `docs/rule-provenance.md` populated
-7. Tagged `v0.1.0`, dog-fooded internally before public announcement
+7. Tagged `v0.0.1`, dog-fooded internally before public announcement
+
+Priority: **reference-file completeness before any v1.1 lint-hook or MCP feature work.** All feature additions blocked until every REQUIRED section across all 11 reference files is populated.
 
 ## Out of Scope (explicit non-goals)
 
@@ -314,12 +316,6 @@ Week 1 post Phase 1:
 | LLM hallucinates rules not in sources | Medium | Pre-commit hook requires `Source:` URL; PR reviewer rejects unsourced |
 | `sasjs/lint` rule changes break our extraction | Low | Pin SHA per release; quarterly pull with diff review |
 | MEPS license never clarified | Medium | Use as inspiration only until then; fallback to lexjansen papers for survey idioms |
-
-## Open Questions
-
-- Email address for SAS User-Agent header (need non-personal inbox)
-- Whether `truveta-prose-skill` pattern table in README should cite this skill as sibling project post-launch
-- Whether v1.1 should add `sasjs-lint` feedback-loop flag or focus on reference-file completeness first
 
 ## References
 

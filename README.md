@@ -12,7 +12,6 @@ Biostatisticians and health-services researchers use SAS 9.4 daily. Current LLMs
 
 - Thin router `SKILL.md` + on-demand `references/*.md` files per topic (DATA step, PROC SQL, macros, base procs, stat procs, hash, ODS, formats, functions, idioms)
 - Rules distilled from MIT-licensed sources (`sasjs/lint`, `sasjs/core`) + transformative use of SAS 9.4 documentation
-- Pattern modeled after [`truveta-prose-skill`](https://github.com/xiaosongz/truveta-prose-skill)
 
 ## Install (future)
 
