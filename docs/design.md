@@ -279,6 +279,12 @@ Week 1 post Phase 1:
 - Run on 5 real workloads from OLIVE / Medicaid claims analyses
 - Track false-positives + false-negatives → file issues → feed Phase 2
 
+## Versioning semantics
+
+- **v0.x.y** = pre-release. "Required" sections in the reference template may be stubbed with `TODO (source pending)` as long as the stub is explicit and not fabricated content. Acceptable for early adoption and dog-fooding.
+- **v1.0.0** = every `references/*.md` has all REQUIRED sections populated from verified sources (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also).
+- **v1.x** = additions to OPTIONAL sections (Silent Pitfalls, Anti-patterns), plus net-new idioms.
+
 ## Phase 1 completion criteria (v0.1.0 tag)
 
 1. SKILL.md router + routing table complete for all 11 reference files
