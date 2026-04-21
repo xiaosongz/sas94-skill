@@ -357,26 +357,26 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `set` | `set ds1 ds2 ...;` | Read input datasets into PDV | Omitting `by` for MERGE-alternative interleave | TODO (source pending) |
-| `merge` | `merge a b; by id;` | BY-group DATA-step join | Right-side silently overwrites (see Rule / GWU §2) | TODO (source pending) |
-| `by` | `by var1 var2;` | Group boundary for MERGE / `first.` / `last.` | Inputs not pre-sorted on BY vars | TODO (source pending) |
-| `retain` | `retain var initial;` | Carry a PDV value across iterations | Forgetting `retain` → accumulator resets to missing each row | TODO (source pending) |
-| `array` | `array a{10} a1-a10;` | Declare a DATA-step array | Using `{}` vs `()` inconsistently; mismatched bounds | TODO (source pending) |
-| `do` / `end` | `do i = 1 to n; ... end;` | Iterative loop in DATA step | Using DATA `do` vs macro `%do` | TODO (source pending) |
-| `output` | `output <dsname>;` | Explicit write of the current PDV | Using `output` inside `if` without covering all branches | TODO (source pending) |
-| `keep` | `keep var1 var2;` | Restrict output columns | Placing `keep=` on dataset option vs statement form | TODO (source pending) |
-| `drop` | `drop var1 var2;` | Drop output columns | `drop` a BY variable — breaks downstream merges | TODO (source pending) |
-| `rename` | `rename old=new;` or `ds(rename=(old=new))` | Rename on input or output | Using in-statement rename when in-dataset-option rename is safer | TODO (source pending) |
-| `format` | `format var mmddyy10.;` | Attach a format to a variable | Forgetting trailing `.` in format name | TODO (source pending) |
-| `length` | `length var $32;` | Declare column length / type | Omitting → char defaults to first-assignment length, often 8 | TODO (source pending) |
-| `attrib` | `attrib var length=$32 format=$32. label='...';` | Combined length/format/label | Using `attrib` when `length` alone would do | TODO (source pending) |
-| `call missing` | `call missing(a, b, c);` | Set multiple vars to missing | Using `a = .; b = .;` instead for >2 vars | TODO (source pending) |
+| `set` | `set ds1 ds2 ...;` | Read input datasets into PDV | Omitting `by` for MERGE-alternative interleave | [`set`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `merge` | `merge a b; by id;` | BY-group DATA-step join | Right-side silently overwrites (see Rule / GWU §2) | [`merge`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `by` | `by var1 var2;` | Group boundary for MERGE / `first.` / `last.` | Inputs not pre-sorted on BY vars | [`by`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `retain` | `retain var initial;` | Carry a PDV value across iterations | Forgetting `retain` → accumulator resets to missing each row | [`retain`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `array` | `array a{10} a1-a10;` | Declare a DATA-step array | Using `{}` vs `()` inconsistently; mismatched bounds | [`array`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `do` / `end` | `do i = 1 to n; ... end;` | Iterative loop in DATA step | Using DATA `do` vs macro `%do` | [`do` / `end`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `output` | `output <dsname>;` | Explicit write of the current PDV | Using `output` inside `if` without covering all branches | [`output`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `keep` | `keep var1 var2;` | Restrict output columns | Placing `keep=` on dataset option vs statement form | [`keep`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `drop` | `drop var1 var2;` | Drop output columns | `drop` a BY variable — breaks downstream merges | [`drop`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `rename` | `rename old=new;` or `ds(rename=(old=new))` | Rename on input or output | Using in-statement rename when in-dataset-option rename is safer | [`rename`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `format` | `format var mmddyy10.;` | Attach a format to a variable | Forgetting trailing `.` in format name | [`format`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `length` | `length var $32;` | Declare column length / type | Omitting → char defaults to first-assignment length, often 8 | [`length`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `attrib` | `attrib var length=$32 format=$32. label='...';` | Combined length/format/label | Using `attrib` when `length` alone would do | [`attrib`](https://documentation.sas.com/doc/en/lestmtsref/9.4/lestmtsref.htm) |
+| `call missing` | `call missing(a, b, c);` | Set multiple vars to missing | Using `a = .; b = .;` instead for >2 vars | [`call missing`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
 | `_N_` | automatic var | Current iteration count | Treating as row number after `set`+`where` filter | TODO (source pending) |
 | `_ERROR_` | automatic var | Flag: 1 if any data error this row | Not resetting with `_ERROR_ = 0;` after handling | TODO (source pending) |
-| `lag` | `lag(x)` | Queue-based previous-call value | Placing inside conditional → misaligned queue (GWU §1) | TODO (source pending) |
-| `coalesce` | `coalesce(a, b, c)` | First non-missing value | Forgetting it's non-short-circuit — all args evaluated | TODO (source pending) |
-| `symget` | `symget('macvar')` | Read macro var at DATA-step *execute* time | Using when compile-time `&macvar` would work | TODO (source pending) |
-| `call symputx` | `call symputx('macvar', value, 'G'|'L'|'F');` | Write a macro var from DATA step | Omitting scope — surprises in nested contexts | TODO (source pending) |
+| `lag` | `lag(x)` | Queue-based previous-call value | Placing inside conditional → misaligned queue (GWU §1) | [`lag`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
+| `coalesce` | `coalesce(a, b, c)` | First non-missing value | Forgetting it's non-short-circuit — all args evaluated | [`coalesce`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
+| `symget` | `symget('macvar')` | Read macro var at DATA-step *execute* time | Using when compile-time `&macvar` would work | [`symget`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
+| `call symputx` | `call symputx('macvar', value, 'G'|'L'|'F');` | Write a macro var from DATA step | Omitting scope — surprises in nested contexts | [`call symputx`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
 
 ## Silent Pitfalls
 

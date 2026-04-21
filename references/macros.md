@@ -248,23 +248,23 @@ when false.
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `%macro` | `%macro name(pos, kw=default) / options;` | Open a macro definition | Missing `()` in signature | TODO (source pending) |
-| `%mend` | `%mend name;` | Close a macro definition | Bare `%mend;` without name | TODO (source pending) |
-| `%let` | `%let var = value;` | Assign a macro variable | Forgetting scope — writes to outermost-matching scope | TODO (source pending) |
-| `%global` | `%global var1 var2;` | Declare a macro variable in the global symbol table | Declaring `%global` inside a macro that already has `%local var` | TODO (source pending) |
-| `%local` | `%local var1 var2;` | Declare variables local to the current macro | Forgetting `%local` — variable leaks to caller scope | TODO (source pending) |
-| `%do` / `%end` | `%do i = 1 %to 10; ... %end;` | Iterative macro loop | Using `&i` after `%end;` — value is last-iter value | TODO (source pending) |
-| `%if` / `%then` / `%else` | `%if cond %then %do; ... %end; %else %do; ... %end;` | Conditional macro logic | Using DATA-step `if` vs macro `%if` | TODO (source pending) |
-| `%put` | `%put NOTE- message;` | Write to the SAS log | Using `%put` without `NOTE-` / `WARNING-` / `ERROR-` tag | TODO (source pending) |
-| `%sysfunc` | `%sysfunc(func(args), format)` | Call a DATA-step function from macro code | Forgetting the optional format argument | TODO (source pending) |
-| `%str` | `%str(text with , ; = etc.)` | Mask special chars at compile time | Using `%str('text')` expecting `&var` to NOT resolve (still does) | TODO (source pending) |
-| `%nrstr` | `%nrstr(&var literal)` | Mask `&` and `%` triggers at compile time | Omitting when passing a literal with `&var` through a parameter | TODO (source pending) |
-| `%bquote` | `%bquote(&var with unbalanced quote)` | Mask special chars at macro-execution time | Using `%str` when unbalanced quotes require `%bquote` | TODO (source pending) |
-| `%nrbquote` | `%nrbquote(&var with & or %)` | Mask `&`, `%`, and special chars at execution time | Picking wrong quote-function tier | TODO (source pending) |
-| `%eval` | `%eval(&a + &b)` | Integer-only arithmetic in macro | Using on decimals — use `%sysevalf` | TODO (source pending) |
-| `%sysevalf` | `%sysevalf(&a / &b, ceil)` | Floating-point arithmetic in macro | Omitting conversion type (`integer`, `ceil`, `floor`, `boolean`) | TODO (source pending) |
-| `call symputx` | `call symputx('var', value, 'G'|'L'|'F');` | Write a macro variable from a DATA step | Omitting scope arg — defaults to most-local; surprises in nested contexts | TODO (source pending) |
-| `symget` | `symget('var')` | Read a macro variable inside a DATA step | Using `symget` when compile-time `&var` would work | TODO (source pending) |
+| `%macro` | `%macro name(pos, kw=default) / options;` | Open a macro definition | Missing `()` in signature | [`%macro`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%mend` | `%mend name;` | Close a macro definition | Bare `%mend;` without name | [`%mend`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%let` | `%let var = value;` | Assign a macro variable | Forgetting scope — writes to outermost-matching scope | [`%let`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%global` | `%global var1 var2;` | Declare a macro variable in the global symbol table | Declaring `%global` inside a macro that already has `%local var` | [`%global`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%local` | `%local var1 var2;` | Declare variables local to the current macro | Forgetting `%local` — variable leaks to caller scope | [`%local`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%do` / `%end` | `%do i = 1 %to 10; ... %end;` | Iterative macro loop | Using `&i` after `%end;` — value is last-iter value | [`%do` / `%end`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%if` / `%then` / `%else` | `%if cond %then %do; ... %end; %else %do; ... %end;` | Conditional macro logic | Using DATA-step `if` vs macro `%if` | [`%if` / `%then` / `%else`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%put` | `%put NOTE- message;` | Write to the SAS log | Using `%put` without `NOTE-` / `WARNING-` / `ERROR-` tag | [`%put`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%sysfunc` | `%sysfunc(func(args), format)` | Call a DATA-step function from macro code | Forgetting the optional format argument | [`%sysfunc`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%str` | `%str(text with , ; = etc.)` | Mask special chars at compile time | Using `%str('text')` expecting `&var` to NOT resolve (still does) | [`%str`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%nrstr` | `%nrstr(&var literal)` | Mask `&` and `%` triggers at compile time | Omitting when passing a literal with `&var` through a parameter | [`%nrstr`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%bquote` | `%bquote(&var with unbalanced quote)` | Mask special chars at macro-execution time | Using `%str` when unbalanced quotes require `%bquote` | [`%bquote`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%nrbquote` | `%nrbquote(&var with & or %)` | Mask `&`, `%`, and special chars at execution time | Picking wrong quote-function tier | [`%nrbquote`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%eval` | `%eval(&a + &b)` | Integer-only arithmetic in macro | Using on decimals — use `%sysevalf` | [`%eval`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `%sysevalf` | `%sysevalf(&a / &b, ceil)` | Floating-point arithmetic in macro | Omitting conversion type (`integer`, `ceil`, `floor`, `boolean`) | [`%sysevalf`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `call symputx` | `call symputx('var', value, 'G'|'L'|'F');` | Write a macro variable from a DATA step | Omitting scope arg — defaults to most-local; surprises in nested contexts | [`call symputx`](https://documentation.sas.com/doc/en/mcrolref/9.4/mcrolref.htm) |
+| `symget` | `symget('var')` | Read a macro variable inside a DATA step | Using `symget` when compile-time `&var` would work | [`symget`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
 
 ## Silent Pitfalls
 
