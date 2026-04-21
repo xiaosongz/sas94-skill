@@ -353,11 +353,14 @@ code-generation macros that emit `%let &var = ...` targets where
 `&var` is not known until run time.
 
 ```sas
-%macro makename;
+/* Whitlock's NESUG 2009 paper uses bare `%macro makename;` (no parens).
+   Parens added here to comply with sasjs/lint hasMacroParentheses;
+   pattern is otherwise identical. */
+%macro makename();
   claim_count_2024
 %mend makename;
 
-%macro set_and_read;
+%macro set_and_read();
   %let %makename = 77;
   %put %unquote(%nrstr(&)%makename);   /* prints 77, not &claim_count_2024 */
 %mend set_and_read;
