@@ -12,14 +12,14 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 |------|----------|----------------|------------------|-----------|----------|------------------|----------------|------------|--------|
 | base-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | data-step.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| formats-informats.md | no | no | no | no | no | no | no | 0% | stub |
+| formats-informats.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | functions-reference.md | no | no | no | no | no | no | no | 0% | stub |
 | hash-tables.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | idioms-from-lexjansen.md | no | no | no | no | no | no | no | 0% | stub |
 | macros.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| ods-and-output.md | no | no | no | no | no | no | no | 0% | stub |
+| ods-and-output.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | proc-sql.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | sas-master-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | stat-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 
-Populated: 7 / 11; Stubs: 4 / 11.
+Populated: 9 / 11; Stubs: 2 / 11.

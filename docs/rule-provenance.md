@@ -35,6 +35,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | data-step.md | Critical Rules | 4 | Strip trailing whitespace from every line | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noTrailingSpaces.ts | 2026-04-21 |
 | data-step.md | Critical Rules | 5 | No "gremlin" non-printable characters | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noGremlins.ts | 2026-04-21 |
 | data-step.md | Critical Rules | 6 | Never commit encoded-password literals (`{SAS001}`, `{SAS002}`, `{SASENC}`) | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/line/noEncodedPasswords.ts | 2026-04-21 |
+| formats-informats.md | Canonical Idioms | idiom | `input()` inside a DATA step to coerce a numeric-looking character column | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Canonical Idioms | idiom | Build a claims-aware character format for CPT / ICD code categorization | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| formats-informats.md | Canonical Idioms | idiom | Build a user format from a dataset via `CNTLIN=` | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| formats-informats.md | Canonical Idioms | idiom | Parse a messy date column with `anydtdte.` plus explicit `DATESTYLE=` | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 1 | `put()` goes variable → string; `input()` goes string → variable — inverting th… | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 2 | Every format reference ends in a period (`.`); every format definition in `VALU… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 3 | `anydtdte.` resolves ambiguous dates using the `DATESTYLE=` system option — set… | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 4 | `VALUE` ranges need an `other=` clause — unmapped values otherwise display as t… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 5 | `CNTLIN=` requires columns `FMTNAME`, `START`, `LABEL` — plus `TYPE='C'` for ch… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 6 | FORMAT (display) and INFORMAT (parse) are distinct attributes — using `FORMAT`… | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 7 | Format width controls display truncation but NOT stored precision | https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm | 2026-04-21 |
+| formats-informats.md | Critical Rules | 8 | `PICTURE` digit selectors — `9` is a required digit, `0` is leading-zero-filled… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | Deduplication via `check()` + `add()` — keep the first row per composite key | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | In-memory counter — tally per-key frequencies with `find()` + `replace()` | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-21 |
 | hash-tables.md | Canonical Idioms | idiom | One-to-many equi-join via `multidata: 'Y'` + `find_next()` | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-21 |
@@ -57,6 +69,18 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | macros.md | Critical Rules | 4 | Strict macro-definition syntax — no spaces inside parameter names or invalid op… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/strictMacroDefinition.ts | 2026-04-21 |
 | macros.md | Critical Rules | 5 | Every macro file starts with a Doxygen header (`@file`, `@brief`, `@param`, `@v… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasDoxygenHeader.ts | 2026-04-21 |
 | macros.md | Critical Rules | 6 | Macros that are shared, stored, or security-sensitive carry required options (`… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasRequiredMacroOptions.ts | 2026-04-21 |
+| ods-and-output.md | Canonical Idioms | idiom | Capture PROC LOGISTIC parameter estimates as a downstream-usable dataset | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Canonical Idioms | idiom | Discover table names with `ODS TRACE ON;` before writing `ODS OUTPUT` | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Canonical Idioms | idiom | Multi-sheet Excel with per-PROC sheet naming | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Canonical Idioms | idiom | Route a suite of PROCs to a single RTF report with `STYLE=` | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 1 | Every `ODS destination FILE=...` must be paired with a matching `ODS destinatio… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 2 | `ODS OUTPUT Table=ds;` requires the exact ODS table name — discover it with `OD… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 3 | `ODS SELECT` / `ODS EXCLUDE` controls which output objects a destination receiv… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 4 | `ODS GRAPHICS` is ON by default in SAS 9.4 — except in batch mode and on z/OS | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 5 | Destination options set at `ODS dest FILE=...` are global — nest `ODS dest OPTI… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 6 | `ODS _ALL_ CLOSE;` is the reset — use it at the top of a production script to g… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 7 | Set `options replace=yes;` when `ODS OUTPUT Table=ds;` targets an existing data… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
+| ods-and-output.md | Critical Rules | 8 | `ODS LISTING` is the default text destination — close it before opening RTF / P… | https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | Canonical left join — reference-table lookup with `COALESCE` defaulting | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | CASE expression for row-level conditional classification | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
@@ -104,4 +128,4 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | stat-procs.md | Critical Rules | 7 | None of these procs return data to macros — use `ODS OUTPUT` to capture structu… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 | stat-procs.md | Critical Rules | 8 | `LSMEANS` in GLM / MIXED / GENMOD produces covariate-adjusted (marginal) means… | https://documentation.sas.com/doc/en/statug/9.4/statug.htm | 2026-04-21 |
 
-Total rows: 93.
+Total rows: 117.
