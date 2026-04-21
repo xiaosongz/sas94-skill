@@ -125,7 +125,11 @@ quit;
 ```
 
 ```sas
-/* WRONG - row-level filter in HAVING, aggregate runs against all years */
+/* WRONG - HAVING filters aggregates; a non-aggregate predicate like
+   service_dt between '01JAN2023'd and '31DEC2023'd placed in HAVING
+   triggers SAS's remerge behavior (or a "Column not in a group" error
+   depending on SAS version) rather than filtering input rows before
+   aggregation. */
 proc sql;
   create table frequent_dx as
   select dx_code, count(*) as n_claims
@@ -138,7 +142,7 @@ quit;
 
 ### Rule 4: `INTO :macvar SEPARATED BY ','` needs `%trim` / `strip()` before going into an `IN()` clause
 
-Source: https://support.sas.com/resources/papers/proceedings11/101-2011.pdf
+Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
 
 `SELECT DISTINCT col INTO :list SEPARATED BY ','` pads the macro
 variable to the SQL query's working width. Passing `&list` directly into
@@ -292,7 +296,7 @@ quit;
 
 ### Idiom: `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for dynamic SQL
 
-Source: https://support.sas.com/resources/papers/proceedings11/101-2011.pdf
+Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
 
 Purpose: read `dictionary.columns` to build a dynamic column list, then
 paste it into a generated SELECT. Common pattern for "select every
@@ -426,7 +430,7 @@ quit;
   blank padding from the longest element's storage length, not the
   visible content. Downstream `IN(&list)` misses matches for shorter
   codes. Always strip / trim before use (Rule 4).
-  Source: https://support.sas.com/resources/papers/proceedings11/101-2011.pdf
+  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
 
 - **`ORDER BY` does not survive `CREATE TABLE AS`** — the created
   table's physical row order is not guaranteed without a trailing

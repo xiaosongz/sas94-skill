@@ -45,7 +45,7 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | macros.md | Critical Rules | 4 | Strict macro-definition syntax — no spaces inside parameter names or invalid op… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/strictMacroDefinition.ts | 2026-04-21 |
 | macros.md | Critical Rules | 5 | Every macro file starts with a Doxygen header (`@file`, `@brief`, `@param`, `@v… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasDoxygenHeader.ts | 2026-04-21 |
 | macros.md | Critical Rules | 6 | Macros that are shared, stored, or security-sensitive carry required options (`… | https://github.com/sasjs/lint/blob/6172b3a64125db6995509d4e5102f2c41b9e4294/src/rules/file/hasRequiredMacroOptions.ts | 2026-04-21 |
-| proc-sql.md | Canonical Idioms | idiom | `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for… | https://support.sas.com/resources/papers/proceedings11/101-2011.pdf | 2026-04-21 |
+| proc-sql.md | Canonical Idioms | idiom | `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | Canonical left join — reference-table lookup with `COALESCE` defaulting | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | CASE expression for row-level conditional classification | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
 | proc-sql.md | Canonical Idioms | idiom | Claims dedup by earliest-row-per-key via `MIN(date)` + self-join | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
@@ -53,7 +53,7 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | proc-sql.md | Critical Rules | 1 | Always qualify shared columns in multi-table SELECT lists — never `a.*, b.*` wi… | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
 | proc-sql.md | Critical Rules | 2 | `FULL JOIN` requires `COALESCE` on the join key — SAS does not merge it automat… | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-21 |
 | proc-sql.md | Critical Rules | 3 | `WHERE` filters rows before grouping; `HAVING` filters groups after | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
-| proc-sql.md | Critical Rules | 4 | `INTO :macvar SEPARATED BY ','` needs `%trim` / `strip()` before going into an… | https://support.sas.com/resources/papers/proceedings11/101-2011.pdf | 2026-04-21 |
+| proc-sql.md | Critical Rules | 4 | `INTO :macvar SEPARATED BY ','` needs `%trim` / `strip()` before going into an… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
 | proc-sql.md | Critical Rules | 5 | Use `FEEDBACK` to surface the expanded query — catches `*` expansion and outer-… | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
 | proc-sql.md | Critical Rules | 6 | `NOEXEC` is a dry-run — parses and plans the query without reading data | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-21 |
 | proc-sql.md | Critical Rules | 7 | `RESET` changes options mid-query block — scope is the current PROC SQL, not th… | https://documentation.sas.com/doc/en/proc/9.4/proc.htm | 2026-04-21 |
