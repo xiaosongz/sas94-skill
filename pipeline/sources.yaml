@@ -1,0 +1,102 @@
+# sas94-skill source manifest
+#
+# Schema (root is a YAML list): each entry maps one reference target file to
+# the upstream sources that will seed its content. Lists are populated over
+# time; Phase 1 (v0.0.1) populates only macros.md and data-step.md.
+#
+#   - target: <filename>.md
+#     github:        # list of {repo, path, scope, [notes]}
+#     official_docs: # list of {url}  -- SAS /doc/en/ URLs
+#     lexjansen:     # list of {url, author}
+#     community:     # list of {url}  -- SAS Communities / Stack Overflow
+
+- target: sas-master-reference.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: data-step.md
+  github:
+    - repo: https://github.com/sasjs/lint
+      path: src/rules/**/*.ts
+      scope: "Line/file-level lint rules that apply to DATA-step code"
+    - repo: https://github.com/sasjs/core
+      path: base/mp_*.sas
+      scope: "DATA-step-oriented macros"
+    - repo: https://github.com/jphall663/GWU_data_mining
+      path: "**/*.sas"
+      scope: "5 hand-transcribed items (LAG, MERGE overwrite, PROC APPEND, SQL join, macro quoting)"
+      notes: "Manual transcribe, no clone"
+  official_docs: []
+  lexjansen: []
+  community: []
+
+- target: proc-sql.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: macros.md
+  github:
+    - repo: https://github.com/sasjs/lint
+      path: src/rules/**/*.ts
+      scope: "Macro-related lint rules (hasMacroParentheses, hasMacroNameInMend, noNestedMacros, strictMacroDefinition, hasDoxygenHeader, hasRequiredMacroOptions)"
+    - repo: https://github.com/sasjs/core
+      path: base/*.sas
+      scope: "Doxygen-headed base macros — idiom corpus"
+  official_docs: []
+  lexjansen: []
+  community: []
+
+- target: base-procs.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: stat-procs.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: hash-tables.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: ods-and-output.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: formats-informats.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: functions-reference.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: idioms-from-lexjansen.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
