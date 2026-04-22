@@ -10,12 +10,13 @@ sources (`sasjs/lint`, `sasjs/core`) plus hand-transcribed SAS-programmer
 pitfalls (GWU data-mining curriculum), and routes Claude Code to
 topic-specific reference files on demand.
 
-**Status:** `v0.0.1` pre-release. All 13 reference files are populated
-to the REQUIRED template sections (Overview, Critical Rules, Canonical
-Idioms, Function/Statement Quick Ref, See Also). OPTIONAL sections
-(Silent Pitfalls, Anti-patterns) are present where source material exists.
-See [`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file
-status.
+**Status:** `v0.0.1` pre-release. All 13 reference files carry both
+REQUIRED sections (Overview, Critical Rules, Canonical Idioms,
+Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent
+Pitfalls, Anti-patterns). 12 of 13 files are at 100% populated status;
+`sas-master-reference.md` is intentionally a routing stub that points
+into the per-topic files. See
+[`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file status.
 
 ## What This Skill Does
 
@@ -35,7 +36,23 @@ When activated, Claude Code can:
 
 ## Installation
 
-### Option 1: Clone into your project
+### Option 1: Personal scope — all projects (recommended)
+
+Install once into `~/.claude/skills/` and the skill loads for every
+Claude Code session on this machine. Pull periodically to pick up new
+rules and idioms.
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/xiaosongz/sas94-skill.git ~/.claude/skills/sas94
+# later:
+git -C ~/.claude/skills/sas94 pull
+```
+
+### Option 2: Per-project scope — pin a version
+
+Use this when you want a SAS project to ride on a specific skill version,
+independent of your personal skills directory.
 
 ```bash
 mkdir -p .claude/skills
@@ -43,16 +60,22 @@ git clone https://github.com/xiaosongz/sas94-skill.git .claude/skills/sas94
 rm -rf .claude/skills/sas94/.git
 ```
 
-### Option 2: Symlink from a central location
+### Option 3: Plugin marketplace — `/plugin install sas94`
 
-```bash
-git clone https://github.com/xiaosongz/sas94-skill.git ~/skills/sas94
-mkdir -p .claude/skills
-ln -s ~/skills/sas94 .claude/skills/sas94
-```
+Planned for `v0.0.2+`. Once published to the Claude Code plugin
+marketplace, install will collapse to `/plugin install sas94`. Not yet
+available.
 
-The skill activates on `.sas` files and on SAS-flavored prompt keywords
-(see `SKILL.md` for the full trigger list).
+### Ad-hoc: `claude --add-dir <path>`
+
+Power-user invocation for one-off skill loading from a non-standard
+directory — pass `--add-dir /path/to/sas94-skill` at CLI launch and
+Claude Code will treat that path as an additional skill root for the
+session.
+
+The skill activates on `.sas` files (via the `paths: "**/*.sas"`
+frontmatter entry) and on SAS-flavored prompt keywords (see `SKILL.md`
+for the full trigger list).
 
 ## Usage
 

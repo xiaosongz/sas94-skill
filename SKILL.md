@@ -13,6 +13,13 @@ description: >
   or git merges — even if the user mentions procs, arrays, dataframes, or
   merges in those contexts.
 allowed-tools: Read Grep Glob Write Edit
+paths: "**/*.sas"
+license: MIT
+metadata:
+  author:
+    name: Xiaosong Zhang
+    github: xiaosongz
+  repository: https://github.com/xiaosongz/sas94-skill
 ---
 
 ## When to Use
@@ -96,4 +103,4 @@ Use these templates as starting points — they supply header comment blocks, no
 
 ## Versioning Note
 
-This skill is at v0.0.1. All 13 reference files are populated to the REQUIRED template sections (Overview, Critical Rules ≥1, Canonical Idioms ≥2, Function/Statement Quick Ref, See Also); OPTIONAL sections (Silent Pitfalls, Anti-patterns) are present where source material exists. See `docs/coverage-matrix.md` for the current per-file status. Later versions expand OPTIONAL sections and net-new idioms (see `docs/design.md` § Versioning semantics).
+This skill is at v0.0.1. All 13 reference files carry both REQUIRED sections (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent Pitfalls, Anti-patterns). 12 of 13 files are at 100% populated status; `sas-master-reference.md` is intentionally a routing stub — its top-20 rules live in the per-topic files it points to. See `docs/coverage-matrix.md` for the current per-file status. Later versions add net-new idioms and expand OPTIONAL sections further (see `docs/design.md` § Versioning semantics).
