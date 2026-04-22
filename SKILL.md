@@ -7,7 +7,13 @@ description: >
   (FREQ/MEANS/LOGISTIC/GLM/MIXED/GENMOD/SURVEY*/LIFETEST), ODS RTF/EXCEL/PDF,
   or PROC FORMAT. Not for R, Python, Stata, SPSS, generic SQL, Procfile, or
   git merges.
-allowed-tools: Read, Grep, Glob, Write, Edit
+license: MIT
+compatibility: Designed for Claude Code; does not execute SAS
+allowed-tools: Read Grep Glob Write Edit
+metadata:
+  author: Xiaosong Zhang
+  repository: https://github.com/xiaosongz/sas94-skill
+  version: "0.0.1"
 ---
 
 ## When to Use

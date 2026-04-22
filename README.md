@@ -37,16 +37,19 @@ When activated, Claude Code can:
 
 ### Option 1: Personal scope — all projects (recommended)
 
-Install once into `~/.claude/skills/` and the skill loads for every
-Claude Code session on this machine. Pull periodically to pick up new
-rules and idioms.
+One line. Skill loads for every Claude Code session on this machine:
 
 ```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/xiaosongz/sas94-skill.git ~/.claude/skills/sas94
-# later:
+mkdir -p ~/.claude/skills && git clone https://github.com/xiaosongz/sas94-skill.git ~/.claude/skills/sas94
+```
+
+Pull periodically to pick up new rules and idioms:
+
+```bash
 git -C ~/.claude/skills/sas94 pull
 ```
+
+Restart Claude Code (or start a new session) after install. Skill activates on `.sas` files and SAS-flavored prompt keywords — see `SKILL.md` for the full trigger list.
 
 ### Option 2: Per-project scope — pin a version
 
@@ -71,10 +74,6 @@ Power-user invocation for one-off skill loading from a non-standard
 directory — pass `--add-dir /path/to/sas94-skill` at CLI launch and
 Claude Code will treat that path as an additional skill root for the
 session.
-
-The skill activates on `.sas` files (via the `paths: "**/*.sas"`
-frontmatter entry) and on SAS-flavored prompt keywords (see `SKILL.md`
-for the full trigger list).
 
 ## Usage
 
