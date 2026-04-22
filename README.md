@@ -10,13 +10,12 @@ sources (`sasjs/lint`, `sasjs/core`) plus hand-transcribed SAS-programmer
 pitfalls (GWU data-mining curriculum), and routes Claude Code to
 topic-specific reference files on demand.
 
-**Status:** `v0.0.1` pre-release. All 13 reference files carry both
-REQUIRED sections (Overview, Critical Rules, Canonical Idioms,
-Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent
-Pitfalls, Anti-patterns). 12 of 13 files are at 100% populated status;
-`sas-master-reference.md` is intentionally a routing stub that points
-into the per-topic files. See
-[`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file status.
+**Status:** `v0.0.1` pre-release. All 13 reference files are 100%
+populated across both REQUIRED sections (Overview, Critical Rules,
+Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL
+sections (Silent Pitfalls, Anti-patterns). See
+[`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file
+status.
 
 ## What This Skill Does
 

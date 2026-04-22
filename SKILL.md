@@ -103,4 +103,4 @@ Use these templates as starting points — they supply header comment blocks, no
 
 ## Versioning Note
 
-This skill is at v0.0.1. All 13 reference files carry both REQUIRED sections (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent Pitfalls, Anti-patterns). 12 of 13 files are at 100% populated status; `sas-master-reference.md` is intentionally a routing stub — its top-20 rules live in the per-topic files it points to. See `docs/coverage-matrix.md` for the current per-file status. Later versions add net-new idioms and expand OPTIONAL sections further (see `docs/design.md` § Versioning semantics).
+This skill is at v0.0.1. All 13 reference files are 100% populated across both REQUIRED sections (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent Pitfalls, Anti-patterns). See `docs/coverage-matrix.md` for the current per-file status. Later versions add net-new idioms and expand OPTIONAL sections further (see `docs/design.md` § Versioning semantics).

@@ -60,6 +60,10 @@ CANONICAL_IDIOMS_HEADINGS = ("Canonical Idioms", "Reference-file Pointers")
 # seeded files. Prefix-match the heading.
 ANTI_PATTERN_HEADING_RE = re.compile(r"^Anti-patterns")
 
+# Critical Rules heading is sometimes suffixed — e.g. `(Top-20 Aggregated)`
+# on the master-reference aggregator. Prefix-match the heading.
+CRITICAL_RULES_HEADING_RE = re.compile(r"^Critical Rules")
+
 # Stub Overview sections start with the TODO marker.
 STUB_OVERVIEW_RE = re.compile(r"^TODO\s*\(source pending\)", re.IGNORECASE)
 
@@ -140,6 +144,13 @@ def _find_canonical_idioms(sections: dict[str, str]) -> str | None:
 def _find_anti_patterns(sections: dict[str, str]) -> str | None:
     for name, content in sections.items():
         if ANTI_PATTERN_HEADING_RE.match(name):
+            return content
+    return None
+
+
+def _find_critical_rules(sections: dict[str, str]) -> str | None:
+    for name, content in sections.items():
+        if CRITICAL_RULES_HEADING_RE.match(name):
             return content
     return None
 
@@ -231,7 +242,7 @@ def scan_reference(path: Path) -> FileCoverage:
     return FileCoverage(
         file=path.name,
         overview=_overview_populated(sections.get("Overview")),
-        critical_rules=_critical_rules_populated(sections.get("Critical Rules")),
+        critical_rules=_critical_rules_populated(_find_critical_rules(sections)),
         canonical_idioms=_canonical_idioms_populated(_find_canonical_idioms(sections)),
         quick_ref=_quick_ref_populated(_find_quick_ref(sections)),
         see_also=_see_also_populated(sections.get("See Also")),

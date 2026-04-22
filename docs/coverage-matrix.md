@@ -21,7 +21,7 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 | macros.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | ods-and-output.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | proc-sql.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| sas-master-reference.md | yes | no | yes | yes | yes | yes | yes | 80% | stub |
+| sas-master-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | stat-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 
-Populated: 12 / 13; Stubs: 1 / 13.
+Populated: 13 / 13; Stubs: 0 / 13.
