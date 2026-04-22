@@ -113,13 +113,11 @@ Purpose: compute a per-row total across a set of paid-amount columns
 that may be missing on any given claim row. `SUM(of ...)` treats
 missing as zero and returns a nonmissing total whenever at least one
 input bucket is populated — the correct semantics for "total paid
-across whichever service categories this claim touched." Pair with
-`nmiss(of ...)` when you need to know how many buckets were present.
+across whichever service categories this claim touched."
 
 ```sas
 data claims_totals; set claims;
-  total_paid  = sum(of paid_ip paid_op paid_rx);
-  n_buckets   = 3 - nmiss(of paid_ip paid_op paid_rx);
+  total_paid = sum(of paid_ip paid_op paid_rx);
 run;
 ```
 
@@ -134,8 +132,7 @@ needs the truncated value as a number, not a formatted string.
 
 ```sas
 data pmpm_summary; set pmpm_raw;
-  pmpm        = round(total_paid / member_months, 0.01);   /* unit = 0.01 */
-  pmpm_ratio  = round(pmpm / benchmark_pmpm,      0.001);  /* unit = 0.001 */
+  pmpm = round(total_paid / member_months, 0.01);   /* unit = 0.01 */
 run;
 ```
 
@@ -162,7 +159,6 @@ run;
 | `SUM` | `sum(of x1-xN)` | Sum ignoring missing | Missing treated as 0 — see Rule 1 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 | `MEAN` | `mean(of x1-xN)` | Row-wise mean of nonmissing | Uses nonmissing count as denominator | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 | `MEDIAN` | `median(of x1-xN)` | Row-wise median | Requires all numeric args | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `NMISS` | `nmiss(of x1-xN)` | Count missing in a value list | Counts only numeric missings | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 | `ROUND` | `round(x <, unit>)` | Round to nearest multiple of unit | Unit is not decimal places — see Rule 2 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 | `INT` | `int(x)` | Truncate toward 0 | Negative numbers round up, not down | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 | `CEIL` | `ceil(x)` | Smallest integer ≥ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
