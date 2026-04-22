@@ -61,7 +61,7 @@ sas94-skill/
 │   ├── formats-informats.md              # PROC FORMAT, date/time, picture fmts (~5KB)
 │   ├── functions-dates.md                # Date/time/datetime functions (~10KB)
 │   ├── functions-strings.md              # String functions (~15KB)
-│   ├── functions-numeric.md              # Numeric and array functions (~13KB)
+│   ├── functions-numeric.md              # Numeric and array functions (~12KB)
 │   └── idioms-from-lexjansen.md          # Real-world idioms distilled from SUGI (~6KB)
 ├── pipeline/                             # Build-time only. Not shipped to users.
 │   ├── fetch_github.py

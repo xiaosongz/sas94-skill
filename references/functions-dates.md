@@ -1,7 +1,7 @@
 ---
 title: SAS date and time function reference
 scope: Date/time/datetime function cheatsheet — INTNX, INTCK, TODAY, MDY, DATEPART, TIMEPART, DHMS, YEAR/MONTH/DAY/QTR/WEEKDAY, DATDIF. Focused on the INTNX alignment default and other argument-order traps that produce silent bugs in claims pipelines.
-loaded_when: '"date arithmetic", "INTNX", "INTCK", "TODAY", "DATE", "DATEPART", "TIMEPART", "DATETIME", "MDY", "DHMS", "YRDIF", "DATDIF", "anydtdte", or any date/time/datetime function lookup.'
+loaded_when: '"date arithmetic", "INTNX", "INTCK", "TODAY", "DATE", "DATEPART", "TIMEPART", "DATETIME", "MDY", "DHMS", "DATDIF", or any date/time/datetime function lookup.'
 last_reviewed: 2026-04-22
 reviewer: xiaosongz
 ---
@@ -16,7 +16,7 @@ datetimes are seconds since 01JAN1960 while `YEAR` expects a SAS
 *date* (days). This file covers interval arithmetic (`INTCK`, `INTNX`),
 construction (`MDY`, `DHMS`, `TODAY`, `DATE`, `TIME`, `DATETIME`),
 extraction (`YEAR`, `MONTH`, `DAY`, `QTR`, `WEEKDAY`, `DATEPART`,
-`TIMEPART`), and day-count (`DATDIF`, `YRDIF`). Every rule and idiom
+`TIMEPART`), and day-count (`DATDIF`). Every rule and idiom
 cites the `SAS Functions and CALL Routines: Reference` docset
 (`lefunctionsref`).
 

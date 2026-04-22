@@ -1,7 +1,7 @@
 ---
 title: SAS string function reference
-scope: String-manipulation function cheatsheet — SCAN, SUBSTR/SUBSTRN, CATS/CATT/CATX, COMPRESS, COMPBL, INDEX/FIND, TRANWRD, TRANSLATE, PROPCASE/UPCASE/LOWCASE, STRIP/TRIM, LENGTH/LENGTHN. Focused on default-delimiter traps, position-underflow errors, and blank-stripping semantics that produce silent bugs in claims-data text parsing.
-loaded_when: '"SCAN", "SUBSTR", "SUBSTRN", "CATX", "CATS", "CATT", "COMPRESS", "TRANWRD", "INDEX", "FIND", "PROPCASE", "UPCASE", "LOWCASE", "STRIP", "TRIM", "LENGTH", "%scan", "%substr", or any string function lookup.'
+scope: String-manipulation function cheatsheet — SCAN, SUBSTR/SUBSTRN, CATS/CATT/CATX, COMPRESS, INDEX/FIND, TRANWRD, TRANSLATE, PROPCASE/UPCASE/LOWCASE, STRIP/TRIM. Focused on default-delimiter traps, position-underflow errors, and blank-stripping semantics that produce silent bugs in claims-data text parsing.
+loaded_when: '"SCAN", "SUBSTR", "SUBSTRN", "CATX", "CATS", "CATT", "COMPRESS", "TRANWRD", "INDEX", "FIND", "PROPCASE", "UPCASE", "LOWCASE", "STRIP", "TRIM", "%scan", "%substr", or any string function lookup.'
 last_reviewed: 2026-04-22
 reviewer: xiaosongz
 ---

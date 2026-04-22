@@ -14,7 +14,7 @@ from R, Python, and SQL. `SUM(of x1-x5)` treats missing as zero;
 nearest even integer — the second argument is a rounding **unit**,
 not a decimal-place count. `MOD(-7, 3)` returns `-1` (sign-of-dividend,
 like C's `%`), not the mathematical modulo. This file covers row-wise
-aggregation (`SUM`, `MEAN`, `MEDIAN`, `NMISS`), rounding (`ROUND`,
+aggregation (`SUM`, `MEAN`, `MEDIAN`), rounding (`ROUND`,
 `INT`, `CEIL`, `FLOOR`), modulo (`MOD`), transcendentals (`LOG`,
 `EXP`), row-wise extremes (`MAX`, `MIN`), and array shape (`DIM`,
 `HBOUND`, `LBOUND`). Every rule and idiom cites the `SAS Functions
@@ -212,7 +212,7 @@ produces output, but the output is almost certainly wrong:
 ## See Also
 
 - [functions-dates.md](functions-dates.md) — date/time functions
-  (INTNX, INTCK, DATDIF, YRDIF) that return numeric day-counts feeding
+  (INTNX, INTCK, DATDIF) that return numeric day-counts feeding
   row-wise arithmetic here.
 - [functions-strings.md](functions-strings.md) — string functions
   (SCAN, SUBSTR, COMPRESS, CATX) used alongside numeric conversions.
@@ -224,4 +224,6 @@ produces output, but the output is almost certainly wrong:
 - [data-step.md](data-step.md) — DATA-step statement-level reference
   (array **declaration** paired with the DIM / HBOUND / LBOUND
   inspection functions here).
+- [macros.md](macros.md) — `%SYSEVALF` for floating-point arithmetic
+  in macro context (contrast with integer-only `%EVAL`).
 - [SAS Functions and CALL Routines: Reference](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm)
