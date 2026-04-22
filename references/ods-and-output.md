@@ -40,7 +40,7 @@ in modeling pipelines.
 
 ### Rule 1: Every `ODS destination FILE=...` must be paired with a matching `ODS destination CLOSE;`
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 An ODS destination opened with `FILE=` stays open for the rest of
 the SAS session until you close it. Subsequent procs continue to
@@ -69,7 +69,7 @@ proc freq data=claims; tables dx_code; run;
 
 ### Rule 2: `ODS OUTPUT Table=ds;` requires the exact ODS table name — discover it with `ODS TRACE ON;`
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 `ODS OUTPUT ParameterEstimates=pe;` captures the proc's named
 output object as a SAS dataset. Mis-type the table name and you
@@ -100,7 +100,7 @@ proc logistic data=claims; model outcome = age sex; run;
 
 ### Rule 3: `ODS SELECT` / `ODS EXCLUDE` controls which output objects a destination receives — default is SELECT ALL for everything except the OUTPUT destination
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Every open destination maintains a selection list. The default is
 `SELECT ALL` for RTF / EXCEL / PDF / HTML / LISTING — every output
@@ -127,7 +127,7 @@ ods rtf close;
 
 ### Rule 4: `ODS GRAPHICS` is ON by default in SAS 9.4 — except in batch mode and on z/OS
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Beginning in SAS 9.4, ODS Graphics is enabled by default on all
 platforms except z/OS, and procedures like LOGISTIC / MIXED / GLM
@@ -156,7 +156,7 @@ run;
 
 ### Rule 5: Destination options set at `ODS dest FILE=...` are global — nest `ODS dest OPTIONS(...)` between procs to change them per-PROC
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Opening an RTF / EXCEL / PDF destination applies the file-level
 options (style, bodytitle, embedded_titles, etc.) to every PROC
@@ -189,7 +189,7 @@ ods excel close;
 
 ### Rule 6: `ODS _ALL_ CLOSE;` is the reset — use it at the top of a production script to guarantee clean state
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 `ods _all_ close;` closes every currently open destination in one
 statement. In an interactive session, a prior run may have left
@@ -217,7 +217,7 @@ ods rtf close;
 
 ### Rule 7: Set `options replace=yes;` when `ODS OUTPUT Table=ds;` targets an existing dataset name
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 The ODS OUTPUT statement documentation flags this explicitly: to
 ensure the captured dataset is replaced on re-runs rather than
@@ -243,7 +243,7 @@ proc logistic data=claims; model outcome = age sex; run;
 
 ### Rule 8: `ODS LISTING` is the default text destination — close it before opening RTF / PDF to avoid dumping a second copy to the `.lst`
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 In interactive SAS and on most batch configurations, `ODS LISTING`
 is open at session start. Opening an RTF or PDF does not close it;
@@ -273,7 +273,7 @@ ods rtf close;
 
 ### Idiom: Capture PROC LOGISTIC parameter estimates as a downstream-usable dataset
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Purpose: the most common ODS OUTPUT pattern in modeling pipelines —
 pull the ParameterEstimates and FitStatistics tables out as SAS
@@ -294,7 +294,7 @@ run;
 
 ### Idiom: Route a suite of PROCs to a single RTF report with `STYLE=`
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Purpose: the canonical claims-reporting pattern — several descriptive
 PROCs landing in one Word-openable RTF. `STYLE=journal` is the
@@ -327,7 +327,7 @@ ods listing;
 
 ### Idiom: Multi-sheet Excel with per-PROC sheet naming
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Purpose: the deliverable-to-a-clinician pattern — one xlsx with
 Enrollment, Costs, Utilization tabs. Re-issue
@@ -356,7 +356,7 @@ ods excel close;
 
 ### Idiom: Discover table names with `ODS TRACE ON;` before writing `ODS OUTPUT`
 
-Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 Purpose: the "what do I call this thing" discovery workflow. Run
 the proc once with trace on, scan the log for output-object names,
@@ -380,21 +380,21 @@ ods trace off;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `ODS RTF` | `ods rtf file='f.rtf' style=journal;` | Open RTF (Word) destination | Forgetting `ODS RTF CLOSE;` (Rule 1) | [`ODS RTF`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS EXCEL` | `ods excel file='f.xlsx' options(sheet_interval='proc');` | Open Excel (native xlsx) destination | No per-proc `sheet_name`; sheets named `Sheet1`... | [`ODS EXCEL`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS PDF` | `ods pdf file='f.pdf' style=journal;` | Open PDF destination | Omitting `STYLE=` → default style often has color backgrounds | [`ODS PDF`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS HTML` | `ods html file='f.html' path='out';` | Open HTML destination | Not setting `PATH=`; files scatter in working dir | [`ODS HTML`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS LISTING` | `ods listing close;` / `ods listing;` | The legacy text destination | Leaving it open duplicates output to `.lst` (Rule 8) | [`ODS LISTING`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS OUTPUT` | `ods output Table=ds Table2=ds2;` | Capture output objects as SAS datasets | Mis-typed table name → silent 0-row dataset (Rule 2) | [`ODS OUTPUT`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS TRACE ON` | `ods trace on / label;` | Log every output object's path + label | Leaving on → log floods with trace records | [`ODS TRACE`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS TRACE OFF` | `ods trace off;` | Stop tracing | Forgetting, then log fills with object records | [`ODS TRACE`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS SELECT` | `ods rtf select ParameterEstimates;` | Narrow a destination's output list | Scope ends at next PROC unless `PERSIST=PROC` | [`ODS SELECT`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS EXCLUDE` | `ods rtf exclude FitStatistics;` | Suppress one or more objects for a destination | Same scope caveat as SELECT | [`ODS EXCLUDE`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS GRAPHICS` | `ods graphics on / noborder imagename='x';` | Enable / configure template-based graphs | Relying on default — off in batch (Rule 4) | [`ODS GRAPHICS`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `ODS _ALL_ CLOSE` | `ods _all_ close;` | Close every open destination | Calling mid-pipeline then forgetting to reopen one | [`ODS _ALL_ CLOSE`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `dest OPTIONS(...)` | `ods excel options(sheet_name='x');` | Per-PROC destination option update | Setting only on `FILE=` and expecting per-sheet rename | [`ODS EXCEL Options`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `PROC TEMPLATE` | `proc template; define style s; ...; end; run;` | Define / modify style templates | Attempting to use a style not yet compiled in the libref | [`PROC TEMPLATE`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
-| `options replace=yes` | `options replace=yes;` | Allow ODS OUTPUT target dataset to overwrite | Running under `REPLACE=NO` → second run errors (Rule 7) | [`REPLACE System Option`](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm) |
+| `ODS RTF` | `ods rtf file='f.rtf' style=journal;` | Open RTF (Word) destination | Forgetting `ODS RTF CLOSE;` (Rule 1) | [`ODS RTF`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS EXCEL` | `ods excel file='f.xlsx' options(sheet_interval='proc');` | Open Excel (native xlsx) destination | No per-proc `sheet_name`; sheets named `Sheet1`... | [`ODS EXCEL`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS PDF` | `ods pdf file='f.pdf' style=journal;` | Open PDF destination | Omitting `STYLE=` → default style often has color backgrounds | [`ODS PDF`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS HTML` | `ods html file='f.html' path='out';` | Open HTML destination | Not setting `PATH=`; files scatter in working dir | [`ODS HTML`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS LISTING` | `ods listing close;` / `ods listing;` | The legacy text destination | Leaving it open duplicates output to `.lst` (Rule 8) | [`ODS LISTING`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS OUTPUT` | `ods output Table=ds Table2=ds2;` | Capture output objects as SAS datasets | Mis-typed table name → silent 0-row dataset (Rule 2) | [`ODS OUTPUT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS TRACE ON` | `ods trace on / label;` | Log every output object's path + label | Leaving on → log floods with trace records | [`ODS TRACE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS TRACE OFF` | `ods trace off;` | Stop tracing | Forgetting, then log fills with object records | [`ODS TRACE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS SELECT` | `ods rtf select ParameterEstimates;` | Narrow a destination's output list | Scope ends at next PROC unless `PERSIST=PROC` | [`ODS SELECT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS EXCLUDE` | `ods rtf exclude FitStatistics;` | Suppress one or more objects for a destination | Same scope caveat as SELECT | [`ODS EXCLUDE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS GRAPHICS` | `ods graphics on / noborder imagename='x';` | Enable / configure template-based graphs | Relying on default — off in batch (Rule 4) | [`ODS GRAPHICS`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `ODS _ALL_ CLOSE` | `ods _all_ close;` | Close every open destination | Calling mid-pipeline then forgetting to reopen one | [`ODS _ALL_ CLOSE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `dest OPTIONS(...)` | `ods excel options(sheet_name='x');` | Per-PROC destination option update | Setting only on `FILE=` and expecting per-sheet rename | [`ODS EXCEL Options`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `PROC TEMPLATE` | `proc template; define style s; ...; end; run;` | Define / modify style templates | Attempting to use a style not yet compiled in the libref | [`PROC TEMPLATE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
+| `options replace=yes` | `options replace=yes;` | Allow ODS OUTPUT target dataset to overwrite | Running under `REPLACE=NO` → second run errors (Rule 7) | [`REPLACE System Option`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -402,32 +402,32 @@ ods trace off;
   to receive output from every subsequent PROC in the session.
   Interactive sessions are especially prone to this. See Rule 1 and
   use `ods _all_ close;` at the top of production scripts (Rule 6).
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 - **`ODS OUTPUT` table-name typo** — no error, no warning, just a
   silently empty dataset. Discover correct names via `ODS TRACE
   ON;`. See Rule 2.
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 - **`ODS GRAPHICS` off in batch** — interactive `PROC LOGISTIC`
   produces diagnostic plots; the same code scheduled as `sas -batch`
   produces no plots because the default flips to OFF. Always
   explicit. See Rule 4.
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 - **Excel auto-named sheets** — one `ODS EXCEL FILE=...` with no
   inter-proc `OPTIONS(SHEET_NAME=...)` gives Sheet1, Sheet2, etc.
   See Rule 5.
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 - **Duplicate `.lst` alongside the RTF** — LISTING stays open when
   RTF opens; close it explicitly. See Rule 8.
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 - **`REPLACE=NO` session re-run failure** — `ODS OUTPUT Table=ds;`
   errors on the second run if `ds` exists and `REPLACE=NO`. See
   Rule 7.
-  Source: https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm
 
 ## Anti-patterns (STOP signs)
 
@@ -459,5 +459,5 @@ output is almost certainly not what the author meant:
   `INTO :mvar` or `CREATE TABLE AS` is wanted.
 - [data-step.md](data-step.md) — `FILE` / `PUT` as the non-ODS
   text-output path; complementary to ODS for log-style output.
-- [SAS Output Delivery System: User's Guide (9.4)](https://documentation.sas.com/doc/en/odsug/9.4/odsug.htm)
-- [Base SAS Procedures Guide — ODS OUTPUT and ODS destinations (9.4)](https://documentation.sas.com/doc/en/proc/9.4/proc.htm)
+- [SAS Output Delivery System: User's Guide (9.4)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=odsug&docsetTarget=titlepage.htm)
+- [Base SAS Procedures Guide — ODS OUTPUT and ODS destinations (9.4)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm)

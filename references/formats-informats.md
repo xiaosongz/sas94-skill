@@ -40,7 +40,7 @@ statements that attach formats to variables, and
 
 ### Rule 1: `put()` goes variable → string; `input()` goes string → variable — inverting them silently returns wrong values
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 `put(date, mmddyy10.)` reads a numeric SAS date and returns a
 character string `'01/02/2020'`. `input('01/02/2020', mmddyy10.)`
@@ -70,7 +70,7 @@ run;
 
 ### Rule 2: Every format reference ends in a period (`.`); every format definition in `VALUE` does NOT
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 When you **reference** a format (in a `FORMAT` statement, a `PUT`
 function, or a `PUT` statement), the name ends in a period:
@@ -108,7 +108,7 @@ run;
 
 ### Rule 3: `anydtdte.` resolves ambiguous dates using the `DATESTYLE=` system option — set it explicitly
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 `anydtdte.` is a permissive date informat: it accepts most
 string forms (`01JAN2020`, `2020-01-15`, `03/15/2024`). When the
@@ -139,7 +139,7 @@ run;
 
 ### Rule 4: `VALUE` ranges need an `other=` clause — unmapped values otherwise display as their raw form, not the mapped label
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 `PROC FORMAT VALUE` only rewrites values that fall inside one of
 the listed ranges. Values outside every range pass through
@@ -172,7 +172,7 @@ run;
 
 ### Rule 5: `CNTLIN=` requires columns `FMTNAME`, `START`, `LABEL` — plus `TYPE='C'` for character formats and `END` for ranges
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 `proc format cntlin=fmt_ds;` builds a format from a dataset
 without writing any `VALUE` statements. The control dataset must
@@ -207,7 +207,7 @@ proc format cntlin=fmt_bad; run;
 
 ### Rule 6: FORMAT (display) and INFORMAT (parse) are distinct attributes — using `FORMAT` where `INFORMAT` is needed silently reads garbage
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 The `FORMAT` statement attaches a display format to a variable;
 it has no effect on how SAS reads raw text. The `INFORMAT`
@@ -239,7 +239,7 @@ run;
 
 ### Rule 7: Format width controls display truncation but NOT stored precision
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 `format x 5.;` limits the printed width to 5 characters — a
 6-digit integer prints as `*****` (the overflow indicator). The
@@ -268,7 +268,7 @@ run;
 
 ### Rule 8: `PICTURE` digit selectors — `9` is a required digit, `0` is leading-zero-filled, other characters are literals
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 `PICTURE` format templates use `9` for a display digit that takes
 the corresponding numeric position, `0` for a digit that fills
@@ -305,7 +305,7 @@ run;
 
 ### Idiom: Build a claims-aware character format for CPT / ICD code categorization
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 Purpose: collapse thousands of CPT / ICD codes into a handful of
 analytic categories via a `VALUE` format, then apply with `put()`
@@ -331,7 +331,7 @@ run;
 
 ### Idiom: Parse a messy date column with `anydtdte.` plus explicit `DATESTYLE=`
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 Purpose: claims extracts often arrive with heterogeneous date
 strings across vendors (`01/15/2024`, `2024-01-15`, `15JAN2024`).
@@ -352,7 +352,7 @@ run;
 
 ### Idiom: Build a user format from a dataset via `CNTLIN=`
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 Purpose: when the mapping is already maintained as a CSV / SAS
 dataset (ICD-10 chapter table, provider taxonomy crosswalk),
@@ -378,7 +378,7 @@ run;
 
 ### Idiom: `input()` inside a DATA step to coerce a numeric-looking character column
 
-Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 Purpose: pipeline handoff bug — a numeric column arrives as
 character (`'1234.56'`) because it was read from CSV with default
@@ -398,25 +398,25 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `PROC FORMAT` | `proc format; stmts; run;` | Create user formats / informats | No `LIBRARY=` → format is WORK-session scoped | [`PROC FORMAT`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `VALUE` | `value name range1=label1 range2=label2 other=...;` | Define a format | No `OTHER=` → unmapped values pass through raw (Rule 4) | [`VALUE Statement`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `INVALUE` | `invalue name range1=val1 ...;` | Define an informat | Using where `VALUE` was meant; direction inversion | [`INVALUE Statement`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `PICTURE` | `picture name low-high='9,999.99' (prefix='$');` | Digit-selector numeric template | `9` vs `0` confusion on leading pads (Rule 8) | [`PICTURE Statement`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `CNTLIN=` | `proc format cntlin=ds; run;` | Build format from dataset | START / END length mismatch errors (Rule 5) | [`CNTLIN= option`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `CNTLOUT=` | `proc format cntlout=ds; run;` | Dump catalog to dataset for audit | Not specifying `LIBRARY=`; defaults to WORK | [`CNTLOUT= option`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `FORMAT` stmt | `format var fmt.;` | Attach display format to variable | No trailing dot on reference (Rule 2) | [`FORMAT Statement`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `INFORMAT` stmt | `informat var fmt.;` | Attach parse informat to variable | Using `FORMAT` instead; silent parse failure (Rule 6) | [`INFORMAT Statement`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `put()` | `str = put(num, fmt.);` | Numeric / char → formatted string | Applying to already-character input (Rule 1) | [`PUT Function`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `input()` | `num = input(str, infmt.);` | String → numeric / date / time | Using `put()` by mistake (Rule 1) | [`INPUT Function`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `putn()` / `putc()` | `str = putn(num, 'mmddyy10.');` | Format name supplied as run-time string | Forgetting the name must end in `.` inside the string | [`PUTN / PUTC`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `inputn()` / `inputc()` | `num = inputn(str, 'mmddyy10.');` | Informat name supplied as run-time string | Forgetting the trailing `.` | [`INPUTN / INPUTC`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `mmddyy10.` | `format dob mmddyy10.;` | US-style `MM/DD/YYYY` date display | Confusing with informat direction | [`MMDDYYw. Format`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `yymmdd10.` | `format dob yymmdd10.;` | ISO-style `YYYY-MM-DD` display | Width 8 drops century digits | [`YYMMDDw. Format`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `datetime20.` | `format ts datetime20.;` | Date + time display | Confusing with `date` informat (strips time) | [`DATETIMEw. Format`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `anydtdte.` | `dt = input(s, anydtdte32.);` | Permissive date informat | Missing `DATESTYLE=` (Rule 3) | [`ANYDTDTEw. Informat`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `best.` | `x = input(str, best12.);` | Auto-pick numeric width | Misreading commas / parens as non-numeric | [`BESTw. Format / Informat`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `dollar.` | `format paid dollar12.2;` | Currency display with `$` and commas | Too-narrow width → asterisks (Rule 7) | [`DOLLARw.d Format`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
-| `options datestyle=` | `options datestyle=mdy;` | Pin ambiguous-date interpretation | Leaving default; host locale varies (Rule 3) | [`DATESTYLE= Option`](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm) |
+| `PROC FORMAT` | `proc format; stmts; run;` | Create user formats / informats | No `LIBRARY=` → format is WORK-session scoped | [`PROC FORMAT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `VALUE` | `value name range1=label1 range2=label2 other=...;` | Define a format | No `OTHER=` → unmapped values pass through raw (Rule 4) | [`VALUE Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `INVALUE` | `invalue name range1=val1 ...;` | Define an informat | Using where `VALUE` was meant; direction inversion | [`INVALUE Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PICTURE` | `picture name low-high='9,999.99' (prefix='$');` | Digit-selector numeric template | `9` vs `0` confusion on leading pads (Rule 8) | [`PICTURE Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `CNTLIN=` | `proc format cntlin=ds; run;` | Build format from dataset | START / END length mismatch errors (Rule 5) | [`CNTLIN= option`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `CNTLOUT=` | `proc format cntlout=ds; run;` | Dump catalog to dataset for audit | Not specifying `LIBRARY=`; defaults to WORK | [`CNTLOUT= option`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `FORMAT` stmt | `format var fmt.;` | Attach display format to variable | No trailing dot on reference (Rule 2) | [`FORMAT Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `INFORMAT` stmt | `informat var fmt.;` | Attach parse informat to variable | Using `FORMAT` instead; silent parse failure (Rule 6) | [`INFORMAT Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `put()` | `str = put(num, fmt.);` | Numeric / char → formatted string | Applying to already-character input (Rule 1) | [`PUT Function`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `input()` | `num = input(str, infmt.);` | String → numeric / date / time | Using `put()` by mistake (Rule 1) | [`INPUT Function`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `putn()` / `putc()` | `str = putn(num, 'mmddyy10.');` | Format name supplied as run-time string | Forgetting the name must end in `.` inside the string | [`PUTN / PUTC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `inputn()` / `inputc()` | `num = inputn(str, 'mmddyy10.');` | Informat name supplied as run-time string | Forgetting the trailing `.` | [`INPUTN / INPUTC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `mmddyy10.` | `format dob mmddyy10.;` | US-style `MM/DD/YYYY` date display | Confusing with informat direction | [`MMDDYYw. Format`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `yymmdd10.` | `format dob yymmdd10.;` | ISO-style `YYYY-MM-DD` display | Width 8 drops century digits | [`YYMMDDw. Format`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `datetime20.` | `format ts datetime20.;` | Date + time display | Confusing with `date` informat (strips time) | [`DATETIMEw. Format`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `anydtdte.` | `dt = input(s, anydtdte32.);` | Permissive date informat | Missing `DATESTYLE=` (Rule 3) | [`ANYDTDTEw. Informat`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `best.` | `x = input(str, best12.);` | Auto-pick numeric width | Misreading commas / parens as non-numeric | [`BESTw. Format / Informat`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `dollar.` | `format paid dollar12.2;` | Currency display with `$` and commas | Too-narrow width → asterisks (Rule 7) | [`DOLLARw.d Format`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
+| `options datestyle=` | `options datestyle=mdy;` | Pin ambiguous-date interpretation | Leaving default; host locale varies (Rule 3) | [`DATESTYLE= Option`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -424,35 +424,35 @@ run;
   value for display; `input()` parses an input string. Swapping
   them silently returns wrong values (or triggers a type-mismatch
   NOTE that gets buried in log noise). See Rule 1.
-  Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 - **Missing trailing dot on format reference** — `format age agegrp;`
   with no dot makes SAS look for a variable named `agegrp`. See
   Rule 2.
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 - **`anydtdte.` with locale-defaulted `DATESTYLE`** — same input
   string parses to a different date on US vs EU hosts. Always set
   `options datestyle=mdy;` explicitly. See Rule 3.
-  Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 - **`VALUE` format with no `OTHER=`** — unmapped values pass through
   raw, mixing labels and codes in the output. See Rule 4.
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 - **`FORMAT` used where `INFORMAT` is needed** — SAS parses with
   default `w.d` and produces missings or garbage, then displays the
   garbage with the attached FORMAT. See Rule 6.
-  Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 - **Format width narrower than the value** — `format x 5.;`
   truncates display to `*****`; the stored value is still full
   precision. See Rule 7.
-  Source: https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm
 
 - **CNTLIN START / END length mismatch** — an easy-to-miss data-prep
   error that yields an opaque PROC FORMAT error. See Rule 5.
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 ## Anti-patterns (STOP signs)
 
@@ -486,5 +486,5 @@ values are almost certainly not what the author meant:
   `PROC REPORT` all honor attached formats for display grouping.
 - [proc-sql.md](proc-sql.md) — format-based `CASE` alternatives and
   `put()` usage in a SELECT list.
-- [SAS Formats and Informats: Reference (9.4)](https://documentation.sas.com/doc/en/leforinforref/9.4/leforinforref.htm)
-- [Base SAS Procedures Guide — FORMAT Procedure (9.4)](https://documentation.sas.com/doc/en/proc/9.4/proc.htm)
+- [SAS Formats and Informats: Reference (9.4)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=leforinforref&docsetTarget=titlepage.htm)
+- [Base SAS Procedures Guide — FORMAT Procedure (9.4)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm)

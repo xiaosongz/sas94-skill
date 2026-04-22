@@ -10,10 +10,12 @@ sources (`sasjs/lint`, `sasjs/core`) plus hand-transcribed SAS-programmer
 pitfalls (GWU data-mining curriculum), and routes Claude Code to
 topic-specific reference files on demand.
 
-**Status:** `v0.0.1` pre-release. Three reference files (`macros.md`,
-`data-step.md`, `sas-master-reference.md`) are seeded; the other eight are
-stubs that will be populated across `v0.0.2`–`v1.0.0`. See
-[`docs/coverage-matrix.md`](docs/coverage-matrix.md) for current status.
+**Status:** `v0.0.1` pre-release. All 11 reference files are populated
+to the REQUIRED template sections (Overview, Critical Rules, Canonical
+Idioms, Function/Statement Quick Ref, See Also). OPTIONAL sections
+(Silent Pitfalls, Anti-patterns) are present where source material exists.
+See [`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file
+status.
 
 ## What This Skill Does
 
@@ -85,7 +87,6 @@ for index events.
 ```text
 sas94-skill/
 ├── SKILL.md                               # Thin router — trigger, routing table, workflow
-├── permissions.json                       # File-access scope
 ├── .skillignore                           # Excludes pipeline/ and docs/design.md from install
 ├── assets/
 │   ├── data-step-template.sas             # DATA step skeleton with Doxygen header
@@ -93,17 +94,17 @@ sas94-skill/
 │   ├── macro-template.sas                 # %macro / %mend skeleton with parenthesized sig
 │   └── analysis-template.sas              # End-to-end study-program scaffold
 ├── references/                            # Loaded on-demand per routing table
-│   ├── sas-master-reference.md            # Top-20 rules; load for new .sas files        [seeded]
-│   ├── data-step.md                       # MERGE/BY, first./last., retain, arrays, PDV  [seeded]
-│   ├── macros.md                          # %let, %macro scope, quoting, &&var           [seeded]
-│   ├── proc-sql.md                        # Joins, dedup, INTO :macvar, RESET            [stub]
-│   ├── base-procs.md                      # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE     [stub]
-│   ├── stat-procs.md                      # LOGISTIC, GLM, MIXED, GENMOD, SURVEY*        [stub]
-│   ├── hash-tables.md                     # declare hash, definekey, hashiter            [stub]
-│   ├── ods-and-output.md                  # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL           [stub]
-│   ├── formats-informats.md               # PROC FORMAT, date/time, input()/put()        [stub]
-│   ├── functions-reference.md             # Function cheatsheet by category              [stub]
-│   └── idioms-from-lexjansen.md           # SUGI / SAS Global Forum idioms               [stub]
+│   ├── sas-master-reference.md            # Top-20 rules; load for new .sas files
+│   ├── data-step.md                       # MERGE/BY, first./last., retain, arrays, PDV
+│   ├── macros.md                          # %let, %macro scope, quoting, &&var
+│   ├── proc-sql.md                        # Joins, dedup, INTO :macvar, RESET
+│   ├── base-procs.md                      # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE
+│   ├── stat-procs.md                      # LOGISTIC, GLM, MIXED, GENMOD, SURVEY*
+│   ├── hash-tables.md                     # declare hash, definekey, hashiter
+│   ├── ods-and-output.md                  # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL
+│   ├── formats-informats.md               # PROC FORMAT, date/time, input()/put()
+│   ├── functions-reference.md             # Function cheatsheet by category
+│   └── idioms-from-lexjansen.md           # SUGI / SAS Global Forum idioms
 └── docs/
     ├── design.md                          # Architecture and sourcing strategy
     ├── CONTRIBUTING.md                    # Reviewer workflow, PR + issue templates
@@ -122,11 +123,11 @@ writes. See
 
 | # | Rule | Reference |
 |---|------|-----------|
-| 1 | Every `%macro` signature must carry parentheses `()` | [macros.md §Rule 1](references/macros.md) |
-| 2 | Close every `%mend` with its macro name | [macros.md §Rule 2](references/macros.md) |
-| 3 | Declare `%local` for every non-parameter macro symbol | [sas-master-reference.md §Rule 19](references/sas-master-reference.md) |
-| 4 | MERGE silently overwrites same-named columns — rename on input, then coalesce | [data-step.md §MERGE overwrite](references/data-step.md) |
-| 5 | `LAG` is queue-based — call unconditionally, gate usage afterwards | [data-step.md §LAG trap](references/data-step.md) |
+| 1 | `LOGISTIC` models `P(Y = lowest ordinal value)` by default — pin the event with `descending` or `event='value'` | [stat-procs.md §Rule 2](references/stat-procs.md) |
+| 2 | `GENMOD` defaults to `DIST=NORMAL LINK=IDENTITY` — specify both for logistic, Poisson, or gamma | [stat-procs.md §Rule 3](references/stat-procs.md) |
+| 3 | MERGE silently overwrites same-named columns — rename on input, then coalesce | [data-step.md §MERGE overwrite](references/data-step.md) |
+| 4 | `LAG` is queue-based — call unconditionally, gate usage afterwards | [data-step.md §LAG trap](references/data-step.md) |
+| 5 | Every `%macro` must carry parentheses `()`; declare `%local` for every non-parameter symbol | [macros.md §Rule 1](references/macros.md) |
 
 Full rule list with `CORRECT` / `WRONG` code examples and source URLs:
 [`docs/rule-provenance.md`](docs/rule-provenance.md).

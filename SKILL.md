@@ -1,13 +1,18 @@
 ---
 name: sas94
 description: >
-  Write, review, fix, or debug SAS 9.4 code (.sas files) for health-services
-  research, biostatistics, and pharma/claims analysis. Triggers on: "write SAS",
-  "fix my SAS", "SAS macro error", "PROC SQL join", "DATA step MERGE",
-  "first. last. processing", "retain statement", "array in SAS", "PROC FREQ",
-  "PROC LOGISTIC", "PROC GLM", "PROC MIXED", "hash table SAS", "declare hash",
-  "ODS OUTPUT", "PROC FORMAT", "%macro", "%let", "%sysfunc", "macro quoting",
-  "SAS date function", "symget", "symput", or when the user references a .sas file or SAS 9.4 code.
+  Use this skill whenever the user wants to write, review, fix, or debug SAS 9.4
+  code — especially .sas files — for health-services research, biostatistics, or
+  claims analysis. Triggers include any mention of a .sas file, DATA step logic
+  (MERGE/BY, first./last., retain, arrays, hash objects), PROC SQL, SAS macros
+  (%macro, %let, %sysfunc, macro quoting, symput/symget), base or statistical
+  PROCs (FREQ, MEANS, LOGISTIC, GLM, MIXED, GENMOD, SURVEY*, LIFETEST), ODS
+  output (RTF, EXCEL, PDF, GRAPHICS), or PROC FORMAT. Do NOT use for R
+  (dplyr, tidyverse, data.frame), Python (pandas, dataframe), Stata, SPSS,
+  generic SQL (T-SQL, PostgreSQL, BigQuery), Procfile / shell "proc" commands,
+  or git merges — even if the user mentions procs, arrays, dataframes, or
+  merges in those contexts.
+allowed-tools: Read Grep Glob Write Edit
 ---
 
 ## When to Use
@@ -37,7 +42,7 @@ Prefer this skill whenever the current file or referenced path is a `.sas` file,
 
 ## Critical Rules (Summary)
 
-The top-10 critical-rules summary is populated progressively as reference files are seeded. Until then, consult the routing table below and load the relevant reference file before writing or reviewing SAS code. **Do not attempt to answer SAS questions from SKILL.md alone.**
+Top-20 aggregated rules (macros + DATA step + GWU items) live in `references/sas-master-reference.md`; per-topic rules live in the matching topic file. Consult the routing table below and load the relevant reference file before writing or reviewing SAS code. **Do not attempt to answer SAS questions from SKILL.md alone.**
 
 ## STOP and Re-check — Known Silent-Failure Patterns
 
@@ -45,7 +50,7 @@ Stop and load the indicated reference file before writing or reviewing code when
 
 - **`data a; set b; a = b + c; run;` without `retain`** — STOP. First row writes an uninitialized accumulator. Load `references/data-step.md` for retain-behavior and PDV-initialization rules.
 - **`%macro foo; ... %mend;` missing `()` in the macro signature** — STOP. `sasjs/lint hasMacroParentheses` forbids this; silent-parameter bugs follow. Load `references/macros.md`.
-- **`proc sql; create table t as select * from a, b;` (unqualified comma join)** — STOP. This is a cartesian product, not a join. Load `references/proc-sql.md` (seeded in a later phase — consult the Overview until then).
+- **`proc sql; create table t as select * from a, b;` (unqualified comma join)** — STOP. This is a cartesian product, not a join. Load `references/proc-sql.md`.
 - **`merge a b; by id; run;` without handling `first.`/`last.`** — STOP. Right-table values silently overwrite left-table values on duplicate keys. Load `references/data-step.md` MERGE/BY rules.
 - **`declare hash h(); h.definekey(); h.definedata(); h.definedone();` without `length` declared for key/data vars upstream** — STOP. Hash vars inherit PDV length; undeclared → truncation. Load `references/hash-tables.md`.
 - **`%let x = &y;` inside `%macro` without scope audit** — STOP. Implicit global-scope write when `y` resolves at outer scope. Load `references/macros.md` scope-and-quoting rules.
@@ -85,6 +90,8 @@ Use these templates as starting points — they supply header comment blocks, no
 4. For new files, start from the matching `assets/*.sas` template.
 5. When a pattern does not clearly match one reference, start with `references/idioms-from-lexjansen.md` for real-world idioms, then branch to the topic file.
 
+**Note on shell commands.** This skill does not execute SAS. Some reference files suggest diagnostic shell commands (`hexdump`, `file`) for inspecting `.sas` source bytes; the skill's frontmatter does not pre-approve Bash, so those commands will prompt for permission at the user's project scope. Users who want frictionless diagnostic access can add the specific commands to their own `.claude/settings.json` `permissions.allow` list.
+
 ## Versioning Note
 
-This skill is in Phase 1 (v0.0.1). Reference files `macros.md`, `data-step.md`, and `sas-master-reference.md` are seeded in a subsequent task; the remaining 8 reference files are stubs with valid frontmatter and will be populated progressively across v0.0.2 through v1.0.0. Do not infer content from file names alone — always open the file to confirm what is available.
+This skill is at v0.0.1. All 11 reference files are populated to the REQUIRED template sections (Overview, Critical Rules ≥1, Canonical Idioms ≥2, Function/Statement Quick Ref, See Also); OPTIONAL sections (Silent Pitfalls, Anti-patterns) are present where source material exists. See `docs/coverage-matrix.md` for the current per-file status. Later versions expand OPTIONAL sections and net-new idioms (see `docs/design.md` § Versioning semantics).

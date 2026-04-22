@@ -20,7 +20,14 @@ files. The top-20 rules below are aggregated and de-duplicated from
 hand-transcribed pitfalls in
 `pipeline/manual/gwu-data-mining-5-items.md`.
 
-## Critical Rules
+## Critical Rules (Top-20 Aggregated)
+
+This file is the cross-topic aggregator — the ≤8-rule cap that applies
+to topic reference files (see `docs/CONTRIBUTING.md`) is intentionally
+waived here. The 20 rules below are de-duplicated across
+`references/macros.md`, `references/data-step.md`, and
+`pipeline/manual/gwu-data-mining-5-items.md`; each rule points back to
+the topic file where its full treatment lives.
 
 ### Rule 1: Every `%macro` signature must carry parentheses `()`
 
@@ -105,7 +112,7 @@ unknown options after `/`.
 ```
 
 ```sas
-/* WRONG */
+/* WRONG - sasjs/lint strictMacroDefinition rejects; SAS itself compiles silently */
 %macro somemacro(var 1, var2) /minXoperator;
 ```
 
@@ -130,7 +137,7 @@ across `sasjs/core` and enforced by `sasjs/lint hasDoxygenHeader`.
 ```
 
 ```sas
-/* WRONG - no header */
+/* WRONG - sasjs/lint hasDoxygenHeader rejects; SAS itself compiles silently */
 %macro mf_getuniquelibref(prefix=mclib);
 %mend mf_getuniquelibref;
 ```
@@ -149,7 +156,7 @@ list. Whitespace-sensitive: `SE CURE` is not `SECURE`.
 ```
 
 ```sas
-/* WRONG */
+/* WRONG - sasjs/lint hasRequiredMacroOptions rejects (whitespace splits SECURE); SAS compiles but treats "SE" and "CURE" as separate tokens */
 %macro somemacro(var1, var2) / SE CURE;
 ```
 
@@ -500,39 +507,38 @@ Load the topic-specific reference when the task matches its scope.
 
 - [macros.md](macros.md) — `%let`, `%macro` scope, quoting (`%str`,
   `%nrstr`, `%bquote`, `%superq`), `&&var` resolution, `call symput` /
-  `symget`. Seeded in v0.0.1.
+  `symget`.
 - [data-step.md](data-step.md) — MERGE / BY, `first.` / `last.`,
-  `retain`, arrays, PDV initialization. Seeded in v0.0.1.
+  `retain`, arrays, PDV initialization.
 - [proc-sql.md](proc-sql.md) — joins, dedup, `INTO :macvar` list
-  targets, `RESET`. **Stub — populated in v0.0.2+.**
+  targets, `RESET`.
 - [base-procs.md](base-procs.md) — FREQ, MEANS, UNIVARIATE, SORT,
-  TRANSPOSE, REPORT. **Stub — populated in v0.0.2+.**
+  TRANSPOSE, REPORT.
 - [stat-procs.md](stat-procs.md) — LOGISTIC, GLM, MIXED, GENMOD,
-  SURVEY\*, LIFETEST. **Stub — populated in v0.0.2+.**
+  SURVEY\*, LIFETEST.
 - [hash-tables.md](hash-tables.md) — `declare hash`, `definekey`,
-  `hashiter`. **Stub — populated in v0.0.2+.**
+  `hashiter`.
 - [ods-and-output.md](ods-and-output.md) — ODS RTF / EXCEL / PDF, `ODS
-  OUTPUT`, ODS GRAPHICS, GTL. **Stub — populated in v0.0.2+.**
+  OUTPUT`, ODS GRAPHICS, GTL.
 - [formats-informats.md](formats-informats.md) — PROC FORMAT, date/time
-  formats, `input()` / `put()`. **Stub — populated in v0.0.2+.**
+  formats, `input()` / `put()`.
 - [functions-reference.md](functions-reference.md) — function-signature
-  cheatsheet by category. **Stub — populated in v0.0.2+.**
+  cheatsheet by category.
 - [idioms-from-lexjansen.md](idioms-from-lexjansen.md) — real-world
-  idioms distilled from SUGI and SAS Global Forum papers. **Stub —
-  populated in v0.0.2+.**
+  idioms distilled from SUGI and SAS Global Forum papers.
 
 ## Function / Statement Quick Ref
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `%macro` / `%mend` | `%macro name(args); ... %mend name;` | Macro definition | Missing `()`, bare `%mend;` | TODO (source pending) |
-| `%let` | `%let var = value;` | Macro variable assignment | Scope leak without `%local` | TODO (source pending) |
-| `%local` / `%global` | `%local v1 v2;` | Macro-symbol scope declaration | Declaring after first `%let` — too late | TODO (source pending) |
-| `data` / `set` / `run` | `data out; set in; run;` | Minimum DATA step | Forgetting `run;` (interactive sessions) | TODO (source pending) |
-| `merge` / `by` | `data c; merge a b; by id; run;` | BY-group DATA-step join | Unsorted inputs, silent overwrite | TODO (source pending) |
-| `retain` | `retain var initial;` | Carry PDV value across iterations | Forgetting → accumulator resets to missing | TODO (source pending) |
-| `proc sql` | `proc sql; <select>; quit;` | SQL block | Missing `quit;` | TODO (source pending) |
-| `libname` | `libname ref engine "path";` | Attach a library | Forgetting to `libname ref clear;` after use | TODO (source pending) |
+| `%macro` / `%mend` | `%macro name(args); ... %mend name;` | Macro definition | Missing `()`, bare `%mend;` | [`%macro` / `%mend`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `%let` | `%let var = value;` | Macro variable assignment | Scope leak without `%local` | [`%let`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `%local` / `%global` | `%local v1 v2;` | Macro-symbol scope declaration | Declaring after first `%let` — too late | [`%local` / `%global`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `data` / `set` / `run` | `data out; set in; run;` | Minimum DATA step | Forgetting `run;` (interactive sessions) | [`DATA Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `merge` / `by` | `data c; merge a b; by id; run;` | BY-group DATA-step join | Unsorted inputs, silent overwrite | [`MERGE Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `retain` | `retain var initial;` | Carry PDV value across iterations | Forgetting → accumulator resets to missing | [`RETAIN Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `proc sql` | `proc sql; <select>; quit;` | SQL block | Missing `quit;` | [`PROC SQL`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `libname` | `libname ref engine "path";` | Attach a library | Forgetting to `libname ref clear;` after use | [`LIBNAME Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 

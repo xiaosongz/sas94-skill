@@ -39,7 +39,7 @@ rather than row-wise) see `base-procs.md` and `proc-sql.md`.
 
 ### Rule 1: `SCAN(str, n)` without an explicit delimiter uses SAS's default delimiter set — which includes comma, period, and parentheses
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 With only two arguments, SCAN uses the environment's default delimiter
 list. On ASCII systems that list is
@@ -63,7 +63,7 @@ run;
 
 ### Rule 2: `SUBSTR` errors on nonpositive position; `SUBSTRN` returns a zero-length result instead — prefer `SUBSTRN` when position can be ≤ 0
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 `SUBSTR(str, -1, 5)` writes a note to the log, sets `_ERROR_ = 1`, and
 returns the substring from position 1 to end of string. `SUBSTRN(str,
@@ -90,7 +90,7 @@ run;
 
 ### Rule 3: `INTNX('interval', dt, 0)` with no `alignment` returns the **beginning** of the interval, not `dt` — use `'S'` (SAME) for same-day alignment
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 The fourth argument `alignment` defaults to `BEGINNING`. So
 `intnx('month', service_dt, 0)` returns the first of `service_dt`'s
@@ -116,7 +116,7 @@ run;
 
 ### Rule 4: `SUM(of x1-x5)` treats missing as zero; `x1+x2+x3+x4+x5` propagates missing — use `SUM` for missing-aware addition
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 The `SUM` function returns the sum of **nonmissing** arguments; if all
 arguments are missing the result is missing, but a single nonmissing
@@ -141,7 +141,7 @@ run;
 
 ### Rule 5: `ROUND(x, unit)` rounds to the nearest **multiple of unit**, not to a number of decimal places
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 `ROUND(3.14159, 1)` returns `3`. `ROUND(3.14159, 0.01)` returns `3.14`.
 The second argument is a rounding unit, not a decimal-place count —
@@ -165,7 +165,7 @@ run;
 
 ### Rule 6: `COMPRESS(str, list, 'k')` **keeps** only chars in `list` — the `k` modifier inverts the default "remove" semantics
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 With two arguments, `COMPRESS(str, '0123456789')` removes the listed
 digits. Add the `'k'` modifier, `COMPRESS(str, '0123456789', 'k')`, and
@@ -190,7 +190,7 @@ run;
 
 ### Rule 7: `MOD(-7, 3)` returns `-1`, not `2` — SAS uses sign-of-dividend, not the mathematical modulo
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 From the docs: "When the result is nonzero, the result has the same
 sign as the first argument. The sign of the second argument is
@@ -217,7 +217,7 @@ run;
 
 ### Rule 8: `CATS`, `CATT`, and `CATX` differ in which blanks they strip — pick deliberately, don't reach for whichever you remember
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 `CATS(a, b, c)` strips leading **and** trailing blanks from each
 argument, no separator. `CATT(a, b, c)` strips only trailing blanks,
@@ -246,7 +246,7 @@ run;
 
 ### Idiom: Month-end alignment for claims billing cycles
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 Purpose: map every service date to the end of its calendar month for
 PMPM / member-month aggregation. Use `INTNX` with `'E'` (END)
@@ -263,7 +263,7 @@ run;
 
 ### Idiom: ICD-10 code prefix match with `SUBSTRN`
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 Purpose: flag claims whose diagnosis starts with one of a set of
 category codes (e.g., I10–I13 for hypertensive disease). `SUBSTRN`
@@ -281,7 +281,7 @@ run;
 
 ### Idiom: `CATX`-assembled composite key for dedup or merge
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 Purpose: build a single-column composite key suitable for `PROC SORT
 NODUPKEY`, hash-table lookups, or SQL joins. `CATX('|', ...)` handles
@@ -302,7 +302,7 @@ run;
 
 ### Idiom: `%SYSFUNC` bridge — calling DATA-step functions from macro context
 
-Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 Purpose: get a DATA-step function result into a macro variable without
 a `DATA _NULL_` round-trip. `%sysfunc(today(), yymmdd10.)` returns
@@ -329,56 +329,56 @@ not stable across docset revisions).
 
 | Category | Name | Syntax | Purpose | Common mistake | Doc URL |
 |----------|------|--------|---------|----------------|---------|
-| date/time | `INTCK` | `intck('interval', d1, d2 <, 'method'>)` | Count interval boundaries between two dates | Default `method='DISCRETE'` counts boundaries; use `'CONTINUOUS'` for anniversary semantics | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `INTNX` | `intnx('interval', d, n <, 'align'>)` | Shift date by N intervals | Default align=`'BEGINNING'`; use `'S'` for same-day (see Rule 3) | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `TODAY` | `today()` | Current date (SAS date integer) | Embeds wall-clock — breaks reproducibility | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DATE` | `date()` | Alias for `today()` | Same reproducibility issue | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `TIME` | `time()` | Seconds since midnight | Type is SAS time, not datetime | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DATETIME` | `datetime()` | Current SAS datetime value | Seconds since 01JAN1960 00:00 — not Unix epoch | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `YEAR` | `year(d)` | Extract year from SAS date | Passing a datetime silently returns year-of-1960 offset | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `MONTH` | `month(d)` | Extract month 1..12 from SAS date | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DAY` | `day(d)` | Extract day-of-month 1..31 | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `QTR` | `qtr(d)` | Quarter 1..4 | SAS calendar quarters, not fiscal | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `WEEKDAY` | `weekday(d)` | Day-of-week 1..7 (1=Sunday) | Many analysts expect 1=Monday | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `MDY` | `mdy(m, d, y)` | Construct SAS date from m/d/y | Argument order is m-d-y (not ISO y-m-d) | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DATEPART` | `datepart(dt)` | SAS date from SAS datetime | Omitting it and using YEAR(dt) directly — wrong | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `TIMEPART` | `timepart(dt)` | SAS time from SAS datetime | Discards date info silently | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DHMS` | `dhms(d, h, m, s)` | Compose datetime from d/h/m/s | Passing a datetime as the date arg | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| date/time | `DATDIF` | `datdif(d1, d2, basis)` | Day-count with basis ('ACT/ACT', '30/360') | Basis is required; not like INTCK('day') | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `SCAN` | `scan(s, n <, delim <, mod>>)` | Extract nth word | Omitting delim uses default set — see Rule 1 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `SUBSTR` | `substr(s, pos <, len>)` | Extract fixed-position substring | Nonpositive pos sets `_ERROR_=1` — see Rule 2 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `SUBSTRN` | `substrn(s, pos <, len>)` | Safe substring — returns empty on bad pos | Silently empty when you expected content | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `CATS` | `cats(a, b, ...)` | Concat, strip all blanks, no separator | Collapses values without separator — see Rule 8 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `CATT` | `catt(a, b, ...)` | Concat, strip trailing only | Leading blanks preserved — rarely what's wanted | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `CATX` | `catx(sep, a, b, ...)` | Concat with separator, strip blanks | Default result length 200 — truncates long keys | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `TRANWRD` | `tranwrd(s, old, new)` | Replace all occurrences of `old` with `new` | Case-sensitive; no regex | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `COMPRESS` | `compress(s <, chars <, mod>>)` | Remove listed chars (or keep with `'k'`) | `'k'` modifier inverts meaning — see Rule 6 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `INDEX` | `index(s, sub)` | Position of first `sub`; 0 if absent | Case-sensitive; no wildcards | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `FIND` | `find(s, sub <, mods <, start>>)` | Positional search with `'i'` case-insens mod | Forgetting `'i'` and missing mixed-case matches | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `TRANSLATE` | `translate(s, to, from)` | Char-by-char swap | Argument order is `to, from` — opposite of tr(1) | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `PROPCASE` | `propcase(s <, delims>)` | Title-case every word | Default delims include space, hyphen, tab | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `UPCASE` | `upcase(s)` | ASCII uppercase | Not locale-aware | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `LOWCASE` | `lowcase(s)` | ASCII lowercase | Not locale-aware | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `STRIP` | `strip(s)` | Remove leading and trailing blanks | Not for interior whitespace | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| string | `TRIM` | `trim(s)` | Remove trailing blanks only | Leading blanks preserved; use STRIP for both sides | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `SUM` | `sum(of x1-xN)` | Sum ignoring missing | Missing treated as 0 — see Rule 4 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `MEAN` | `mean(of x1-xN)` | Row-wise mean of nonmissing | Uses nonmissing count as denominator | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `MEDIAN` | `median(of x1-xN)` | Row-wise median | Requires all numeric args | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `ROUND` | `round(x <, unit>)` | Round to nearest multiple of unit | Unit is not decimal places — see Rule 5 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `INT` | `int(x)` | Truncate toward 0 | Negative numbers round up, not down | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `CEIL` | `ceil(x)` | Smallest integer ≥ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `FLOOR` | `floor(x)` | Largest integer ≤ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `MOD` | `mod(x, y)` | Remainder | Sign follows dividend — see Rule 7 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `LOG` | `log(x)` | Natural log | Not log10 — name confusion from other languages | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `EXP` | `exp(x)` | e^x | Overflow at x ≈ 709 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `MAX` | `max(a, b, ...)` | Row-wise max of nonmissing | Different from `PROC SQL MAX(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| numeric | `MIN` | `min(a, b, ...)` | Row-wise min of nonmissing | Different from `PROC SQL MIN(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| array | `DIM` | `dim(arr <, dim-n>)` | Length of array (or nth dim) | On 2D arrays, omitting n returns first-dim length | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| array | `HBOUND` | `hbound(arr <, n>)` | Upper bound of array index | Nonzero lower-bound arrays common in time-series work | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| array | `LBOUND` | `lbound(arr <, n>)` | Lower bound of array index | Default is 1 unless explicit `array a{0:10}` | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| macro-aware | `%SYSFUNC` | `%sysfunc(func(args) <, fmt>)` | Call DATA-step function from macro context | Inner commas in func args confuse the parser | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| macro-aware | `%SCAN` | `%scan(text, n <, delim>)` | Macro-context SCAN | Same default-delim trap as SCAN (Rule 1) | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
-| macro-aware | `%SUBSTR` | `%substr(text, pos <, len>)` | Macro-context SUBSTR | No macro-context SUBSTRN equivalent — beware pos ≤ 0 | [`lefunctionsref`](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm) |
+| date/time | `INTCK` | `intck('interval', d1, d2 <, 'method'>)` | Count interval boundaries between two dates | Default `method='DISCRETE'` counts boundaries; use `'CONTINUOUS'` for anniversary semantics | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `INTNX` | `intnx('interval', d, n <, 'align'>)` | Shift date by N intervals | Default align=`'BEGINNING'`; use `'S'` for same-day (see Rule 3) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `TODAY` | `today()` | Current date (SAS date integer) | Embeds wall-clock — breaks reproducibility | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DATE` | `date()` | Alias for `today()` | Same reproducibility issue | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `TIME` | `time()` | Seconds since midnight | Type is SAS time, not datetime | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DATETIME` | `datetime()` | Current SAS datetime value | Seconds since 01JAN1960 00:00 — not Unix epoch | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `YEAR` | `year(d)` | Extract year from SAS date | Passing a datetime silently returns year-of-1960 offset | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `MONTH` | `month(d)` | Extract month 1..12 from SAS date | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DAY` | `day(d)` | Extract day-of-month 1..31 | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `QTR` | `qtr(d)` | Quarter 1..4 | SAS calendar quarters, not fiscal | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `WEEKDAY` | `weekday(d)` | Day-of-week 1..7 (1=Sunday) | Many analysts expect 1=Monday | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `MDY` | `mdy(m, d, y)` | Construct SAS date from m/d/y | Argument order is m-d-y (not ISO y-m-d) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DATEPART` | `datepart(dt)` | SAS date from SAS datetime | Omitting it and using YEAR(dt) directly — wrong | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `TIMEPART` | `timepart(dt)` | SAS time from SAS datetime | Discards date info silently | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DHMS` | `dhms(d, h, m, s)` | Compose datetime from d/h/m/s | Passing a datetime as the date arg | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| date/time | `DATDIF` | `datdif(d1, d2, basis)` | Day-count with basis ('ACT/ACT', '30/360') | Basis is required; not like INTCK('day') | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `SCAN` | `scan(s, n <, delim <, mod>>)` | Extract nth word | Omitting delim uses default set — see Rule 1 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `SUBSTR` | `substr(s, pos <, len>)` | Extract fixed-position substring | Nonpositive pos sets `_ERROR_=1` — see Rule 2 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `SUBSTRN` | `substrn(s, pos <, len>)` | Safe substring — returns empty on bad pos | Silently empty when you expected content | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `CATS` | `cats(a, b, ...)` | Concat, strip all blanks, no separator | Collapses values without separator — see Rule 8 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `CATT` | `catt(a, b, ...)` | Concat, strip trailing only | Leading blanks preserved — rarely what's wanted | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `CATX` | `catx(sep, a, b, ...)` | Concat with separator, strip blanks | Default result length 200 — truncates long keys | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `TRANWRD` | `tranwrd(s, old, new)` | Replace all occurrences of `old` with `new` | Case-sensitive; no regex | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `COMPRESS` | `compress(s <, chars <, mod>>)` | Remove listed chars (or keep with `'k'`) | `'k'` modifier inverts meaning — see Rule 6 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `INDEX` | `index(s, sub)` | Position of first `sub`; 0 if absent | Case-sensitive; no wildcards | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `FIND` | `find(s, sub <, mods <, start>>)` | Positional search with `'i'` case-insens mod | Forgetting `'i'` and missing mixed-case matches | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `TRANSLATE` | `translate(s, to, from)` | Char-by-char swap | Argument order is `to, from` — opposite of tr(1) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `PROPCASE` | `propcase(s <, delims>)` | Title-case every word | Default delims include space, hyphen, tab | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `UPCASE` | `upcase(s)` | ASCII uppercase | Not locale-aware | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `LOWCASE` | `lowcase(s)` | ASCII lowercase | Not locale-aware | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `STRIP` | `strip(s)` | Remove leading and trailing blanks | Not for interior whitespace | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| string | `TRIM` | `trim(s)` | Remove trailing blanks only | Leading blanks preserved; use STRIP for both sides | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `SUM` | `sum(of x1-xN)` | Sum ignoring missing | Missing treated as 0 — see Rule 4 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `MEAN` | `mean(of x1-xN)` | Row-wise mean of nonmissing | Uses nonmissing count as denominator | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `MEDIAN` | `median(of x1-xN)` | Row-wise median | Requires all numeric args | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `ROUND` | `round(x <, unit>)` | Round to nearest multiple of unit | Unit is not decimal places — see Rule 5 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `INT` | `int(x)` | Truncate toward 0 | Negative numbers round up, not down | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `CEIL` | `ceil(x)` | Smallest integer ≥ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `FLOOR` | `floor(x)` | Largest integer ≤ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `MOD` | `mod(x, y)` | Remainder | Sign follows dividend — see Rule 7 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `LOG` | `log(x)` | Natural log | Not log10 — name confusion from other languages | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `EXP` | `exp(x)` | e^x | Overflow at x ≈ 709 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `MAX` | `max(a, b, ...)` | Row-wise max of nonmissing | Different from `PROC SQL MAX(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| numeric | `MIN` | `min(a, b, ...)` | Row-wise min of nonmissing | Different from `PROC SQL MIN(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| array | `DIM` | `dim(arr <, dim-n>)` | Length of array (or nth dim) | On 2D arrays, omitting n returns first-dim length | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| array | `HBOUND` | `hbound(arr <, n>)` | Upper bound of array index | Nonzero lower-bound arrays common in time-series work | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| array | `LBOUND` | `lbound(arr <, n>)` | Lower bound of array index | Default is 1 unless explicit `array a{0:10}` | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| macro-aware | `%SYSFUNC` | `%sysfunc(func(args) <, fmt>)` | Call DATA-step function from macro context | Inner commas in func args confuse the parser | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| macro-aware | `%SCAN` | `%scan(text, n <, delim>)` | Macro-context SCAN | Same default-delim trap as SCAN (Rule 1) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| macro-aware | `%SUBSTR` | `%substr(text, pos <, len>)` | Macro-context SUBSTR | No macro-context SUBSTRN equivalent — beware pos ≤ 0 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -386,47 +386,47 @@ not stable across docset revisions).
   returns `B`, not `B.C`, because comma and period are both default
   delimiters on ASCII. Always pass the third `character-list` argument
   explicitly when the input has any punctuation. See Rule 1.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **SUBSTR sets `_ERROR_=1` on nonpositive position** — the step
   continues and produces output, but `_ERROR_=1` flows into downstream
   error-flag logic and (depending on `ERRORCHECK`) can halt macro
   loops. `SUBSTRN` is the safer substring for defensive code. See
   Rule 2.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **INTNX default alignment is `BEGINNING`** — `intnx('month', dt, 0)`
   is the first of the month, not `dt`. Every `INTNX` call in a claims
   pipeline should carry an explicit alignment argument. See Rule 3.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **SUM vs `+`** — `SUM(of x1-x5)` treats missing as 0; `x1+x2+...` is
   missing if any arg is missing. Mixing the two in nested expressions
   produces surprising shape-changes on row-wise totals. See Rule 4.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **ROUND unit vs decimal places** — `ROUND(x, 2)` rounds to the
   nearest even integer, not 2 decimals. Use `ROUND(x, 0.01)`. See
   Rule 5.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **COMPRESS `'k'` inversion** — without `'k'`, the listed chars are
   **removed**; with `'k'`, they are the **only** chars kept. `COMPRESS(s,
   , 'a')` removes all alphabetic — the opposite of what "compress with
   alpha" sounds like in English. See Rule 6.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **MOD sign-of-dividend** — `MOD(-7, 3) = -1`, not `2`. Code that
   uses `MOD` for hash-bucket assignment on signed keys will produce
   negative bucket indices. See Rule 7.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 - **CATS / CATT / CATX default length 200** — all three default the
   result variable to 200 bytes when one has not been assigned. Long
   concatenations truncate to 200 silently in DATA steps outside WHERE
   clauses; WHERE-clause and PROC SQL usage truncates even more
   aggressively. Declare `length` explicitly. See Rule 8.
-  Source: https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm
 
 ## Anti-patterns (STOP signs)
 
@@ -467,4 +467,4 @@ produces output, but the output is almost certainly wrong:
 - [formats-informats.md](formats-informats.md) — date/time formats
   used with `PUT` after `INTNX` / `MDY` / `TODAY`; ISO-format
   round-trips.
-- [SAS Functions and CALL Routines: Reference](https://documentation.sas.com/doc/en/lefunctionsref/9.4/lefunctionsref.htm)
+- [SAS Functions and CALL Routines: Reference](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm)

@@ -8,6 +8,10 @@ pipeline/**/__pycache__/
 *.pyc
 .python-version
 
+# R session files
+.Rhistory
+**/.Rhistory
+
 # OS
 .DS_Store
 Thumbs.db

@@ -1,8 +1,0 @@
-{
-  "read": ["*.sas", "*.sas7bcat", "*.sas7bdat"],
-  "write": ["*.sas"],
-  "bash": {
-    "allow": [],
-    "deny": ["rm -rf", "git push --force"]
-  }
-}

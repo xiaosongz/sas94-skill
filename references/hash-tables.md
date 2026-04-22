@@ -40,7 +40,7 @@ not fit in memory.
 
 ### Rule 1: The hash must be declared and loaded inside `if _N_ = 1 then do; ... end;` — or via `dataset:` — before any `set` reads the lookup column
 
-Source: https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm
 
 The hash object is created and populated at run time, not compile
 time. If you put `declare hash ...` below the `set large;`, the first
@@ -83,7 +83,7 @@ run;
 
 ### Rule 2: Omitting `definedone()` is a silent error — every subsequent method call fails
 
-Source: https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm
 
 `definedone()` is what locks the key / data schema and makes the hash
 usable; without it, `add()`, `find()`, `check()`, and `output()` all
@@ -91,9 +91,14 @@ fail. The DATA step may still compile and run, but no row will be
 added or found. Always terminate the define sequence with
 `definedone()` — and check its return code in defensive code.
 
+The snippets below highlight only the define block — for a full
+self-contained DATA step (with PDV parameter-type match and a driver
+`set`) see Rule 1 and the "Reference-table lookup" idiom below.
+
 ```sas
-/* CORRECT - definedone() terminates the schema */
+/* CORRECT - definedone() terminates the schema (fragment; see Rule 1 for full DATA step) */
 if _N_ = 1 then do;
+  length pat_id $20 plan_type $10;  /* PDV type-match for definekey / definedata */
   declare hash h();
   h.definekey('pat_id');
   h.definedata('pat_id', 'plan_type');
@@ -102,8 +107,9 @@ end;
 ```
 
 ```sas
-/* WRONG - no definedone(); every h.add() / h.find() below silently fails */
+/* WRONG - no definedone(); every h.add() / h.find() below silently fails (fragment) */
 if _N_ = 1 then do;
+  length pat_id $20 plan_type $10;
   declare hash h();
   h.definekey('pat_id');
   h.definedata('pat_id', 'plan_type');
@@ -140,7 +146,7 @@ output;
 
 ### Rule 4: Hash objects do NOT persist across DATA steps — their lifetime is exactly one step
 
-Source: https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm
 
 Every `declare hash` is scoped to the DATA step that creates it; when
 the step's `run;` fires, the hash and its memory are freed. If you
@@ -246,8 +252,12 @@ If the lookup source has duplicates and you need the last version,
 use `replace()`; if you need the first, use `add()`. The `dataset:`
 tag is equivalent to an `add()` loop — it keeps the first.
 
+Snippets below show only the load loop — a self-contained step would
+wrap these in `data _null_; if _N_ = 1 then do; declare hash h(); ...
+h.definedone(); end;` as in Rule 1.
+
 ```sas
-/* CORRECT - replace() keeps the most-recent row per key */
+/* CORRECT - replace() keeps the most-recent row per key (fragment; see Rule 1) */
 do until (eof);
   set ref_updates end=eof;
   h.replace();
@@ -255,7 +265,7 @@ end;
 ```
 
 ```sas
-/* WRONG - add() silently discards the "newer" row when the key is a dup */
+/* WRONG - add() silently discards the "newer" row when the key is a dup (fragment) */
 do until (eof);
   set ref_updates end=eof;
   h.add();  /* first row wins; later updates lost */
@@ -294,7 +304,8 @@ end;
 
 ```sas
 /* WRONG - dx_code absent from definedata; only first() updates it,
-   every next() row carries the first row's key */
+   every next() row carries the first row's key (fragment; see Rule 1 for
+   full wrapping DATA step with `if 0 then set` PDV type-match). */
 h.definekey('dx_code');
 h.definedata('n_claims');  /* dx_code missing */
 ```
@@ -455,24 +466,24 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `declare hash` | `declare hash h(<dataset: 'x', ordered: 'a', multidata: 'Y', hashexp: n>);` | Instantiate a hash object | Placing below `set`; PDV not type-matched | [`DECLARE Statement, Hash`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `dcl hash` | `dcl hash h();` | Shorthand for `declare hash` | None — pure alias | [`DECLARE Statement, Hash`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `definekey` | `h.definekey('k1', 'k2');` | Name the key column(s) | Forgetting to include key in `definedata` when iterator needs it | [`Hash Object`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `definedata` | `h.definedata('v1', 'v2');` | Name the data-portion column(s) | Missing the key when iterator will walk the table | [`Hash Object`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `definedone` | `h.definedone();` | Finalize the schema | Omitting it — every later method silently fails | [`Hash Object`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `find` | `rc = h.find();` | Retrieve row for current key; 0 = hit | Not checking `rc` → last-retrieved-values bug | [`FIND Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `find_next` | `rc = h.find_next();` | Next duplicate for same key (requires `multidata: 'Y'`) | Calling without `multidata: 'Y'` | [`FIND_NEXT Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `check` | `rc = h.check();` | Test if key exists without retrieving data | Confusing with `find` — check doesn't populate PDV | [`CHECK Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `add` | `rc = h.add();` | Insert row; fails on duplicate key | Wanting "upsert" semantics — use `replace` | [`ADD Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `replace` | `rc = h.replace();` | Insert or overwrite existing key | Losing the first value when you wanted first-wins | [`REPLACE Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `remove` | `rc = h.remove();` | Delete current key's entry | Calling without a prior `find` / `check` | [`REMOVE Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `output` | `h.output(dataset: 'x');` | Persist hash contents to a SAS dataset | Expecting it to survive the step without `output` | [`OUTPUT Method`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `declare hiter` | `declare hiter hi('h');` | Bind iterator to a hash | Passing hash name unquoted; must be a string | [`DECLARE Statement, Hash Iterator`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `hi.first` / `hi.last` | `rc = hi.first();` | Move to ordered first / last entry | Requires `ordered:` on the hash to be meaningful | [`Hash Iterator`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `hi.next` / `hi.prev` | `rc = hi.next();` | Move to next / prev entry | Updates data-portion only, not key (Rule 7) | [`Hash Iterator`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `multidata: 'Y'` | `declare hash h(multidata: 'Y');` | Accept duplicate keys | Omitting it → silent dedup to first row per key | [`Hash Object Arguments`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `ordered:` | `declare hash h(ordered: 'a');` | Maintain key order | Passing a numeric literal → runtime error | [`Hash Object Arguments`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
-| `hashexp:` | `declare hash h(hashexp: 10);` | Bucket count = `2**hashexp` | Rarely material — defaults fine for most data | [`Hash Object Arguments`](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm) |
+| `declare hash` | `declare hash h(<dataset: 'x', ordered: 'a', multidata: 'Y', hashexp: n>);` | Instantiate a hash object | Placing below `set`; PDV not type-matched | [`DECLARE Statement, Hash`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `dcl hash` | `dcl hash h();` | Shorthand for `declare hash` | None — pure alias | [`DECLARE Statement, Hash`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `definekey` | `h.definekey('k1', 'k2');` | Name the key column(s) | Forgetting to include key in `definedata` when iterator needs it | [`Hash Object`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `definedata` | `h.definedata('v1', 'v2');` | Name the data-portion column(s) | Missing the key when iterator will walk the table | [`Hash Object`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `definedone` | `h.definedone();` | Finalize the schema | Omitting it — every later method silently fails | [`Hash Object`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `find` | `rc = h.find();` | Retrieve row for current key; 0 = hit | Not checking `rc` → last-retrieved-values bug | [`FIND Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `find_next` | `rc = h.find_next();` | Next duplicate for same key (requires `multidata: 'Y'`) | Calling without `multidata: 'Y'` | [`FIND_NEXT Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `check` | `rc = h.check();` | Test if key exists without retrieving data | Confusing with `find` — check doesn't populate PDV | [`CHECK Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `add` | `rc = h.add();` | Insert row; fails on duplicate key | Wanting "upsert" semantics — use `replace` | [`ADD Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `replace` | `rc = h.replace();` | Insert or overwrite existing key | Losing the first value when you wanted first-wins | [`REPLACE Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `remove` | `rc = h.remove();` | Delete current key's entry | Calling without a prior `find` / `check` | [`REMOVE Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `output` | `h.output(dataset: 'x');` | Persist hash contents to a SAS dataset | Expecting it to survive the step without `output` | [`OUTPUT Method`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `declare hiter` | `declare hiter hi('h');` | Bind iterator to a hash | Passing hash name unquoted; must be a string | [`DECLARE Statement, Hash Iterator`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `hi.first` / `hi.last` | `rc = hi.first();` | Move to ordered first / last entry | Requires `ordered:` on the hash to be meaningful | [`Hash Iterator`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `hi.next` / `hi.prev` | `rc = hi.next();` | Move to next / prev entry | Updates data-portion only, not key (Rule 7) | [`Hash Iterator`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `multidata: 'Y'` | `declare hash h(multidata: 'Y');` | Accept duplicate keys | Omitting it → silent dedup to first row per key | [`Hash Object Arguments`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `ordered:` | `declare hash h(ordered: 'a');` | Maintain key order | Passing a numeric literal → runtime error | [`Hash Object Arguments`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
+| `hashexp:` | `declare hash h(hashexp: 10);` | Bucket count = `2**hashexp` | Rarely material — defaults fine for most data | [`Hash Object Arguments`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -490,7 +501,7 @@ run;
 
 - **Forgotten `definedone()`** — no error at compile, but every
   `add()` / `find()` / `output()` below is a no-op. See Rule 2.
-  Source: https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm
 
 - **Duplicate keys silently collapse without `multidata: 'Y'`** —
   loading a table where the key is not unique keeps only the first
@@ -537,7 +548,7 @@ runs, but the results are almost certainly not what the author meant:
   dedup alternative to the hash-`check()` idiom.
 - [idioms-from-lexjansen.md](idioms-from-lexjansen.md) — deeper hash
   treatments from Dorfman and other authors.
-- [SAS Language Reference: Processing Guide](https://documentation.sas.com/doc/en/lepg/9.4/lepg.htm)
+- [SAS Language Reference: Processing Guide](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lepg&docsetTarget=titlepage.htm)
 - [Dorfman (2005) — Data Step Hash Objects as Programming Tools](https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf)
 - [Dorfman (2007) — Hash Crash and Beyond](https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf)
 - [Dorfman (2015) — Using the SAS Hash Object with Duplicate Key Entries](https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf)

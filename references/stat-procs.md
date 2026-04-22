@@ -38,7 +38,7 @@ preprocessing that typically precedes these procs see `data-step.md`.
 
 ### Rule 1: `CLASS` is required for every categorical predictor — a numeric categorical in `MODEL` without `CLASS` is silently treated as continuous
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 LOGISTIC, GLM, MIXED, and GENMOD all accept a `CLASS` statement that
 names the categorical predictors. Any predictor listed in `MODEL`
@@ -66,7 +66,7 @@ run;
 
 ### Rule 2: LOGISTIC defaults to modeling `P(Y = lowest ordinal value)` — use `descending` or `event='value'` to pin the event
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Per the LOGISTIC Procedure documentation, the default model is the
 probability of the lowest response level — so for a binary outcome
@@ -94,7 +94,7 @@ run;
 
 ### Rule 3: GENMOD defaults to `DIST=NORMAL LINK=IDENTITY` — specify both for logistic, Poisson, or gamma
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Per the GENMOD MODEL statement docs, "if you specify no distribution
 and no link function, then the GENMOD procedure defaults to the
@@ -124,7 +124,7 @@ run;
 
 ### Rule 4: MIXED `REPEATED` models R-side (within-subject residual correlation); `RANDOM` models G-side (random effects) — they are NOT interchangeable
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Per the MIXED Procedure docs, `RANDOM` specifies random-effects
 parameters (the `Z` design matrix and `G` covariance), and
@@ -167,7 +167,7 @@ run;
 
 ### Rule 5: LIFETEST `TIME t*status(code)` — the value in parentheses is the CENSORED code, not the event code
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Per the LIFETEST Getting Started section, the syntax is
 `time <time-var>*<status-var>(<censor-value-list>);` — the values in
@@ -196,7 +196,7 @@ run;
 
 ### Rule 6: SURVEY* procs require design variables — no `STRATA` / `CLUSTER` / `WEIGHT` assumes simple random sampling (wrong SEs)
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Per the SURVEYMEANS Procedure overview, the SURVEY family (MEANS,
 FREQ, LOGISTIC, REG, PHREG) estimates sampling errors under a
@@ -227,7 +227,7 @@ run;
 
 ### Rule 7: None of these procs return data to macros — use `ODS OUTPUT` to capture structured model output
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 LOGISTIC, GLM, MIXED, GENMOD, LIFETEST, PHREG, and the SURVEY* procs
 write their tabular output through the Output Delivery System, not
@@ -263,7 +263,7 @@ run;
 
 ### Rule 8: `LSMEANS` in GLM / MIXED / GENMOD produces covariate-adjusted (marginal) means — NOT arithmetic means
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 `lsmeans class-effect;` computes the least-squares means — the
 predicted value at a common set of covariate values, effectively the
@@ -298,7 +298,7 @@ run;
 
 ### Idiom: Logistic regression for a binary claims outcome with CLASS + ODS OUTPUT capture
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Purpose: fit a logistic regression for a binary outcome (hospital
 readmission, event occurrence), with categorical predictors properly
@@ -322,7 +322,7 @@ ods output close;
 
 ### Idiom: Mixed model for panel claims with random patient intercept
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Purpose: model longitudinal claims cost across patients with a
 random intercept per patient (captures the patient-level clustering)
@@ -342,7 +342,7 @@ run;
 
 ### Idiom: Kaplan-Meier survival curve by treatment with log-rank test
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Purpose: compare survival (time to death, time to readmission)
 across treatment groups. `time days*event(0)` declares 0 as the
@@ -361,7 +361,7 @@ ods output close;
 
 ### Idiom: Cox proportional hazards via PHREG with hazard ratios
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Purpose: semi-parametric survival model with covariate adjustment.
 PHREG's MODEL syntax mirrors LIFETEST (`time*status(censor_code)`),
@@ -381,7 +381,7 @@ ods output close;
 
 ### Idiom: Complex-survey proportion via SURVEYFREQ with STRATA / CLUSTER / WEIGHT
 
-Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 Purpose: estimate a population proportion from a complex-sample
 survey (NHANES-style design) with correct variance estimation. Every
@@ -402,26 +402,26 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `PROC LOGISTIC` | `proc logistic data=ds; class ...; model y(event='1') = x;` | Binary / ordinal / nominal logistic regression | Default models P(lowest value); omit `event=` | [`PROC LOGISTIC`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `CLASS` (LOGISTIC) | `class sex(ref='F') / param=ref;` | Declare categorical predictors + reference coding | Numeric categorical missing from CLASS → continuous | [`CLASS Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `MODEL event=` | `model y(event='1') = x;` | Pin modeled event in LOGISTIC | Omitting → wrong event modeled | [`MODEL Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `descending` | `proc logistic descending;` | Flip response ordering (alternate to `event=`) | Using both — redundant, confusing | [`PROC LOGISTIC`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC GLM` | `proc glm; class g; model y = g x;` | ANOVA / ANCOVA / linear regression | Treating a fit as MIXED when data are clustered | [`PROC GLM`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC MIXED` | `proc mixed; class g; model y = x; random intercept / subject=g;` | Linear mixed model with REML | `RANDOM` vs `REPEATED` confusion (Rule 4) | [`PROC MIXED`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `RANDOM` (MIXED) | `random intercept / subject=id;` | G-side random effects | Using it for residual serial correlation | [`RANDOM Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `REPEATED` (MIXED) | `repeated visit / subject=id type=ar(1);` | R-side within-subject correlation | Using it for a random intercept | [`REPEATED Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC GENMOD` | `proc genmod; class g; model y = x / dist=bin link=logit;` | Generalized linear model | Default `DIST=NORMAL LINK=IDENTITY` (OLS) | [`PROC GENMOD`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `DIST=` (GENMOD) | `model y = x / dist=poisson;` | Response distribution family | Forgetting it → silent OLS fit (Rule 3) | [`MODEL Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `LINK=` (GENMOD) | `model y = x / dist=bin link=logit;` | Link function | Omitting with DIST= → canonical link used | [`MODEL Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC LIFETEST` | `proc lifetest; time t*c(0); strata g;` | Nonparametric survival (K-M) | `time t*c(1)` flipping the censor code (Rule 5) | [`PROC LIFETEST`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `TIME time*status(c)` | `time days*event(0);` | Declare survival time + CENSOR code | Value in parens is CENSORED, not event | [`TIME Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC PHREG` | `proc phreg; class g; model t*c(0) = x;` | Cox proportional hazards regression | Same TIME syntax pitfall as LIFETEST | [`PROC PHREG`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `HAZARDRATIO` | `hazardratio treatment;` | Per-covariate HR with CIs | Reporting parameter estimates as HRs (wrong scale) | [`HAZARDRATIO`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC SURVEYMEANS` | `proc surveymeans; strata s; cluster c; weight w; var y;` | Complex-survey descriptives | Omitting design vars → SRS variance (Rule 6) | [`PROC SURVEYMEANS`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC SURVEYFREQ` | `proc surveyfreq; strata s; cluster c; weight w; tables a*b;` | Complex-survey crosstabs | Same design-var omission pitfall | [`PROC SURVEYFREQ`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `PROC SURVEYLOGISTIC` | `proc surveylogistic; strata s; cluster c; weight w; model y=x;` | Complex-survey logistic | Using PROC LOGISTIC with `weight` → wrong SEs | [`PROC SURVEYLOGISTIC`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `LSMEANS` | `lsmeans trt / diff cl;` | Covariate-adjusted marginal means | Treating as raw group means (Rule 8) | [`LSMEANS Statement`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
-| `ODS OUTPUT` | `ods output ParameterEstimates=pe;` | Capture tabular output to a dataset | Wrong table name → empty / missing dataset | [`ODS OUTPUT`](https://documentation.sas.com/doc/en/statug/9.4/statug.htm) |
+| `PROC LOGISTIC` | `proc logistic data=ds; class ...; model y(event='1') = x;` | Binary / ordinal / nominal logistic regression | Default models P(lowest value); omit `event=` | [`PROC LOGISTIC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `CLASS` (LOGISTIC) | `class sex(ref='F') / param=ref;` | Declare categorical predictors + reference coding | Numeric categorical missing from CLASS → continuous | [`CLASS Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `MODEL event=` | `model y(event='1') = x;` | Pin modeled event in LOGISTIC | Omitting → wrong event modeled | [`MODEL Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `descending` | `proc logistic descending;` | Flip response ordering (alternate to `event=`) | Using both — redundant, confusing | [`PROC LOGISTIC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC GLM` | `proc glm; class g; model y = g x;` | ANOVA / ANCOVA / linear regression | Treating a fit as MIXED when data are clustered | [`PROC GLM`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC MIXED` | `proc mixed; class g; model y = x; random intercept / subject=g;` | Linear mixed model with REML | `RANDOM` vs `REPEATED` confusion (Rule 4) | [`PROC MIXED`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `RANDOM` (MIXED) | `random intercept / subject=id;` | G-side random effects | Using it for residual serial correlation | [`RANDOM Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `REPEATED` (MIXED) | `repeated visit / subject=id type=ar(1);` | R-side within-subject correlation | Using it for a random intercept | [`REPEATED Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC GENMOD` | `proc genmod; class g; model y = x / dist=bin link=logit;` | Generalized linear model | Default `DIST=NORMAL LINK=IDENTITY` (OLS) | [`PROC GENMOD`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `DIST=` (GENMOD) | `model y = x / dist=poisson;` | Response distribution family | Forgetting it → silent OLS fit (Rule 3) | [`MODEL Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `LINK=` (GENMOD) | `model y = x / dist=bin link=logit;` | Link function | Omitting with DIST= → canonical link used | [`MODEL Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC LIFETEST` | `proc lifetest; time t*c(0); strata g;` | Nonparametric survival (K-M) | `time t*c(1)` flipping the censor code (Rule 5) | [`PROC LIFETEST`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `TIME time*status(c)` | `time days*event(0);` | Declare survival time + CENSOR code | Value in parens is CENSORED, not event | [`TIME Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC PHREG` | `proc phreg; class g; model t*c(0) = x;` | Cox proportional hazards regression | Same TIME syntax pitfall as LIFETEST | [`PROC PHREG`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `HAZARDRATIO` | `hazardratio treatment;` | Per-covariate HR with CIs | Reporting parameter estimates as HRs (wrong scale) | [`HAZARDRATIO`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC SURVEYMEANS` | `proc surveymeans; strata s; cluster c; weight w; var y;` | Complex-survey descriptives | Omitting design vars → SRS variance (Rule 6) | [`PROC SURVEYMEANS`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC SURVEYFREQ` | `proc surveyfreq; strata s; cluster c; weight w; tables a*b;` | Complex-survey crosstabs | Same design-var omission pitfall | [`PROC SURVEYFREQ`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `PROC SURVEYLOGISTIC` | `proc surveylogistic; strata s; cluster c; weight w; model y=x;` | Complex-survey logistic | Using PROC LOGISTIC with `weight` → wrong SEs | [`PROC SURVEYLOGISTIC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `LSMEANS` | `lsmeans trt / diff cl;` | Covariate-adjusted marginal means | Treating as raw group means (Rule 8) | [`LSMEANS Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
+| `ODS OUTPUT` | `ods output ParameterEstimates=pe;` | Capture tabular output to a dataset | Wrong table name → empty / missing dataset | [`ODS OUTPUT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -430,40 +430,40 @@ run;
   `CLASS` is silently modeled as continuous. The "coefficient for
   sex" becomes a per-unit log-odds; the F-vs-M contrast vanishes.
   See Rule 1.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **Wrong event in LOGISTIC** — the default models the probability
   of the LOWEST response level, not the highest. For binary
   outcomes coded 0/1, you almost certainly mean `event='1'`. See
   Rule 2.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **GENMOD defaulting to OLS** — `proc genmod; model y = x; run;`
   with a 0/1 response silently fits a normal-identity model. All
   coefficients are linear-probability estimates; CIs and p-values
   are meaningless for binary data. See Rule 3.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **MIXED `RANDOM` vs `REPEATED` confusion** — the two modify
   different covariance matrices (`G` vs `R`). Using one where the
   other was meant fits a different model entirely. See Rule 4.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **Inverted LIFETEST/PHREG censor code** — `time days*event(1)`
   when 1 is the event (not censoring) marks every event observation
   as censored. Survival curves look artificially high; log-rank
   tests are nonsense. See Rule 5.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **SURVEY* without design vars** — omitting `STRATA` / `CLUSTER` /
   `WEIGHT` silently assumes SRS. Point estimates are usually close
   to correct; SEs, CIs, and p-values are all wrong. See Rule 6.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 - **Reporting `MEANS` output as "adjusted"** — `PROC MEANS` produces
   arithmetic means, not covariate-adjusted (LS) means. Labeling them
   "adjusted" in a report is a write-up error. See Rule 8.
-  Source: https://documentation.sas.com/doc/en/statug/9.4/statug.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm
 
 ## Anti-patterns (STOP signs)
 
@@ -501,4 +501,4 @@ meant:
   SQL joins before model fitting.
 - [ods-and-output.md](ods-and-output.md) — routing ODS OUTPUT to
   Excel / RTF / PDF; controlling which tables are captured.
-- [SAS/STAT User's Guide](https://documentation.sas.com/doc/en/statug/9.4/statug.htm)
+- [SAS/STAT User's Guide](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=statug&docsetTarget=titlepage.htm)

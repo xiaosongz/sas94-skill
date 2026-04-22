@@ -321,7 +321,7 @@ Priority: **reference-file completeness before any v1.1 lint-hook or MCP feature
 
 - Pattern blueprint: `/Users/xiaosong/git/truveta-prose-skill/`
 - Research agent transcripts: in session 2026-04-21
-- SAS documentation entry point: https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/home.htm
+- SAS documentation entry point: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5
 - `sasjs/lint`: https://github.com/sasjs/lint
 - `sasjs/core`: https://github.com/sasjs/core
 - `HHS-AHRQ/MEPS`: https://github.com/HHS-AHRQ/MEPS (license pending)

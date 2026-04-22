@@ -102,7 +102,7 @@ quit;
 
 ### Rule 3: `WHERE` filters rows before grouping; `HAVING` filters groups after
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 A `WHERE` clause applies to the raw rows prior to `GROUP BY`
 aggregation; `HAVING` applies to the grouped summary. Putting an
@@ -142,7 +142,7 @@ quit;
 
 ### Rule 4: `INTO :macvar SEPARATED BY ','` needs `%trim` / `strip()` before going into an `IN()` clause
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 `SELECT DISTINCT col INTO :list SEPARATED BY ','` pads the macro
 variable to the SQL query's working width. Passing `&list` directly into
@@ -220,7 +220,7 @@ quit;
 
 ### Rule 7: `RESET` changes options mid-query block — scope is the current PROC SQL, not the SAS session
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 `reset feedback noexec;` toggles SQL-specific options (`FEEDBACK`,
 `NOEXEC`, `NUMBER`, `NOWARNRECURS`, etc.) without ending the PROC SQL
@@ -296,7 +296,7 @@ quit;
 
 ### Idiom: `INTO :list SEPARATED BY ' '` — build a macro-variable list of column names for dynamic SQL
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 Purpose: read `dictionary.columns` to build a dynamic column list, then
 paste it into a generated SELECT. Common pattern for "select every
@@ -370,7 +370,7 @@ quit;
 
 ### Idiom: Dictionary-table introspection — list every variable in every WORK dataset
 
-Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 Purpose: programmatic schema lookup for generated code or audit. Avoids
 hand-maintaining a list of variable names across pipeline stages.
@@ -389,27 +389,27 @@ quit;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `SELECT` | `select col1, col2 from t;` | Project columns from a table | `a.*, b.*` with overlapping column names | [`SELECT`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `SELECT DISTINCT` | `select distinct key from t;` | De-duplicate on selected columns | Using `distinct *` when only some columns matter | [`SELECT DISTINCT`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `CREATE TABLE AS` | `create table t as select ...;` | Materialize a query in one pass | Using empty-create + INSERT when AS would do | [`CREATE TABLE`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `INSERT INTO` | `insert into t select ...;` or `insert into t values(...);` | Append rows to an existing table | Mismatched column count / type vs the target | [`INSERT INTO`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `UPDATE` | `update t set col = expr where ...;` | In-place row modification | Forgetting `WHERE` → every row updated | [`UPDATE`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `DELETE` | `delete from t where ...;` | Remove rows | Forgetting `WHERE` → every row deleted | [`DELETE`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `WHERE` | `where cond;` (before GROUP BY) | Row-level filter | Putting an aggregate in `WHERE` (use `HAVING`) | [`WHERE`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `GROUP BY` | `group by col1, col2;` | Aggregate key | Selecting a non-aggregated column not in GROUP BY → "remerge" | [`GROUP BY`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `HAVING` | `having count(*) >= 10;` | Group-level filter | Putting a row-level predicate in `HAVING` (use `WHERE`) | [`HAVING`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `ORDER BY` | `order by col1 desc, col2;` | Sort result set | Assuming CREATE TABLE AS preserves ORDER BY without one | [`ORDER BY`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `INNER JOIN` | `a inner join b on a.k = b.k` | Matched-rows-only join | Writing `a, b where a.k = b.k` and forgetting one predicate → Cartesian | [`INNER JOIN`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `LEFT JOIN` | `a left join b on a.k = b.k` | Keep all rows from `a` | Relying on `b.*` to surface — unmatched rows have missing | [`LEFT JOIN`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `FULL JOIN` | `a full join b on a.k = b.k` | Keep all rows from both sides | Not coalescing the join key (Rule 2) | [`FULL JOIN`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `INTO :mv` | `select col into :mv from t;` | Write a scalar into a macro variable | Forgetting `NOPRINT` on the PROC SQL | [`INTO :`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `INTO :mv SEPARATED BY` | `select col into :mv separated by ',' from t;` | Build a delimited list macro var | Not trimming before pasting into `IN()` (Rule 4) | [`INTO :mv SEPARATED BY`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `CASE` | `case when cond then val else val end as name` | Row-level conditional | Missing `ELSE` → rows get missing value silently | [`CASE expression`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `COALESCE` | `coalesce(a, b, c)` | First non-missing | Forgetting it's non-short-circuit — all args evaluated | [`COALESCE`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `DICTIONARY.COLUMNS` | `select ... from dictionary.columns where libname='...'` | Schema introspection | Using `sashelp.vcolumn` (view over the same) in PROC SQL — fine, but slower | [`DICTIONARY`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `FEEDBACK` | `proc sql feedback;` | Log expanded query pre-exec | Turning on for an entire batch — log floods | [`FEEDBACK`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `NOEXEC` | `proc sql noexec;` | Parse / plan without running | Running with side-effecting DDL (`CREATE TABLE` still validates) | [`NOEXEC`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
-| `RESET` | `reset feedback noexec;` (inside a PROC SQL block) | Change options mid-block | Expecting scope to outlive the `quit;` | [`RESET`](https://documentation.sas.com/doc/en/proc/9.4/proc.htm) |
+| `SELECT` | `select col1, col2 from t;` | Project columns from a table | `a.*, b.*` with overlapping column names | [`SELECT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `SELECT DISTINCT` | `select distinct key from t;` | De-duplicate on selected columns | Using `distinct *` when only some columns matter | [`SELECT DISTINCT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `CREATE TABLE AS` | `create table t as select ...;` | Materialize a query in one pass | Using empty-create + INSERT when AS would do | [`CREATE TABLE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `INSERT INTO` | `insert into t select ...;` or `insert into t values(...);` | Append rows to an existing table | Mismatched column count / type vs the target | [`INSERT INTO`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `UPDATE` | `update t set col = expr where ...;` | In-place row modification | Forgetting `WHERE` → every row updated | [`UPDATE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `DELETE` | `delete from t where ...;` | Remove rows | Forgetting `WHERE` → every row deleted | [`DELETE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `WHERE` | `where cond;` (before GROUP BY) | Row-level filter | Putting an aggregate in `WHERE` (use `HAVING`) | [`WHERE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `GROUP BY` | `group by col1, col2;` | Aggregate key | Selecting a non-aggregated column not in GROUP BY → "remerge" | [`GROUP BY`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `HAVING` | `having count(*) >= 10;` | Group-level filter | Putting a row-level predicate in `HAVING` (use `WHERE`) | [`HAVING`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `ORDER BY` | `order by col1 desc, col2;` | Sort result set | Assuming CREATE TABLE AS preserves ORDER BY without one | [`ORDER BY`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `INNER JOIN` | `a inner join b on a.k = b.k` | Matched-rows-only join | Writing `a, b where a.k = b.k` and forgetting one predicate → Cartesian | [`INNER JOIN`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `LEFT JOIN` | `a left join b on a.k = b.k` | Keep all rows from `a` | Relying on `b.*` to surface — unmatched rows have missing | [`LEFT JOIN`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `FULL JOIN` | `a full join b on a.k = b.k` | Keep all rows from both sides | Not coalescing the join key (Rule 2) | [`FULL JOIN`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `INTO :mv` | `select col into :mv from t;` | Write a scalar into a macro variable | Forgetting `NOPRINT` on the PROC SQL | [`INTO :`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `INTO :mv SEPARATED BY` | `select col into :mv separated by ',' from t;` | Build a delimited list macro var | Not trimming before pasting into `IN()` (Rule 4) | [`INTO :mv SEPARATED BY`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `CASE` | `case when cond then val else val end as name` | Row-level conditional | Missing `ELSE` → rows get missing value silently | [`CASE expression`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `COALESCE` | `coalesce(a, b, c)` | First non-missing | Forgetting it's non-short-circuit — all args evaluated | [`COALESCE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `DICTIONARY.COLUMNS` | `select ... from dictionary.columns where libname='...'` | Schema introspection | Using `sashelp.vcolumn` (view over the same) in PROC SQL — fine, but slower | [`DICTIONARY`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `FEEDBACK` | `proc sql feedback;` | Log expanded query pre-exec | Turning on for an entire batch — log floods | [`FEEDBACK`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `NOEXEC` | `proc sql noexec;` | Parse / plan without running | Running with side-effecting DDL (`CREATE TABLE` still validates) | [`NOEXEC`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `RESET` | `reset feedback noexec;` (inside a PROC SQL block) | Change options mid-block | Expecting scope to outlive the `quit;` | [`RESET`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
@@ -418,7 +418,7 @@ quit;
   onto every detail row and prints a NOTE ("The query requires remerging
   summary statistics back with the original data"). Intended ~10% of the
   time; an unintended silent 100x row multiplication the rest.
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 - **Cartesian from a missing join predicate** — `FROM a, b WHERE a.k =
   b.k AND <other pred>` — if `<other pred>` is a typo that resolves to
@@ -430,14 +430,14 @@ quit;
   blank padding from the longest element's storage length, not the
   visible content. Downstream `IN(&list)` misses matches for shorter
   codes. Always strip / trim before use (Rule 4).
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 - **`ORDER BY` does not survive `CREATE TABLE AS`** — the created
   table's physical row order is not guaranteed without a trailing
   `ORDER BY` and even then SAS may reorder via engine. If you need
   deterministic order downstream, store the order via an explicit
   sequence column.
-  Source: https://documentation.sas.com/doc/en/proc/9.4/proc.htm
+  Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm
 
 ## Anti-patterns (STOP signs)
 
@@ -469,6 +469,6 @@ meant:
   `call symputx` / `symget`.
 - [idioms-from-lexjansen.md](idioms-from-lexjansen.md) — deeper PROC
   SQL + DATA-step treatments from Lafler and other SUGI / WUSS papers.
-- [Base SAS Procedures Guide — SQL Procedure](https://documentation.sas.com/doc/en/proc/9.4/proc.htm)
+- [Base SAS Procedures Guide — SQL Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm)
 - [Lafler (2015) — Essential PROC SQL Join Techniques](https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf)
 - [Lafler (2011) — Conditional Processing Using the Case Expression in PROC SQL](https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf)

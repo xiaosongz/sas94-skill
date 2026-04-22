@@ -447,7 +447,10 @@ def _find_short_description(
 
 
 def _canonical_url(docset: str) -> str:
-    return f"https://documentation.sas.com/doc/en/{docset}/9.4/{docset}.htm"
+    return (
+        "https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5"
+        f"&docsetId={docset}&docsetTarget=titlepage.htm"
+    )
 
 
 def _load_manifest() -> dict:

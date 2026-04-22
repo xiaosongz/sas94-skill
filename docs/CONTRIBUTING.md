@@ -8,6 +8,28 @@ primary contribution path. Pipeline extractor changes
 pinned `sasjs/lint` and `sasjs/core` SHAs recorded in
 `pipeline/sources.yaml` — changing a SHA is a separate, reviewed PR.
 
+### Frontmatter conventions
+
+Every `references/*.md` file carries this YAML frontmatter block:
+
+```yaml
+---
+title: <topic>
+scope: <one-sentence description of what this file covers>
+loaded_when: <routing triggers as quoted keywords or prose>
+last_reviewed: YYYY-MM-DD
+reviewer: <GitHub handle>
+---
+```
+
+`loaded_when` is **documentation for human reviewers**, not a Claude
+Code harness signal. The harness reads only `SKILL.md`'s
+`description:` and `allowed-tools:` at activation time; reference files
+are fetched on demand when `SKILL.md`'s Reference Routing table (or
+Claude's judgement) calls for them by path. `loaded_when` exists so
+that a future reviewer scanning a reference file can see at a glance
+what triggers are supposed to route work into that file.
+
 ## Workflow
 
 1. **Fork** the repo to your GitHub account.
@@ -51,7 +73,7 @@ Copy this checklist into your PR body:
       changed)
 - [ ] `last_reviewed` in the reference-file frontmatter updated to
       today's ISO date
-- [ ] Pre-commit hook passes locally, once installed (`pre-commit run --all-files` — hook arrives in v0.0.2+)
+- [ ] Pre-commit hook passes locally (`pre-commit install && pre-commit run --all-files`)
 ```
 
 ## Issue Template — Rule Dispute
@@ -117,9 +139,11 @@ Reviewers check:
 - **CORRECT / WRONG examples** are SAS 9.4-valid — not fabricated,
   not copy-pasted from a different dialect, not silently altered from the
   source.
-- **File size budget** — keep each reference file at ≤8 Critical Rules
-  and ~30 lines per rule. Split into a new reference file if the topic
-  outgrows its scope.
+- **File size budget** — keep each topic reference file at ≤8 Critical
+  Rules and ~30 lines per rule. Split into a new reference file if the
+  topic outgrows its scope. The only exception is
+  `references/sas-master-reference.md`, which aggregates across topic
+  files and is allowed to hold up to 20 cross-topic rules.
 - **No placeholder text** — `TBD`, `fabricate`, `TODO (source pending)`,
   or empty `Source:` strings in a PR that claims to populate a rule.
 - **Idempotence** — re-running `make_provenance.py` and
