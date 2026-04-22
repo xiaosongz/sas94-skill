@@ -156,22 +156,22 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `SUM` | `sum(of x1-xN)` | Sum ignoring missing | Missing treated as 0 — see Rule 1 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MEAN` | `mean(of x1-xN)` | Row-wise mean of nonmissing | Uses nonmissing count as denominator | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MEDIAN` | `median(of x1-xN)` | Row-wise median | Requires all numeric args | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `ROUND` | `round(x <, unit>)` | Round to nearest multiple of unit | Unit is not decimal places — see Rule 2 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `INT` | `int(x)` | Truncate toward 0 | Negative numbers round up, not down | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `CEIL` | `ceil(x)` | Smallest integer ≥ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `FLOOR` | `floor(x)` | Largest integer ≤ x | Fuzzed near integers | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `ABS` | `abs(x)` | Absolute value | Undefined on missing — returns missing | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MOD` | `mod(x, y)` | Remainder | Sign follows dividend — see Rule 3 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `LOG` | `log(x)` | Natural log | Not log10 — name confusion from other languages | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `EXP` | `exp(x)` | e^x | Overflow at x ≈ 709 | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MAX` | `max(a, b, ...)` | Row-wise max of nonmissing | Different from `PROC SQL MAX(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MIN` | `min(a, b, ...)` | Row-wise min of nonmissing | Different from `PROC SQL MIN(col)` aggregate | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DIM` | `dim(arr <, dim-n>)` | Length of array (or nth dim) | On 2D arrays, omitting n returns first-dim length | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `HBOUND` | `hbound(arr <, n>)` | Upper bound of array index | Nonzero lower-bound arrays common in time-series work | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `LBOUND` | `lbound(arr <, n>)` | Lower bound of array index | Default is 1 unless explicit `array a{0:10}` | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `SUM` | `sum(of x1-xN)` | Sum ignoring missing | Missing treated as 0 — see Rule 1 | [SUM Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MEAN` | `mean(of x1-xN)` | Row-wise mean of nonmissing | Uses nonmissing count as denominator | [MEAN Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MEDIAN` | `median(of x1-xN)` | Row-wise median | Requires all numeric args | [MEDIAN Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `ROUND` | `round(x <, unit>)` | Round to nearest multiple of unit | Unit is not decimal places — see Rule 2 | [ROUND Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `INT` | `int(x)` | Truncate toward 0 | Negative numbers round up, not down | [INT Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `CEIL` | `ceil(x)` | Smallest integer ≥ x | Fuzzed near integers | [CEIL Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `FLOOR` | `floor(x)` | Largest integer ≤ x | Fuzzed near integers | [FLOOR Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `ABS` | `abs(x)` | Absolute value | Undefined on missing — returns missing | [ABS Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MOD` | `mod(x, y)` | Remainder | Sign follows dividend — see Rule 3 | [MOD Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `LOG` | `log(x)` | Natural log | Not log10 — name confusion from other languages | [LOG Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `EXP` | `exp(x)` | e^x | Overflow at x ≈ 709 | [EXP Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MAX` | `max(a, b, ...)` | Row-wise max of nonmissing | Different from `PROC SQL MAX(col)` aggregate | [MAX Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MIN` | `min(a, b, ...)` | Row-wise min of nonmissing | Different from `PROC SQL MIN(col)` aggregate | [MIN Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DIM` | `dim(arr <, dim-n>)` | Length of array (or nth dim) | On 2D arrays, omitting n returns first-dim length | [DIM Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `HBOUND` | `hbound(arr <, n>)` | Upper bound of array index | Nonzero lower-bound arrays common in time-series work | [HBOUND Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `LBOUND` | `lbound(arr <, n>)` | Lower bound of array index | Default is 1 unless explicit `array a{0:10}` | [LBOUND Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 

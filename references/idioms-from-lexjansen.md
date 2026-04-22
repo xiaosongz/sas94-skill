@@ -2,7 +2,7 @@
 title: Real-world SAS idioms (lexjansen / SUGI / SAS Global Forum)
 scope: Distilled real-world idioms from lexjansen.com conference papers and SAS Global Forum / SUGI proceedings, cross-linked to the SAS-docs-grounded per-topic reference files. Hash (Dorfman), PROC SQL (Lafler), macro quoting (Whitlock, Lepp).
 loaded_when: Unknown or novel task, "how do SAS programmers do X", "Dorfman hash", "Lafler PROC SQL", "Whitlock macro quoting", or when no single topic-reference file clearly matches the request.
-last_reviewed: 2026-04-21
+last_reviewed: 2026-04-22
 reviewer: xiaosongz
 ---
 

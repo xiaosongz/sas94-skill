@@ -2,7 +2,7 @@
 title: Base SAS procedures reference
 scope: PROC FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE, REPORT, PRINT — options, output-dataset idioms, and the silent-failure modes that separate the defaults from what analysts usually mean.
 loaded_when: '"PROC FREQ", "PROC MEANS", "PROC UNIVARIATE", "PROC SORT", "PROC TRANSPOSE", "PROC REPORT", "PROC PRINT", "NODUPKEY", "OUTPUT OUT=", or any descriptive-statistics / tabulation / reshape task.'
-last_reviewed: 2026-04-21
+last_reviewed: 2026-04-22
 reviewer: xiaosongz
 ---
 
@@ -317,17 +317,17 @@ run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `PROC FREQ` | `proc freq; tables a*b / missing; run;` | One-way / cross-tabular counts | Default drops missing from cells and denominator | [`PROC FREQ`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC FREQ OUT=` | `tables x / out=ds noprint;` | Write frequencies to a dataset | Omitting `NOPRINT` on the PROC — still prints | [`TABLES OUT=`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC MEANS` | `proc means; class g; var x; output out=ds sum=;` | Descriptive summary | Forgetting `NOPRINT` pollutes the listing | [`PROC MEANS`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC MEANS OUTPUT OUT=` | `output out=ds(drop=_type_ _freq_) sum()= mean()= ;` | Named output stats | Forgetting to drop `_TYPE_` / `_FREQ_` | [`OUTPUT OUT=`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC UNIVARIATE` | `proc univariate noprint; var x; output out=ds p25= p50= p75=;` | Quantiles + extended descriptives | Bare invocation produces pages of default report | [`PROC UNIVARIATE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC SORT` | `proc sort data=a out=b; by v1 v2; run;` | Order rows | Omitting `OUT=` silently overwrites input | [`PROC SORT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `NODUPKEY` | `proc sort nodupkey; by k; run;` | Dedup by BY vars only | Mistaking for full-row dedup (`NODUPRECS`) | [`NODUPKEY`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `NODUPRECS` | `proc sort noduprecs; by k; run;` | Full-row adjacent dedup | Only adjacent duplicates — sort first | [`NODUPRECS`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC TRANSPOSE` | `proc transpose out=b prefix=p_; by g; id seq; var x; run;` | Long ↔ wide reshape | Omitting `VAR` → every numeric transposes, chars silently dropped | [`PROC TRANSPOSE`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC REPORT` | `proc report nowd; column a b; define a / group; define b / analysis sum; run;` | Formatted report with grouping / summary | Using `DISPLAY` when `GROUP` was intended → no collapse | [`PROC REPORT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `PROC PRINT` | `proc print data=ds noobs label; var a b c; run;` | Listing report | Leaving default shows every column including bookkeeping vars | [`PROC PRINT`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC FREQ` | `proc freq; tables a*b / missing; run;` | One-way / cross-tabular counts | Default drops missing from cells and denominator | [PROC FREQ Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC FREQ OUT=` | `tables x / out=ds noprint;` | Write frequencies to a dataset | Omitting `NOPRINT` on the PROC — still prints | [TABLES Statement OUT= Option](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC MEANS` | `proc means; class g; var x; output out=ds sum=;` | Descriptive summary | Forgetting `NOPRINT` pollutes the listing | [PROC MEANS Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC MEANS OUTPUT OUT=` | `output out=ds(drop=_type_ _freq_) sum()= mean()= ;` | Named output stats | Forgetting to drop `_TYPE_` / `_FREQ_` | [OUTPUT Statement (PROC MEANS)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC UNIVARIATE` | `proc univariate noprint; var x; output out=ds p25= p50= p75=;` | Quantiles + extended descriptives | Bare invocation produces pages of default report | [PROC UNIVARIATE Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC SORT` | `proc sort data=a out=b; by v1 v2; run;` | Order rows | Omitting `OUT=` silently overwrites input | [PROC SORT Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `NODUPKEY` | `proc sort nodupkey; by k; run;` | Dedup by BY vars only | Mistaking for full-row dedup (`NODUPRECS`) | [NODUPKEY Option (PROC SORT)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `NODUPRECS` | `proc sort noduprecs; by k; run;` | Full-row adjacent dedup | Only adjacent duplicates — sort first | [NODUPRECS Option (PROC SORT)](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC TRANSPOSE` | `proc transpose out=b prefix=p_; by g; id seq; var x; run;` | Long ↔ wide reshape | Omitting `VAR` → every numeric transposes, chars silently dropped | [PROC TRANSPOSE Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC REPORT` | `proc report nowd; column a b; define a / group; define b / analysis sum; run;` | Formatted report with grouping / summary | Using `DISPLAY` when `GROUP` was intended → no collapse | [PROC REPORT Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `PROC PRINT` | `proc print data=ds noobs label; var a b c; run;` | Listing report | Leaving default shows every column including bookkeeping vars | [PROC PRINT Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 

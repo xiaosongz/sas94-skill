@@ -2,7 +2,7 @@
 title: SAS 9.4 master reference
 scope: Grammar overview, execution model, PDV semantics, and top-N pitfalls that span multiple SAS topics.
 loaded_when: New `.sas` file, study program skeleton, cross-cutting grammar or scope questions.
-last_reviewed: 2026-04-21
+last_reviewed: 2026-04-22
 reviewer: xiaosongz
 ---
 
@@ -535,14 +535,14 @@ Load the topic-specific reference when the task matches its scope.
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `%macro` / `%mend` | `%macro name(args); ... %mend name;` | Macro definition | Missing `()`, bare `%mend;` | [`%macro` / `%mend`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
-| `%let` | `%let var = value;` | Macro variable assignment | Scope leak without `%local` | [`%let`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
-| `%local` / `%global` | `%local v1 v2;` | Macro-symbol scope declaration | Declaring after first `%let` — too late | [`%local` / `%global`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
-| `data` / `set` / `run` | `data out; set in; run;` | Minimum DATA step | Forgetting `run;` (interactive sessions) | [`DATA Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
-| `merge` / `by` | `data c; merge a b; by id; run;` | BY-group DATA-step join | Unsorted inputs, silent overwrite | [`MERGE Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
-| `retain` | `retain var initial;` | Carry PDV value across iterations | Forgetting → accumulator resets to missing | [`RETAIN Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
-| `proc sql` | `proc sql; <select>; quit;` | SQL block | Missing `quit;` | [`PROC SQL`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
-| `libname` | `libname ref engine "path";` | Attach a library | Forgetting to `libname ref clear;` after use | [`LIBNAME Statement`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `%macro` / `%mend` | `%macro name(args); ... %mend name;` | Macro definition | Missing `()`, bare `%mend;` | [%macro and %mend Statements](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `%let` | `%let var = value;` | Macro variable assignment | Scope leak without `%local` | [%let Statement](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `%local` / `%global` | `%local v1 v2;` | Macro-symbol scope declaration | Declaring after first `%let` — too late | [%local and %global Statements](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=mcrolref&docsetTarget=titlepage.htm) |
+| `data` / `set` / `run` | `data out; set in; run;` | Minimum DATA step | Forgetting `run;` (interactive sessions) | [DATA Statement](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `merge` / `by` | `data c; merge a b; by id; run;` | BY-group DATA-step join | Unsorted inputs, silent overwrite | [MERGE Statement](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `retain` | `retain var initial;` | Carry PDV value across iterations | Forgetting → accumulator resets to missing | [RETAIN Statement](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
+| `proc sql` | `proc sql; <select>; quit;` | SQL block | Missing `quit;` | [PROC SQL Procedure](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=proc&docsetTarget=titlepage.htm) |
+| `libname` | `libname ref engine "path";` | Attach a library | Forgetting to `libname ref clear;` after use | [LIBNAME Statement](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lestmtsref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 

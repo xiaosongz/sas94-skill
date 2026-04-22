@@ -30,6 +30,36 @@ Claude's judgement) calls for them by path. `loaded_when` exists so
 that a future reviewer scanning a reference file can see at a glance
 what triggers are supposed to route work into that file.
 
+### Quick Ref link-text convention
+
+Every reference file carries a `## Function / Statement Quick Ref`
+table with columns `Name | Syntax | Purpose | Common mistake | Doc URL`.
+The Doc URL cell's **link text** must be a short descriptive phrase
+— never the bare token from the `Name` column and never a raw URL.
+The heuristic: if `Name` alone already reads as a descriptive phrase
+(`PROC FREQ`, `CREATE TABLE AS`), the link text may match or lightly
+extend it (`PROC FREQ Procedure`, `CREATE TABLE Statement`); if
+`Name` is just a token (`INTNX`, `%local`, `SCAN`), expand the link
+text to give the reader a two-word hint about the target page
+(`INTNX Function`, `%local Statement`, `SCAN Function`). Good shape
+examples:
+
+- `[DECLARE Statement, Hash Object](https://...)` — not `[declare hash](https://...)`
+- `[INTNX Function](https://...)` — not `[INTNX](https://...)`
+- `[PROC FREQ Procedure](https://...)` — fine; `PROC FREQ` alone also acceptable
+- `[%local Statement](https://...)` — not `[%local](https://...)`
+
+Do **not** use the docset name (`lefunctionsref`, `mcrolref`, etc.)
+as link text — it gives the reader no hint about which page they're
+going to. The URLs themselves are unchanged by this convention; only
+the link text inside the square brackets is in scope.
+
+The `idioms-from-lexjansen.md` file uses a different Quick Ref
+table shape (`Name | Idiom / Pattern | Paper | URL`) because its
+entries cite conference papers rather than SAS documentation; the
+`Paper` column carries the descriptive phrase, so the `URL` column
+link text is the paper filename.
+
 ## Workflow
 
 1. **Fork** the repo to your GitHub account.

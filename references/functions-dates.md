@@ -33,11 +33,14 @@ Source: https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docset
 
 The fourth argument `alignment` defaults to `BEGINNING`. So
 `intnx('month', service_dt, 0)` returns the first of `service_dt`'s
-month, not `service_dt` itself. For "shift by N months but keep the
-day-of-month" semantics use `'SAME'` (alias `'S'`). A common claims
-bug: computing `months_since_start = intck('month', a, b)` and then
-trying to reconstruct the corresponding date with `intnx('month', a,
-k)` — which lands on the first of each month, not the anniversary day.
+month, not `service_dt` itself. Concrete example:
+`intnx('month', '15MAR2024'd, 0)` returns `'01MAR2024'd` — the 15th
+silently becomes the 1st because the default alignment is
+`BEGINNING`. For "shift by N months but keep the day-of-month"
+semantics use `'SAME'` (alias `'S'`). A common claims bug: computing
+`months_since_start = intck('month', a, b)` and then trying to
+reconstruct the corresponding date with `intnx('month', a, k)` —
+which lands on the first of each month, not the anniversary day.
 
 ```sas
 /* CORRECT - SAME alignment preserves day-of-month */
@@ -50,6 +53,7 @@ run;
 /* WRONG - default BEGINNING alignment; lands on 01JAN */
 data claims; set claims;
   anniversary = intnx('year', enroll_dt, 1);   /* not what the name suggests */
+  /* e.g. intnx('month', '15MAR2024'd, 0) = '01MAR2024'd -- default alignment='BEGINNING' */
 run;
 ```
 
@@ -94,22 +98,22 @@ data claims_&rundate; set claims; run;
 
 | Name | Syntax | Purpose | Common mistake | Doc URL |
 |------|--------|---------|----------------|---------|
-| `INTCK` | `intck('interval', d1, d2 <, 'method'>)` | Count interval boundaries between two dates | Default `method='DISCRETE'` counts boundaries; use `'CONTINUOUS'` for anniversary semantics | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `INTNX` | `intnx('interval', d, n <, 'align'>)` | Shift date by N intervals | Default align=`'BEGINNING'`; use `'S'` for same-day (see Rule 1) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `TODAY` | `today()` | Current date (SAS date integer) | Embeds wall-clock — breaks reproducibility | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DATE` | `date()` | Alias for `today()` | Same reproducibility issue | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `TIME` | `time()` | Seconds since midnight | Type is SAS time, not datetime | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DATETIME` | `datetime()` | Current SAS datetime value | Seconds since 01JAN1960 00:00 — not Unix epoch | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `YEAR` | `year(d)` | Extract year from SAS date | Passing a datetime silently returns year-of-1960 offset | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MONTH` | `month(d)` | Extract month 1..12 from SAS date | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DAY` | `day(d)` | Extract day-of-month 1..31 | Same datetime confusion as YEAR | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `QTR` | `qtr(d)` | Quarter 1..4 | SAS calendar quarters, not fiscal | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `WEEKDAY` | `weekday(d)` | Day-of-week 1..7 (1=Sunday) | Many analysts expect 1=Monday | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `MDY` | `mdy(m, d, y)` | Construct SAS date from m/d/y | Argument order is m-d-y (not ISO y-m-d) | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DATEPART` | `datepart(dt)` | SAS date from SAS datetime | Omitting it and using YEAR(dt) directly — wrong | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `TIMEPART` | `timepart(dt)` | SAS time from SAS datetime | Discards date info silently | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DHMS` | `dhms(d, h, m, s)` | Compose datetime from d/h/m/s | Passing a datetime as the date arg | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
-| `DATDIF` | `datdif(d1, d2, basis)` | Day-count with basis ('ACT/ACT', '30/360') | Basis is required; not like INTCK('day') | [`lefunctionsref`](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `INTCK` | `intck('interval', d1, d2 <, 'method'>)` | Count interval boundaries between two dates | Default `method='DISCRETE'` counts boundaries; use `'CONTINUOUS'` for anniversary semantics | [INTCK Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `INTNX` | `intnx('interval', d, n <, 'align'>)` | Shift date by N intervals | Default align=`'BEGINNING'`; use `'S'` for same-day (see Rule 1) | [INTNX Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `TODAY` | `today()` | Current date (SAS date integer) | Embeds wall-clock — breaks reproducibility | [TODAY Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DATE` | `date()` | Alias for `today()` | Same reproducibility issue | [DATE Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `TIME` | `time()` | Seconds since midnight | Type is SAS time, not datetime | [TIME Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DATETIME` | `datetime()` | Current SAS datetime value | Seconds since 01JAN1960 00:00 — not Unix epoch | [DATETIME Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `YEAR` | `year(d)` | Extract year from SAS date | Passing a datetime silently returns year-of-1960 offset | [YEAR Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MONTH` | `month(d)` | Extract month 1..12 from SAS date | Same datetime confusion as YEAR | [MONTH Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DAY` | `day(d)` | Extract day-of-month 1..31 | Same datetime confusion as YEAR | [DAY Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `QTR` | `qtr(d)` | Quarter 1..4 | SAS calendar quarters, not fiscal | [QTR Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `WEEKDAY` | `weekday(d)` | Day-of-week 1..7 (1=Sunday) | Many analysts expect 1=Monday | [WEEKDAY Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `MDY` | `mdy(m, d, y)` | Construct SAS date from m/d/y | Argument order is m-d-y (not ISO y-m-d) | [MDY Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DATEPART` | `datepart(dt)` | SAS date from SAS datetime | Omitting it and using YEAR(dt) directly — wrong | [DATEPART Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `TIMEPART` | `timepart(dt)` | SAS time from SAS datetime | Discards date info silently | [TIMEPART Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DHMS` | `dhms(d, h, m, s)` | Compose datetime from d/h/m/s | Passing a datetime as the date arg | [DHMS Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
+| `DATDIF` | `datdif(d1, d2, basis)` | Day-count with basis ('ACT/ACT', '30/360') | Basis is required; not like INTCK('day') | [DATDIF Function](https://documentation.sas.com/?cdcId=pgmsascdc&cdcVersion=9.4_3.5&docsetId=lefunctionsref&docsetTarget=titlepage.htm) |
 
 ## Silent Pitfalls
 
