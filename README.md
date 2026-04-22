@@ -161,19 +161,20 @@ Full rule list with `CORRECT` / `WRONG` code examples and source URLs:
 A small regression-baseline eval lives in `evals/`. Three prompts, one per
 claimed differentiator of the skill vs. a generic LLM writing SAS
 (`sasjs/core` macro conventions, PROC APPEND silent-failure patterns,
-PROC LOGISTIC event pinning + ODS OUTPUT). The runner sends each prompt to
-Claude Opus 4.7 with `SKILL.md` + `references/*.md` loaded as a cached
-system message and checks the response against a list of regex patterns.
+PROC LOGISTIC event pinning + ODS OUTPUT). The harness is **manual** —
+the maintainer runs each prompt inside a fresh Claude Code session with
+the skill installed, saves Claude's reply to `evals/transcripts/<id>.txt`,
+then a stdlib-only Python runner pattern-checks the transcripts. No API
+key, no SDK dependency, no per-run cost.
 
 Run before tagging a new version:
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
 uv --directory pipeline run python ../evals/run_evals.py
 ```
 
-See [`docs/EVALS.md`](docs/EVALS.md) for the architectural stance and
-[`evals/README.md`](evals/README.md) for the how-to and cost estimate.
+See [`docs/EVALS.md`](docs/EVALS.md) for why it's a manual harness and
+[`evals/README.md`](evals/README.md) for the full how-to.
 
 ## Contributing
 

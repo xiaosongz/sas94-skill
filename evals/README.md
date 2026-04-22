@@ -1,52 +1,51 @@
 # Evaluation harness
 
-This directory holds a small regression-baseline eval for `sas94-skill`. It
-answers one question: does the skill, loaded into Claude as a system message,
+Regression-baseline for `sas94-skill`. Answers one question: does the skill,
+loaded into a Claude Code session with its on-demand reference-file routing,
 still produce SAS code that carries the structural markers the rules and
 idioms in `references/*.md` demand?
 
-The harness is intentionally small. Three prompts. Regex pattern matching on
-the response. No semantic SAS verification. Its job is to catch a regression
-where a reference-file edit quietly removes a guardrail — not to grade
-correctness.
+Three prompts. Regex pattern-matching against transcripts. No semantic SAS
+verification. Job: catch a regression where a reference-file edit quietly
+removes a guardrail — not grade correctness.
+
+## Why it's not automated
+
+The skill is activated inside Claude Code via on-demand routing per
+`SKILL.md`'s Reference Routing table — not via direct Anthropic-API calls
+that bulk-load every reference file. Automating the eval through the API
+would simulate a different routing path than what ships. So the harness is
+intentionally manual: the user runs each prompt inside a real Claude Code
+session with the skill installed, pastes the reply into a transcript file,
+and the runner pattern-checks the transcript.
+
+No API key, no `anthropic` SDK dependency, no cost per run. The runner is
+stdlib Python only.
 
 ## How to run
 
-From the repo root:
+1. Install the skill per `README.md` § Installation.
+2. For each file under `evals/prompts/*.md`:
+   a. Open a fresh Claude Code session.
+   b. Paste the prompt body (the text after the second `---`).
+   c. Save Claude's reply to `evals/transcripts/<prompt-id>.txt`. The
+      `<prompt-id>` must match the frontmatter `id:` (e.g.
+      `01_macro_libref.txt`).
+3. From the repo root, run:
 
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-uv --directory pipeline run python ../evals/run_evals.py
-```
+   ```bash
+   uv --directory pipeline run python ../evals/run_evals.py
+   ```
 
-The runner uses the pipeline's `uv` environment so it can resolve the
-`anthropic` dependency. Exit codes:
+Exit codes:
 
-- `0` — every prompt matched every expected pattern and cleared the
+- `0` — every transcript matched every pattern and cleared the
   `min_word_count` floor.
-- `1` — at least one prompt failed a check.
-- `2` — `ANTHROPIC_API_KEY` is unset.
+- `1` — at least one transcript failed a check.
+- `2` — one or more transcripts are missing for declared prompts.
 
-## Cost estimate
-
-One run costs roughly **$0.50–$1.00** the first time and **~$0.10** on every
-follow-up run within the prompt-cache TTL.
-
-Breakdown:
-
-- System message: `SKILL.md` + 13 reference files ≈ 60–80k input tokens.
-- First prompt pays full input price (`$5 / 1M tokens` on Opus 4.7):
-  ~80k × $5 / 1M ≈ $0.40 just for the cache write.
-- Prompts 2 and 3 hit the cache at ~10% of the input rate: ~80k × $0.50 / 1M
-  ≈ $0.04 each.
-- Output is short (a SAS snippet plus a few paragraphs): ~500–1000 tokens at
-  `$25 / 1M` ≈ $0.02 per prompt.
-
-Total first run: ~$0.50. Subsequent runs within ~5 minutes of each other:
-~$0.10. See the `cache_control: {"type": "ephemeral"}` marker on the system
-message in `run_evals.py` — that is what triggers prompt caching. The
-Anthropic Prompt Caching docs spell out the 5-minute TTL and pricing
-mechanics.
+The `evals/transcripts/` directory is gitignored — transcripts are
+ephemeral per-run artifacts, not content that belongs in version control.
 
 ## What the prompts test
 
@@ -79,18 +78,9 @@ architectural stance on this.
    - `expected_patterns` (list of Python regex strings)
    - `min_word_count` (integer; 50 is a reasonable floor)
 3. Write the prompt body after the frontmatter.
-4. Run the harness. The new prompt is picked up by the `prompts/*.md` glob.
+4. Run the prompt in a fresh Claude Code session and save the reply to
+   `evals/transcripts/<id>.txt`.
+5. Run the harness.
 
 Keep patterns conservative — prefer matching structural tokens (`%mend \w+;`)
 over prose (`"remember to use..."`). The latter will drift with the model.
-
-## Notes on caching
-
-Prompt caching is handled automatically by the `cache_control` marker on the
-system message. The TTL is 5 minutes (`ephemeral`), so consecutive runs of
-the harness share one cache write. If you run the suite once, wait an hour,
-and rerun, the first prompt will pay the full cache-write cost again.
-
-The SDK reports cache hits via `response.usage.cache_read_input_tokens`; the
-current runner does not surface that metric in the results table but you can
-add it if you want to verify the caching is working on your run.

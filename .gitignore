@@ -24,3 +24,6 @@ Thumbs.db
 
 # Draft reference files pending colleague review
 references/*.md.draft
+
+# Eval transcripts — ephemeral per-run artifacts
+evals/transcripts/
