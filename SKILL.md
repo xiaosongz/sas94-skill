@@ -1,25 +1,13 @@
 ---
 name: sas94
 description: >
-  Use this skill whenever the user wants to write, review, fix, or debug SAS 9.4
-  code — especially .sas files — for health-services research, biostatistics, or
-  claims analysis. Triggers include any mention of a .sas file, DATA step logic
+  Use when user references a .sas file, SAS 9.4 code, DATA step constructs
   (MERGE/BY, first./last., retain, arrays, hash objects), PROC SQL, SAS macros
-  (%macro, %let, %sysfunc, macro quoting, symput/symget), base or statistical
-  PROCs (FREQ, MEANS, LOGISTIC, GLM, MIXED, GENMOD, SURVEY*, LIFETEST), ODS
-  output (RTF, EXCEL, PDF, GRAPHICS), or PROC FORMAT. Do NOT use for R
-  (dplyr, tidyverse, data.frame), Python (pandas, dataframe), Stata, SPSS,
-  generic SQL (T-SQL, PostgreSQL, BigQuery), Procfile / shell "proc" commands,
-  or git merges — even if the user mentions procs, arrays, dataframes, or
-  merges in those contexts.
-allowed-tools: Read Grep Glob Write Edit
-paths: "**/*.sas"
-license: MIT
-metadata:
-  author:
-    name: Xiaosong Zhang
-    github: xiaosongz
-  repository: https://github.com/xiaosongz/sas94-skill
+  (%macro, %sysfunc, quoting, symput/symget), base or stat procs
+  (FREQ/MEANS/LOGISTIC/GLM/MIXED/GENMOD/SURVEY*/LIFETEST), ODS RTF/EXCEL/PDF,
+  or PROC FORMAT. Not for R, Python, Stata, SPSS, generic SQL, Procfile, or
+  git merges.
+allowed-tools: Read, Grep, Glob, Write, Edit
 ---
 
 ## When to Use
@@ -39,13 +27,16 @@ Activate this skill when the user asks to:
 
 Prefer this skill whenever the current file or referenced path is a `.sas` file, or when the user references SAS 9.4 code (DATA step, PROC SQL, %macro, ODS, hash tables, etc.).
 
-## What It Does
+## When NOT to Use
 
-- Translate analytic intent into correct, idiomatic SAS 9.4
-- Route to topic-specific reference files for deep dives (see Reference Routing below)
-- Catch common pitfalls before code ships: uninitialized variables in accumulators, right-table-overwrite on MERGE, cartesian joins, macro-quoting errors, and undeclared-hash-iterator bugs
-- Enforce naming and structural conventions drawn from `sasjs/lint` and `sasjs/core`
-- Provide SAS-specific debugging moves (PUTLOG, `_ALL_`, `options mprint mlogic symbolgen;`)
+Skip even if keywords overlap — another skill or a generic response fits:
+
+- R (dplyr, tidyverse, data.frame)
+- Python (pandas, dataframe)
+- Stata, SPSS
+- Generic SQL (T-SQL, PostgreSQL, BigQuery)
+- Procfile or shell "proc" commands
+- Git merges — even when the user says "merge", "array", "dataframe", or "proc"
 
 ## Critical Rules (Summary)
 
@@ -99,8 +90,4 @@ Use these templates as starting points — they supply header comment blocks, no
 4. For new files, start from the matching `assets/*.sas` template.
 5. When a pattern does not clearly match one reference, start with `references/idioms-from-lexjansen.md` for real-world idioms, then branch to the topic file.
 
-**Note on shell commands.** This skill does not execute SAS. Some reference files suggest diagnostic shell commands (`hexdump`, `file`) for inspecting `.sas` source bytes; the skill's frontmatter does not pre-approve Bash, so those commands will prompt for permission at the user's project scope. Users who want frictionless diagnostic access can add the specific commands to their own `.claude/settings.json` `permissions.allow` list.
-
-## Versioning Note
-
-This skill is at v0.0.1. All 13 reference files are 100% populated across both REQUIRED sections (Overview, Critical Rules, Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent Pitfalls, Anti-patterns). See `docs/coverage-matrix.md` for the current per-file status. Later versions add net-new idioms and expand OPTIONAL sections further (see `docs/design.md` § Versioning semantics).
+**Shell commands.** Skill does not execute SAS. Reference files suggest diagnostic shell commands (`hexdump`, `file`) for inspecting `.sas` bytes — Bash not pre-approved, prompts at project scope.

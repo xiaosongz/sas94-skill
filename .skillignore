@@ -1,3 +1,10 @@
 pipeline/
-docs/design.md
 evals/
+docs/
+.github/
+.pre-commit-config.yaml
+.markdownlint.json
+.yamllint.yaml
+.gitignore
+.DS_Store
+README.md
