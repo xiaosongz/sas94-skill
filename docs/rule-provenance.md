@@ -1,6 +1,6 @@
 # Rule Provenance
 
-Audit trail for every `### Rule` and `### Idiom` heading in `references/*.md`. Each row records the rule's source URL and the `last_reviewed` date from the reference file's frontmatter. This file is auto-generated — do not edit by hand.
+Audit trail for every `### Rule`, `### Idiom`, and `### Hygiene` heading in `references/*.md`. Each row records the rule's source URL and the `last_reviewed` date from the reference file's frontmatter. This file is auto-generated — do not edit by hand.
 
 Regenerate after editing any reference file:
 

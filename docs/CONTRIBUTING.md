@@ -38,11 +38,11 @@ what triggers are supposed to route work into that file.
    - `feat/macros-add-quoting-rule`
    - `fix/data-step-merge-overwrite-example`
    - `docs/proc-sql-seed`
-3. **Edit the target reference file**. Every new Rule or Idiom MUST carry
-   a `Source:` URL on the line immediately following the heading. The
-   pre-commit hook (added in Task 7) will reject headings without
-   sources.
-4. **Regenerate the audit trail** if you added or removed a Rule/Idiom:
+3. **Edit the target reference file**. Every new Rule, Idiom, or Hygiene
+   entry MUST carry a `Source:` URL on the line immediately following
+   the heading. The pre-commit hook (added in Task 7) will reject
+   headings without sources.
+4. **Regenerate the audit trail** if you added or removed a Rule, Idiom, or Hygiene entry:
    ```bash
    uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
    ```
@@ -58,17 +58,17 @@ what triggers are supposed to route work into that file.
 Copy this checklist into your PR body:
 
 ```markdown
-- [ ] Every new `### Rule` or `### Idiom` heading has a `Source:` URL
-      within 5 lines after the heading
+- [ ] Every new `### Rule`, `### Idiom`, or `### Hygiene` heading has a
+      `Source:` URL within 5 lines after the heading
 - [ ] CORRECT and WRONG code blocks are both present for each Rule
       (CORRECT / WRONG labels inside the `sas` fence)
 - [ ] Source URL resolves (CI runs a HEAD request against every URL in
       `docs/rule-provenance.md`)
-- [ ] Rule points to a real `sasjs/lint` / `sasjs/core` / SAS 9.4
-      documentation page or a hand-transcribed `pipeline/manual/*.md`
-      file — no fabricated citations
-- [ ] `docs/rule-provenance.md` regenerated (if any Rule / Idiom added,
-      removed, or renamed)
+- [ ] Rule / Idiom / Hygiene points to a real `sasjs/lint` / `sasjs/core`
+      / SAS 9.4 documentation page or a hand-transcribed
+      `pipeline/manual/*.md` file — no fabricated citations
+- [ ] `docs/rule-provenance.md` regenerated (if any Rule, Idiom, or
+      Hygiene heading added, removed, or renamed)
 - [ ] `docs/coverage-matrix.md` regenerated (if file coverage status
       changed)
 - [ ] `last_reviewed` in the reference-file frontmatter updated to
@@ -144,6 +144,9 @@ Reviewers check:
   topic outgrows its scope. The only exception is
   `references/sas-master-reference.md`, which aggregates across topic
   files and is allowed to hold up to 20 cross-topic rules.
+  `### Hygiene N:` headings (file-level lint conventions, e.g. the
+  `sasjs/lint` items in `references/data-step.md`) are tracked
+  separately and do **not** count against the ≤8 Rules cap.
 - **No placeholder text** — `TBD`, `fabricate`, `TODO (source pending)`,
   or empty `Source:` strings in a PR that claims to populate a rule.
 - **Idempotence** — re-running `make_provenance.py` and

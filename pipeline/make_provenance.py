@@ -1,13 +1,13 @@
-"""Generate `docs/rule-provenance.md` — an audit trail mapping every Rule
-and Idiom in `references/*.md` to its upstream source URL.
+"""Generate `docs/rule-provenance.md` — an audit trail mapping every Rule,
+Idiom, and Hygiene entry in `references/*.md` to its upstream source URL.
 
 Usage:
 
     uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 
-The script scans each reference file for `### Rule <N>:` and `### Idiom:`
-headings, extracts the `Source:` URL on the next 5 lines, and emits a
-sorted markdown table to stdout.
+The script scans each reference file for `### Rule <N>:`, `### Idiom:`,
+and `### Hygiene <N>:` headings, extracts the `Source:` URL on the
+next 5 lines, and emits a sorted markdown table to stdout.
 
 Re-running the script must produce byte-identical output — no timestamps,
 everything sorted deterministically.
@@ -76,8 +76,8 @@ def _escape_cell(text: str) -> str:
 
 
 def _truncate_claim(heading_text: str) -> str:
-    """Trim the Rule/Idiom heading text to MAX_CLAIM_LEN chars, keeping
-    an explicit ellipsis when truncated."""
+    """Trim the Rule/Idiom/Hygiene heading text to MAX_CLAIM_LEN chars,
+    keeping an explicit ellipsis when truncated."""
     heading_text = heading_text.strip()
     if len(heading_text) <= MAX_CLAIM_LEN:
         return heading_text
@@ -100,7 +100,7 @@ def _extract_source(lines: list[str], start: int, window: int = 5) -> str:
 
 def scan_reference(path: Path) -> list[ProvenanceRow]:
     """Walk a single reference file, yielding one ProvenanceRow per
-    `### Rule` / `### Idiom` heading."""
+    `### Rule`, `### Idiom`, or `### Hygiene` heading."""
     fm = load_frontmatter(path)
     last_verified = str(fm.get("last_reviewed", "unknown"))
 
@@ -165,8 +165,8 @@ def render_markdown(rows: list[ProvenanceRow]) -> str:
         "# Rule Provenance",
         "",
         (
-            "Audit trail for every `### Rule` and `### Idiom` heading in "
-            "`references/*.md`. Each row records the rule's source URL and "
+            "Audit trail for every `### Rule`, `### Idiom`, and `### Hygiene` "
+            "heading in `references/*.md`. Each row records the rule's source URL and "
             "the `last_reviewed` date from the reference file's frontmatter. "
             "This file is auto-generated — do not edit by hand."
         ),
@@ -219,13 +219,13 @@ def render_markdown(rows: list[ProvenanceRow]) -> str:
 def main() -> int:
     rows = collect_all_rows()
 
-    # Fail loud if any Rule/Idiom heading lacks a Source URL within
-    # the 5-line window — silent empty `source` cells are the single
-    # most destructive failure mode for an audit trail.
+    # Fail loud if any Rule/Idiom/Hygiene heading lacks a Source URL
+    # within the 5-line window — silent empty `source` cells are the
+    # single most destructive failure mode for an audit trail.
     missing = [r for r in rows if not r.source]
     if missing:
         sys.stderr.write(
-            f"ERROR: {len(missing)} Rule/Idiom heading(s) lack a Source URL within 5 lines:\n"
+            f"ERROR: {len(missing)} Rule/Idiom/Hygiene heading(s) lack a Source URL within 5 lines:\n"
         )
         for r in sorted(missing, key=lambda r: (r.file, r.section, r.claim)):
             sys.stderr.write(f"  - {r.file} | {r.section} | {r.claim}\n")
