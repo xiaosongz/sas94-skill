@@ -38,7 +38,7 @@ repos:
           must carry a Source URL within 5 lines.
         entry: python3 pipeline/hooks/check_source_urls.py
         language: system
-        files: ^references/.*\.md$
+        files: ^plugins/sas94/skills/sas94/references/.*\.md$
         pass_filenames: true
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2

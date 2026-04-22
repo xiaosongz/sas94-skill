@@ -37,7 +37,7 @@ SOURCE_RE = re.compile(r"^Source:\s+https?://\S+")
 WINDOW = 5
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-REFERENCES_DIR = REPO_ROOT / "references"
+REFERENCES_DIR = REPO_ROOT / "plugins" / "sas94" / "skills" / "sas94" / "references"
 
 
 def scan_file(path: Path) -> list[str]:

@@ -1,0 +1,33 @@
+{
+  "name": "sas94-skill",
+  "owner": {
+    "name": "Xiaosong Zhang"
+  },
+  "metadata": {
+    "description": "SAS 9.4 coding skill for Claude Code",
+    "version": "0.0.1"
+  },
+  "plugins": [
+    {
+      "name": "sas94",
+      "source": "./plugins/sas94",
+      "description": "Claude Code skill for writing, reviewing, and debugging SAS 9.4 code — DATA step, PROC SQL, macros, hash tables, stats procs, ODS",
+      "version": "0.0.1",
+      "author": {
+        "name": "Xiaosong Zhang"
+      },
+      "homepage": "https://github.com/xiaosongz/sas94-skill",
+      "repository": "https://github.com/xiaosongz/sas94-skill",
+      "license": "MIT",
+      "keywords": [
+        "sas",
+        "sas-9.4",
+        "biostatistics",
+        "health-services-research",
+        "claims",
+        "analytics"
+      ],
+      "category": "data-analysis"
+    }
+  ]
+}

@@ -13,7 +13,8 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
-REFERENCES_DIR: Path = REPO_ROOT / "references"
+SKILL_ROOT: Path = REPO_ROOT / "plugins" / "sas94" / "skills" / "sas94"
+REFERENCES_DIR: Path = SKILL_ROOT / "references"
 
 
 def load_frontmatter(path: Path) -> dict:

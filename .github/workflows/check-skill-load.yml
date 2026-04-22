@@ -8,13 +8,17 @@ name: check-skill-load
 on:
   pull_request:
     paths:
-      - 'SKILL.md'
-      - 'references/**'
+      - 'plugins/sas94/skills/sas94/SKILL.md'
+      - 'plugins/sas94/skills/sas94/references/**'
+      - '.claude-plugin/marketplace.json'
+      - 'plugins/sas94/.claude-plugin/plugin.json'
   push:
     branches: [main]
     paths:
-      - 'SKILL.md'
-      - 'references/**'
+      - 'plugins/sas94/skills/sas94/SKILL.md'
+      - 'plugins/sas94/skills/sas94/references/**'
+      - '.claude-plugin/marketplace.json'
+      - 'plugins/sas94/.claude-plugin/plugin.json'
 
 jobs:
   check:
@@ -38,22 +42,23 @@ jobs:
           import yaml
           from pathlib import Path
 
-          skill = Path('SKILL.md').read_text(encoding='utf-8')
+          skill_path = Path('plugins/sas94/skills/sas94/SKILL.md')
+          skill = skill_path.read_text(encoding='utf-8')
           m = re.match(r'---\n(.*?)\n---', skill, re.DOTALL)
           if not m:
-              print('FAIL: SKILL.md missing YAML frontmatter')
+              print(f'FAIL: {skill_path} missing YAML frontmatter')
               sys.exit(1)
 
           data = yaml.safe_load(m.group(1))
           for key in ('name', 'description'):
               if key not in data:
-                  print(f'FAIL: SKILL.md frontmatter missing `{key}`')
+                  print(f'FAIL: {skill_path} frontmatter missing `{key}`')
                   sys.exit(1)
 
           # Reference filenames are quoted in backticks in the routing table.
           refs_in_skill = set(re.findall(r'`([\w\-]+\.md)`', skill))
 
-          ref_dir = Path('references')
+          ref_dir = Path('plugins/sas94/skills/sas94/references')
           refs_on_disk = {p.name for p in ref_dir.glob('*.md')}
 
           missing = refs_in_skill - refs_on_disk

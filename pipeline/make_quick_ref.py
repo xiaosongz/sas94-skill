@@ -36,7 +36,7 @@ from typing import Iterable
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 INDEX_PATH = REPO_ROOT / "pipeline" / "cache" / "extracted" / "sas_docs.json"
-REFERENCES_DIR = REPO_ROOT / "references"
+REFERENCES_DIR = REPO_ROOT / "plugins" / "sas94" / "skills" / "sas94" / "references"
 
 TODO_MARKER = "TODO (source pending)"
 

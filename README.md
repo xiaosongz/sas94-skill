@@ -35,45 +35,48 @@ When activated, Claude Code can:
 
 ## Installation
 
-### Option 1: Personal scope — all projects (recommended)
+### Recommended: Claude Code plugin marketplace
 
-One line. Skill loads for every Claude Code session on this machine:
+Two slash commands inside any Claude Code session:
 
-```bash
-mkdir -p ~/.claude/skills && git clone https://github.com/xiaosongz/sas94-skill.git ~/.claude/skills/sas94
+```text
+/plugin marketplace add xiaosongz/sas94-skill
+/plugin install sas94@sas94-skill
 ```
 
-Pull periodically to pick up new rules and idioms:
+Claude Code fetches this repo, installs the `sas94` plugin into the
+local plugin cache, and activates the skill. Update later with:
 
-```bash
-git -C ~/.claude/skills/sas94 pull
+```text
+/plugin marketplace update sas94-skill
 ```
 
-Restart Claude Code (or start a new session) after install. Skill activates on `.sas` files and SAS-flavored prompt keywords — see `SKILL.md` for the full trigger list.
+Skill activates on `.sas` files and SAS-flavored prompt keywords — see
+`plugins/sas94/skills/sas94/SKILL.md` for the full trigger list.
 
-### Option 2: Per-project scope — pin a version
+### Alternative: personal-scope git clone
 
-Use this when you want a SAS project to ride on a specific skill version,
-independent of your personal skills directory.
+Prefer `git` over slash commands? Clone the skill subtree into your
+personal skills directory (one line):
 
 ```bash
-mkdir -p .claude/skills
-git clone https://github.com/xiaosongz/sas94-skill.git .claude/skills/sas94
-rm -rf .claude/skills/sas94/.git
+git clone --depth 1 https://github.com/xiaosongz/sas94-skill.git /tmp/sas94-skill && mkdir -p ~/.claude/skills && mv /tmp/sas94-skill/plugins/sas94/skills/sas94 ~/.claude/skills/sas94 && rm -rf /tmp/sas94-skill
 ```
 
-### Option 3: Plugin marketplace — `/plugin install sas94`
-
-Planned for `v0.0.2+`. Once published to the Claude Code plugin
-marketplace, install will collapse to `/plugin install sas94`. Not yet
-available.
+Update later by re-running the same command. The plugin marketplace
+path is cleaner — use it unless you have a reason not to.
 
 ### Ad-hoc: `claude --add-dir <path>`
 
-Power-user invocation for one-off skill loading from a non-standard
-directory — pass `--add-dir /path/to/sas94-skill` at CLI launch and
-Claude Code will treat that path as an additional skill root for the
-session.
+Power-user invocation for one-off skill loading. Clone the repo
+anywhere, then:
+
+```bash
+claude --add-dir /path/to/sas94-skill/plugins/sas94/skills/sas94
+```
+
+Claude Code treats that path as an additional skill root for the
+session only.
 
 ## Usage
 
@@ -106,51 +109,60 @@ for index events.
 ## Contents
 
 ```text
-sas94-skill/
-├── SKILL.md                               # Thin router — trigger, routing table, workflow
-├── .skillignore                           # Excludes pipeline/ and docs/design.md from install
-├── assets/
-│   ├── data-step-template.sas             # DATA step skeleton with Doxygen header
-│   ├── proc-sql-template.sas              # PROC SQL skeleton
-│   ├── macro-template.sas                 # %macro / %mend skeleton with parenthesized sig
-│   └── analysis-template.sas              # End-to-end study-program scaffold
-├── references/                            # Loaded on-demand per routing table
-│   ├── sas-master-reference.md            # Top-20 rules; load for new .sas files
-│   ├── data-step.md                       # MERGE/BY, first./last., retain, arrays, PDV
-│   ├── macros.md                          # %let, %macro scope, quoting, &&var
-│   ├── proc-sql.md                        # Joins, dedup, INTO :macvar, RESET
-│   ├── base-procs.md                      # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE
-│   ├── stat-procs.md                      # LOGISTIC, GLM, MIXED, GENMOD, SURVEY*
-│   ├── hash-tables.md                     # declare hash, definekey, hashiter
-│   ├── ods-and-output.md                  # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL
-│   ├── formats-informats.md               # PROC FORMAT, date/time, input()/put()
-│   ├── functions-dates.md                 # Date/time/datetime functions (INTNX, INTCK, MDY, DATEPART)
-│   ├── functions-strings.md               # String functions (SCAN, SUBSTR, CATX, COMPRESS, TRANWRD)
-│   ├── functions-numeric.md               # Numeric and array functions (SUM, ROUND, MOD, DIM)
-│   └── idioms-from-lexjansen.md           # SUGI / SAS Global Forum idioms
-└── docs/
-    ├── design.md                          # Architecture and sourcing strategy
-    ├── CONTRIBUTING.md                    # Reviewer workflow, PR + issue templates
-    ├── rule-provenance.md                 # Auto-generated audit trail (rule → source URL)
-    └── coverage-matrix.md                 # Auto-generated reference-file coverage report
+sas94-skill/                                      # repo = marketplace
+├── .claude-plugin/
+│   └── marketplace.json                          # marketplace catalog (lists the sas94 plugin)
+├── plugins/
+│   └── sas94/                                    # plugin root (copied into ~/.claude/plugins/cache on install)
+│       ├── .claude-plugin/
+│       │   └── plugin.json                       # plugin manifest
+│       └── skills/
+│           └── sas94/                            # skill root
+│               ├── SKILL.md                      # Thin router — trigger, routing table, workflow
+│               ├── assets/
+│               │   ├── data-step-template.sas    # DATA step skeleton with Doxygen header
+│               │   ├── proc-sql-template.sas     # PROC SQL skeleton
+│               │   ├── macro-template.sas        # %macro / %mend skeleton with parenthesized sig
+│               │   └── analysis-template.sas     # End-to-end study-program scaffold
+│               └── references/                   # Loaded on-demand per routing table
+│                   ├── sas-master-reference.md   # Top-20 rules; load for new .sas files
+│                   ├── data-step.md              # MERGE/BY, first./last., retain, arrays, PDV
+│                   ├── macros.md                 # %let, %macro scope, quoting, &&var
+│                   ├── proc-sql.md               # Joins, dedup, INTO :macvar, RESET
+│                   ├── base-procs.md             # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE
+│                   ├── stat-procs.md             # LOGISTIC, GLM, MIXED, GENMOD, SURVEY*
+│                   ├── hash-tables.md            # declare hash, definekey, hashiter
+│                   ├── ods-and-output.md         # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL
+│                   ├── formats-informats.md      # PROC FORMAT, date/time, input()/put()
+│                   ├── functions-dates.md        # Date/time/datetime fns (INTNX, INTCK, MDY, DATEPART)
+│                   ├── functions-strings.md      # String fns (SCAN, SUBSTR, CATX, COMPRESS, TRANWRD)
+│                   ├── functions-numeric.md      # Numeric and array fns (SUM, ROUND, MOD, DIM)
+│                   └── idioms-from-lexjansen.md  # SUGI / SAS Global Forum idioms
+├── docs/                                         # repo-level docs, not shipped with plugin
+│   ├── design.md                                 # Architecture and sourcing strategy
+│   ├── CONTRIBUTING.md                           # Reviewer workflow, PR + issue templates
+│   ├── rule-provenance.md                        # Auto-generated audit trail (rule → source URL)
+│   └── coverage-matrix.md                        # Auto-generated reference-file coverage report
+├── evals/                                        # manual transcript-check eval harness
+└── pipeline/                                     # extractors + generators for rules/idioms
 ```
 
 ## Critical Rules (Summary)
 
 The top-5 rules below are enforced across every SAS file the skill
 writes. See
-[`references/macros.md`](references/macros.md) and
-[`references/data-step.md`](references/data-step.md) for the full set
+[`plugins/sas94/skills/sas94/references/macros.md`](plugins/sas94/skills/sas94/references/macros.md) and
+[`plugins/sas94/skills/sas94/references/data-step.md`](plugins/sas94/skills/sas94/references/data-step.md) for the full set
 (6 + 6 rules plus 20 aggregated top-level rules in
-[`references/sas-master-reference.md`](references/sas-master-reference.md)).
+[`plugins/sas94/skills/sas94/references/sas-master-reference.md`](plugins/sas94/skills/sas94/references/sas-master-reference.md)).
 
 | # | Rule | Reference |
 |---|------|-----------|
-| 1 | `LOGISTIC` models `P(Y = lowest ordinal value)` by default — pin the event with `descending` or `event='value'` | [stat-procs.md §Rule 2](references/stat-procs.md) |
-| 2 | `GENMOD` defaults to `DIST=NORMAL LINK=IDENTITY` — specify both for logistic, Poisson, or gamma | [stat-procs.md §Rule 3](references/stat-procs.md) |
-| 3 | MERGE silently overwrites same-named columns — rename on input, then coalesce | [data-step.md §MERGE overwrite](references/data-step.md) |
-| 4 | `LAG` is queue-based — call unconditionally, gate usage afterwards | [data-step.md §LAG trap](references/data-step.md) |
-| 5 | Every `%macro` must carry parentheses `()`; declare `%local` for every non-parameter symbol | [macros.md §Rule 1](references/macros.md) |
+| 1 | `LOGISTIC` models `P(Y = lowest ordinal value)` by default — pin the event with `descending` or `event='value'` | [stat-procs.md §Rule 2](plugins/sas94/skills/sas94/references/stat-procs.md) |
+| 2 | `GENMOD` defaults to `DIST=NORMAL LINK=IDENTITY` — specify both for logistic, Poisson, or gamma | [stat-procs.md §Rule 3](plugins/sas94/skills/sas94/references/stat-procs.md) |
+| 3 | MERGE silently overwrites same-named columns — rename on input, then coalesce | [data-step.md §MERGE overwrite](plugins/sas94/skills/sas94/references/data-step.md) |
+| 4 | `LAG` is queue-based — call unconditionally, gate usage afterwards | [data-step.md §LAG trap](plugins/sas94/skills/sas94/references/data-step.md) |
+| 5 | Every `%macro` must carry parentheses `()`; declare `%local` for every non-parameter symbol | [macros.md §Rule 1](plugins/sas94/skills/sas94/references/macros.md) |
 
 Full rule list with `CORRECT` / `WRONG` code examples and source URLs:
 [`docs/rule-provenance.md`](docs/rule-provenance.md).
@@ -179,7 +191,7 @@ See [`docs/EVALS.md`](docs/EVALS.md) for why it's a manual harness and
 
 See [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) for the reviewer
 workflow, PR template, and issue template for rule disputes. Content
-contributions to `references/*.md` are the primary contribution path —
+contributions to `plugins/sas94/skills/sas94/references/*.md` are the primary contribution path —
 every new Rule or Idiom must carry a `Source:` URL on the line
 immediately following the heading.
 

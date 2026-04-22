@@ -31,7 +31,7 @@ from pathlib import Path
 import httpx
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-REFERENCES_DIR = REPO_ROOT / "references"
+REFERENCES_DIR = REPO_ROOT / "plugins" / "sas94" / "skills" / "sas94" / "references"
 PROVENANCE_MD = REPO_ROOT / "docs" / "rule-provenance.md"
 
 # Capture the URL after `Source:` in reference files. The URL runs until
