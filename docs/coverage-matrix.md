@@ -13,7 +13,9 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 | base-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | data-step.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | formats-informats.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
-| functions-reference.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
+| functions-dates.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
+| functions-numeric.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
+| functions-strings.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | hash-tables.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | idioms-from-lexjansen.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 | macros.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
@@ -22,4 +24,4 @@ uv --directory pipeline run python make_coverage.py > docs/coverage-matrix.md
 | sas-master-reference.md | yes | no | yes | yes | yes | yes | yes | 80% | stub |
 | stat-procs.md | yes | yes | yes | yes | yes | yes | yes | 100% | populated |
 
-Populated: 10 / 11; Stubs: 1 / 11.
+Populated: 12 / 13; Stubs: 1 / 13.

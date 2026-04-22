@@ -522,8 +522,12 @@ Load the topic-specific reference when the task matches its scope.
   OUTPUT`, ODS GRAPHICS, GTL.
 - [formats-informats.md](formats-informats.md) — PROC FORMAT, date/time
   formats, `input()` / `put()`.
-- [functions-reference.md](functions-reference.md) — function-signature
-  cheatsheet by category.
+- [functions-dates.md](functions-dates.md) — date/time/datetime
+  functions (INTNX, INTCK, MDY, DATEPART, TIMEPART, DHMS).
+- [functions-strings.md](functions-strings.md) — string functions
+  (SCAN, SUBSTR, CATX, COMPRESS, TRANWRD, INDEX, FIND).
+- [functions-numeric.md](functions-numeric.md) — numeric and array
+  functions (SUM, ROUND, MOD, DIM, HBOUND, LBOUND).
 - [idioms-from-lexjansen.md](idioms-from-lexjansen.md) — real-world
   idioms distilled from SUGI and SAS Global Forum papers.
 

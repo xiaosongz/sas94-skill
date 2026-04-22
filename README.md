@@ -10,7 +10,7 @@ sources (`sasjs/lint`, `sasjs/core`) plus hand-transcribed SAS-programmer
 pitfalls (GWU data-mining curriculum), and routes Claude Code to
 topic-specific reference files on demand.
 
-**Status:** `v0.0.1` pre-release. All 11 reference files are populated
+**Status:** `v0.0.1` pre-release. All 13 reference files are populated
 to the REQUIRED template sections (Overview, Critical Rules, Canonical
 Idioms, Function/Statement Quick Ref, See Also). OPTIONAL sections
 (Silent Pitfalls, Anti-patterns) are present where source material exists.
@@ -103,7 +103,9 @@ sas94-skill/
 │   ├── hash-tables.md                     # declare hash, definekey, hashiter
 │   ├── ods-and-output.md                  # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL
 │   ├── formats-informats.md               # PROC FORMAT, date/time, input()/put()
-│   ├── functions-reference.md             # Function cheatsheet by category
+│   ├── functions-dates.md                 # Date/time/datetime functions (INTNX, INTCK, MDY, DATEPART)
+│   ├── functions-strings.md               # String functions (SCAN, SUBSTR, CATX, COMPRESS, TRANWRD)
+│   ├── functions-numeric.md               # Numeric and array functions (SUM, ROUND, MOD, DIM)
 │   └── idioms-from-lexjansen.md           # SUGI / SAS Global Forum idioms
 └── docs/
     ├── design.md                          # Architecture and sourcing strategy

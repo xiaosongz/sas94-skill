@@ -95,7 +95,21 @@
   community: []
   # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
 
-- target: functions-reference.md
+- target: functions-dates.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: functions-strings.md
+  github: []
+  official_docs: []
+  lexjansen: []
+  community: []
+  # Phase 1 deferred — source lists populated in v0.0.2+ per spec §Versioning semantics.
+
+- target: functions-numeric.md
   github: []
   official_docs: []
   lexjansen: []

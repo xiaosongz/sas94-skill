@@ -59,7 +59,9 @@ sas94-skill/
 │   ├── hash-tables.md                    # declare hash, hashiter (~8KB)
 │   ├── ods-and-output.md                 # ODS OUTPUT, RTF, EXCEL, graphics (~6KB)
 │   ├── formats-informats.md              # PROC FORMAT, date/time, picture fmts (~5KB)
-│   ├── functions-reference.md            # Function cheatsheet by category (~8KB)
+│   ├── functions-dates.md                # Date/time/datetime functions (~10KB)
+│   ├── functions-strings.md              # String functions (~15KB)
+│   ├── functions-numeric.md              # Numeric and array functions (~13KB)
 │   └── idioms-from-lexjansen.md          # Real-world idioms distilled from SUGI (~6KB)
 ├── pipeline/                             # Build-time only. Not shipped to users.
 │   ├── fetch_github.py
@@ -89,15 +91,17 @@ sas94-skill/
 | Task / Trigger Phrase | Load Reference | Also Load If |
 |-----------------------|---------------|--------------|
 | New `.sas` file, study program skeleton | `sas-master-reference.md` | + domain file per section |
-| "MERGE", "BY processing", "first.", "last.", "retain", "array", "PDV" | `data-step.md` | `functions-reference.md` if fns involved |
+| "MERGE", "BY processing", "first.", "last.", "retain", "array", "PDV" | `data-step.md` | `functions-dates.md` / `functions-strings.md` / `functions-numeric.md` if fns involved |
 | "PROC SQL", "join claims", "dedup", "INTO :macvar" | `proc-sql.md` | `macros.md` if INTO drives macro |
 | "%macro", "%let", "%sysfunc", quoting error, `&&var`, symget/symput | `macros.md` | `sas-master-reference.md` for scope rules |
 | PROC FREQ / MEANS / UNIVARIATE / SORT / TRANSPOSE / REPORT | `base-procs.md` | `ods-and-output.md` if capturing output |
 | PROC LOGISTIC / GLM / MIXED / GENMOD / SURVEY* / LIFETEST | `stat-procs.md` | `ods-and-output.md` for ODS OUTPUT |
 | "hash join", "hash lookup", `declare hash`, `definekey`, `hashiter` | `hash-tables.md` | `data-step.md` for DATA-step context |
 | ODS RTF/EXCEL/PDF, ODS OUTPUT, ODS GRAPHICS, GTL | `ods-and-output.md` | `stat-procs.md` if capturing proc output |
-| PROC FORMAT, date/time fns, picture formats, `input()`/`put()` | `formats-informats.md` | `functions-reference.md` |
-| Function signature lookup, date arithmetic, string fns | `functions-reference.md` | — |
+| PROC FORMAT, date/time fns, picture formats, `input()`/`put()` | `formats-informats.md` | `functions-dates.md` |
+| "INTNX", "INTCK", "date arithmetic", "TODAY", "MDY", "DATEPART" | `functions-dates.md` | `formats-informats.md` |
+| "SCAN", "SUBSTR", "CATX", "COMPRESS", "TRANWRD", string parsing | `functions-strings.md` | `macros.md` for `%SCAN` / `%SUBSTR` |
+| "ROUND", "MOD", "SUM function", "DIM", array inspection | `functions-numeric.md` | `base-procs.md` for column aggregates |
 | Unknown/novel, "how do SAS programmers do X" | `idioms-from-lexjansen.md` | + best-match topic file |
 
 Auto-activation triggers (SKILL.md frontmatter `description:`): file open/edit `*.sas`, `*.sas7bcat`; prompts containing "SAS", "DATA step", "PROC SQL", "%macro", "claims merge", "ODS output", etc.
@@ -287,7 +291,7 @@ Week 1 post Phase 1:
 
 ## Phase 1 completion criteria (v0.0.1 tag)
 
-1. SKILL.md router + routing table complete for all 11 reference files
+1. SKILL.md router + routing table complete for all 13 reference files
 2. Critical Rules + Silent Pitfalls for `macros.md` + `data-step.md` sourced 100% from `sasjs/lint` + `sasjs/core`
 3. Canonical Idioms for `data-step.md` + `proc-sql.md` seeded from `sasjs/core` base macros + 5 GWU items
 4. Function/Statement Quick Ref marked `TODO (source pending)` rather than fabricated
@@ -295,7 +299,7 @@ Week 1 post Phase 1:
 6. `README.md` + `docs/CONTRIBUTING.md` + `docs/rule-provenance.md` populated
 7. Tagged `v0.0.1`, dog-fooded internally before public announcement
 
-Priority: **reference-file completeness before any v1.1 lint-hook or MCP feature work.** All feature additions blocked until every REQUIRED section across all 11 reference files is populated.
+Priority: **reference-file completeness before any v1.1 lint-hook or MCP feature work.** All feature additions blocked until every REQUIRED section across all 13 reference files is populated.
 
 ## Out of Scope (explicit non-goals)
 

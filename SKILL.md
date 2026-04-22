@@ -62,15 +62,17 @@ Load the appropriate reference file based on the task or trigger phrase. This is
 | Task / Trigger Phrase | Load Reference | Also Load If |
 |-----------------------|---------------|--------------|
 | New `.sas` file, study program skeleton | `sas-master-reference.md` | + domain file per section |
-| "MERGE", "BY processing", "first.", "last.", "retain", "array", "PDV" | `data-step.md` | `functions-reference.md` if fns involved |
+| "MERGE", "BY processing", "first.", "last.", "retain", "array", "PDV" | `data-step.md` | `functions-dates.md` / `functions-strings.md` / `functions-numeric.md` if fns involved |
 | "PROC SQL", "join claims", "dedup", "INTO :macvar" | `proc-sql.md` | `macros.md` if INTO drives macro |
 | "%macro", "%let", "%sysfunc", quoting error, `&&var`, symget/symput | `macros.md` | `sas-master-reference.md` for scope rules |
 | PROC FREQ / MEANS / UNIVARIATE / SORT / TRANSPOSE / REPORT | `base-procs.md` | `ods-and-output.md` if capturing output |
 | PROC LOGISTIC / GLM / MIXED / GENMOD / SURVEY* / LIFETEST | `stat-procs.md` | `ods-and-output.md` for ODS OUTPUT |
 | "hash join", "hash lookup", `declare hash`, `definekey`, `hashiter` | `hash-tables.md` | `data-step.md` for DATA-step context |
 | ODS RTF/EXCEL/PDF, ODS OUTPUT, ODS GRAPHICS, GTL | `ods-and-output.md` | `stat-procs.md` if capturing proc output |
-| PROC FORMAT, date/time fns, picture formats, `input()`/`put()` | `formats-informats.md` | `functions-reference.md` |
-| Function signature lookup, date arithmetic, string fns | `functions-reference.md` | — |
+| PROC FORMAT, date/time fns, picture formats, `input()`/`put()` | `formats-informats.md` | `functions-dates.md` |
+| "INTNX", "INTCK", "date arithmetic", "TODAY", "MDY", "DATEPART", "YEAR"/"MONTH"/"DAY" | `functions-dates.md` | `formats-informats.md` for PUT / INPUT around dates |
+| "SCAN", "SUBSTR", "CATX", "CATS", "COMPRESS", "TRANWRD", "INDEX", "FIND", string parsing | `functions-strings.md` | `macros.md` for `%SCAN` / `%SUBSTR` / quoting |
+| "ROUND", "MOD", "SUM function", "MEAN" (row-wise), "DIM", "HBOUND", "LBOUND", array inspection | `functions-numeric.md` | `base-procs.md` for PROC MEANS column aggregates |
 | Unknown/novel, "how do SAS programmers do X" | `idioms-from-lexjansen.md` | + best-match topic file |
 
 ## Assets
@@ -94,4 +96,4 @@ Use these templates as starting points — they supply header comment blocks, no
 
 ## Versioning Note
 
-This skill is at v0.0.1. All 11 reference files are populated to the REQUIRED template sections (Overview, Critical Rules ≥1, Canonical Idioms ≥2, Function/Statement Quick Ref, See Also); OPTIONAL sections (Silent Pitfalls, Anti-patterns) are present where source material exists. See `docs/coverage-matrix.md` for the current per-file status. Later versions expand OPTIONAL sections and net-new idioms (see `docs/design.md` § Versioning semantics).
+This skill is at v0.0.1. All 13 reference files are populated to the REQUIRED template sections (Overview, Critical Rules ≥1, Canonical Idioms ≥2, Function/Statement Quick Ref, See Also); OPTIONAL sections (Silent Pitfalls, Anti-patterns) are present where source material exists. See `docs/coverage-matrix.md` for the current per-file status. Later versions expand OPTIONAL sections and net-new idioms (see `docs/design.md` § Versioning semantics).

@@ -2,7 +2,8 @@ name: check-skill-load
 
 # Asserts that SKILL.md parses as a valid Anthropic-skill manifest and
 # that every reference file named in the routing table exists on disk.
-# Also enforces the Phase 1 invariant of exactly 11 reference files.
+# Also enforces the Phase 1 invariant of at least 11 reference files
+# (now 13 after the T19 functions-reference split).
 
 on:
   pull_request:

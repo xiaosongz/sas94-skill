@@ -433,5 +433,9 @@ produces output, but the output is almost certainly wrong:
 - [proc-sql.md](proc-sql.md) — SQL-join side of GWU §4 distinction.
 - [hash-tables.md](hash-tables.md) — hash-lookup alternative to MERGE for
   reference-table joins.
-- [functions-reference.md](functions-reference.md) — `lag`, `coalesce`,
-  `call missing`, `_N_`, `_ERROR_` signatures.
+- [functions-dates.md](functions-dates.md) — date/time functions
+  (INTNX, INTCK, MDY, DATEPART) used alongside DATA-step logic.
+- [functions-strings.md](functions-strings.md) — string functions
+  (SCAN, SUBSTR, CATX, COMPRESS) used in DATA-step parsing.
+- [functions-numeric.md](functions-numeric.md) — numeric and array
+  functions (SUM, ROUND, MOD, DIM) for row-wise arithmetic.

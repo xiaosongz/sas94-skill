@@ -33,8 +33,8 @@ PROC FORMAT chapter of the Base SAS Procedures Guide (proc).
 
 See also `data-step.md` for the `FORMAT` / `LENGTH` / `ATTRIB`
 statements that attach formats to variables, and
-`functions-reference.md` for the full surface of `INPUT()` and
-`PUT()` functions plus date arithmetic helpers.
+`functions-dates.md` for date arithmetic helpers
+(`INTNX`, `INTCK`, `MDY`, `DATEPART`) alongside `INPUT()` / `PUT()`.
 
 ## Critical Rules
 
@@ -479,9 +479,11 @@ values are almost certainly not what the author meant:
 - [data-step.md](data-step.md) — `FORMAT` / `INFORMAT` / `LENGTH`
   / `ATTRIB` statements in a DATA step; where and when attached
   attributes propagate to the output dataset.
-- [functions-reference.md](functions-reference.md) — full surface
-  of `INPUT()` / `PUT()` / `INPUTN` / `PUTN` plus date-arithmetic
-  functions (`INTCK`, `INTNX`, `MDY`, `DATEPART`, `TIMEPART`).
+- [functions-dates.md](functions-dates.md) — date-arithmetic
+  functions (`INTCK`, `INTNX`, `MDY`, `DATEPART`, `TIMEPART`) often
+  wrapped in `PUT()` for ISO-format output.
+- [functions-strings.md](functions-strings.md) — `SCAN` / `SUBSTR` /
+  `TRANWRD` used alongside `INPUT()` / `PUT()` string parsing.
 - [base-procs.md](base-procs.md) — `PROC FREQ` / `PROC MEANS` /
   `PROC REPORT` all honor attached formats for display grouping.
 - [proc-sql.md](proc-sql.md) — format-based `CASE` alternatives and
