@@ -27,7 +27,7 @@ that silently re-merges grouped statistics back onto detail rows (the
 Base SAS Procedures Guide "SQL Procedure" chapter and the three Kirk
 Paul Lafler papers on joins, CASE expressions, and tips / techniques.
 
-See also `data-step.md` Idiom "SQL join vs MERGE distinction" for the
+See also `data-step.md` Rule "SQL join vs MERGE" for the
 step-by-step comparison with DATA-step MERGE semantics.
 
 ## Critical Rules
@@ -461,8 +461,8 @@ meant:
 
 ## See Also
 
-- [data-step.md](data-step.md) — "SQL join vs MERGE distinction" idiom
-  (GWU §4) and DATA-step MERGE overwrite semantics.
+- [data-step.md](data-step.md) — "SQL join vs MERGE" rule (GWU §4) and
+  DATA-step MERGE overwrite semantics.
 - [base-procs.md](base-procs.md) — `PROC SORT NODUPKEY` vs SQL
   `SELECT DISTINCT` dedup comparison.
 - [macros.md](macros.md) — macro-variable side of `INTO :mv` and

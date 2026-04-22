@@ -518,8 +518,8 @@ author meant:
 - [macros.md](macros.md) — SAS-docs-grounded macro language rules;
   quoting tier summary complements Whitlock / Lepp here.
 - [data-step.md](data-step.md) — DATA-step control flow and MERGE
-  semantics; see "SQL join vs MERGE distinction" for the
-  counterpart to the hash streaming idiom.
+  semantics; see the "SQL join vs MERGE" rule for the counterpart to
+  the hash streaming idiom.
 - [Dorfman (2005) — Data Step Hash Objects as Programming Tools](https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf)
 - [Dorfman (2007) — Hash Crash and Beyond](https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf)
 - [Dorfman (2015) — Using the SAS Hash Object with Duplicate Key Entries](https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf)

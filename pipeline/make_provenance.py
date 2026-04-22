@@ -22,9 +22,11 @@ from pathlib import Path
 
 from _common import REFERENCES_DIR, body_after_frontmatter, load_frontmatter
 
-# A `### Rule N: Title...` or `### Idiom: Title...` heading. Rule numbers
-# are captured; Idioms have no number (slot stays empty for sorting).
-HEADING_RE = re.compile(r"^###\s+(Rule|Idiom)(?:\s+(\d+))?:\s*(.+?)\s*$")
+# A `### Rule N: Title...`, `### Idiom: Title...`, or `### Hygiene N: Title...`
+# heading. Rule / Hygiene numbers are captured; Idioms have no number (slot
+# stays empty for sorting). `Hygiene` rows are file-hygiene items demoted
+# out of the Rules cap but still tracked for provenance (see data-step.md).
+HEADING_RE = re.compile(r"^###\s+(Rule|Idiom|Hygiene)(?:\s+(\d+))?:\s*(.+?)\s*$")
 
 # A `## Section Heading` heading — used to tag the section each rule
 # sits under.
@@ -41,8 +43,10 @@ SOURCE_RE = re.compile(r"^Source:\s+(\S+.*?)\s*$")
 # be squashed — we truncate claim text at 80 chars as the spec asks.
 MAX_CLAIM_LEN = 80
 
-# Kinds we recognize; used to sort deterministically.
-KIND_ORDER = {"Rule": 0, "Idiom": 1}
+# Kinds we recognize; used to sort deterministically. `Hygiene` rows sort
+# after Idioms so the provenance table groups Rules → Idioms → Hygiene
+# within each file/section tuple.
+KIND_ORDER = {"Rule": 0, "Idiom": 1, "Hygiene": 2}
 
 
 @dataclass(frozen=True, order=True)
@@ -181,12 +185,17 @@ def render_markdown(rows: list[ProvenanceRow]) -> str:
 
     body: list[str] = []
     for r in rows:
-        # Tag the `#` column so Rules and Idioms remain visually
-        # distinguishable in the table even though `Kind` is not a
-        # separate column: Rules carry their number (`1`..`20`), Idioms
-        # carry `I` (the letter) to sort after rule numbers alphabetically
-        # while still occupying the same column.
-        num_display = r.rule_num_display if r.kind == "Rule" else "idiom"
+        # Tag the `#` column so Rules, Idioms, and Hygiene items remain
+        # visually distinguishable in the table even though `Kind` is not
+        # a separate column: Rules carry their number (`1`..`20`), Idioms
+        # carry `idiom`, Hygiene items carry `H<n>` (so `H1` sorts near
+        # `1` alphabetically while still flagging the demoted-Rule kind).
+        if r.kind == "Rule":
+            num_display = r.rule_num_display
+        elif r.kind == "Hygiene":
+            num_display = f"H{r.rule_num_display}" if r.rule_num_display != "—" else "hygiene"
+        else:
+            num_display = "idiom"
         body.append(
             "| {file} | {section} | {num} | {claim} | {source} | {lv} |".format(
                 file=_escape_cell(r.file),

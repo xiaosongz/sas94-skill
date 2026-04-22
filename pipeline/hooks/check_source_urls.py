@@ -22,9 +22,12 @@ import re
 import sys
 from pathlib import Path
 
-# `### Rule N: Title...` or `### Idiom: Title...`. We capture the heading
-# text only for diagnostics — the hook does not care about rule numbers.
-HEADING_RE = re.compile(r"^###\s+(Rule(?:\s+\d+)?|Idiom):\s*(.+?)\s*$")
+# `### Rule N: Title...`, `### Idiom: Title...`, or `### Hygiene N: Title...`.
+# We capture the heading text only for diagnostics — the hook does not care
+# about rule numbers. `Hygiene` matches file-hygiene items kept out of the
+# Rules cap but still required to carry a Source URL (see data-step.md's
+# trailing `## File hygiene (sasjs/lint)` section).
+HEADING_RE = re.compile(r"^###\s+(Rule(?:\s+\d+)?|Idiom|Hygiene(?:\s+\d+)?):\s*(.+?)\s*$")
 
 # A Source line looks like `Source: https://... [optional trailing note]`.
 # The URL itself must be http(s); anything else is rejected as a stub.
