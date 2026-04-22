@@ -161,6 +161,11 @@ contributions to `references/*.md` are the primary contribution path —
 every new Rule or Idiom must carry a `Source:` URL on the line
 immediately following the heading.
 
+For pipeline internals — how rules and idioms are sourced, how to refresh
+SAS-doc scrapes at a new Mx release, how to add a new lexjansen paper, and
+how to reuse the pattern for other under-represented-language skills —
+see [`docs/BUILDING.md`](docs/BUILDING.md).
+
 ## License
 
 [MIT](LICENSE)

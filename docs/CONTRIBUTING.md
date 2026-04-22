@@ -62,6 +62,11 @@ link text is the paper filename.
 
 ## Workflow
 
+For deeper pipeline details — source-tier discipline, how the audit-trail
+regenerators work, how to refresh SAS-doc scrapes at a new Mx release, and
+how to add a new lexjansen paper — see [`BUILDING.md`](BUILDING.md). The
+steps below cover the day-to-day contribution path.
+
 1. **Fork** the repo to your GitHub account.
 2. **Branch per reference-file change**. Name the branch after the target
    file and the change kind:
