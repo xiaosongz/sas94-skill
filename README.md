@@ -134,6 +134,25 @@ writes. See
 Full rule list with `CORRECT` / `WRONG` code examples and source URLs:
 [`docs/rule-provenance.md`](docs/rule-provenance.md).
 
+## Evaluation
+
+A small regression-baseline eval lives in `evals/`. Three prompts, one per
+claimed differentiator of the skill vs. a generic LLM writing SAS
+(`sasjs/core` macro conventions, PROC APPEND silent-failure patterns,
+PROC LOGISTIC event pinning + ODS OUTPUT). The runner sends each prompt to
+Claude Opus 4.7 with `SKILL.md` + `references/*.md` loaded as a cached
+system message and checks the response against a list of regex patterns.
+
+Run before tagging a new version:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+uv --directory pipeline run python ../evals/run_evals.py
+```
+
+See [`docs/EVALS.md`](docs/EVALS.md) for the architectural stance and
+[`evals/README.md`](evals/README.md) for the how-to and cost estimate.
+
 ## Contributing
 
 See [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) for the reviewer
