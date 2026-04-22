@@ -16,6 +16,15 @@ wrong scope. This file encodes the definition and scope rules from
 `sasjs/core` (v4.63.0, ~150 Doxygen-headed base macros) so that generated
 macro code is well-formed by construction.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: Every `%macro` signature must carry parentheses `()`

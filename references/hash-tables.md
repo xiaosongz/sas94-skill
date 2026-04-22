@@ -36,6 +36,15 @@ See also `data-step.md` for the MERGE vs hash-lookup comparison and
 `proc-sql.md` for the SQL join alternative when the lookup table does
 not fit in memory.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: The hash must be declared and loaded inside `if _N_ = 1 then do; ... end;` — or via `dataset:` — before any `set` reads the lookup column

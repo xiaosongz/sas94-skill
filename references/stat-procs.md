@@ -34,6 +34,15 @@ For base-level categorical summaries (FREQ, MEANS, UNIVARIATE) see
 `base-procs.md`; for PROC SQL see `proc-sql.md`; for the DATA-step
 preprocessing that typically precedes these procs see `data-step.md`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `CLASS` is required for every categorical predictor — a numeric categorical in `MODEL` without `CLASS` is silently treated as continuous

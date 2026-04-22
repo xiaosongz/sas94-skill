@@ -30,6 +30,15 @@ Paul Lafler papers on joins, CASE expressions, and tips / techniques.
 See also `data-step.md` Rule "SQL join vs MERGE" for the
 step-by-step comparison with DATA-step MERGE semantics.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: Always qualify shared columns in multi-table SELECT lists — never `a.*, b.*` with overlapping names

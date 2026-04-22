@@ -23,6 +23,15 @@ For date and numeric functions see `functions-dates.md` and
 `functions-numeric.md`. For macro-context quoting functions (`%str`,
 `%bquote`, `%nrstr`) see `macros.md`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `SCAN(str, n)` without an explicit delimiter uses SAS's default delimiter set — which includes comma, period, and parentheses

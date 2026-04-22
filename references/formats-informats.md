@@ -36,6 +36,15 @@ statements that attach formats to variables, and
 `functions-dates.md` for date arithmetic helpers
 (`INTNX`, `INTCK`, `MDY`, `DATEPART`) alongside `INPUT()` / `PUT()`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `put()` goes variable → string; `input()` goes string → variable — inverting them silently returns wrong values

@@ -20,6 +20,15 @@ files. The top-20 rules below are aggregated and de-duplicated from
 hand-transcribed pitfalls in
 `pipeline/manual/gwu-data-mining-5-items.md`.
 
+## Contents
+
+- [Critical Rules (Top-20 Aggregated)](#critical-rules-top-20-aggregated)
+- [Reference-file Pointers](#reference-file-pointers)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules (Top-20 Aggregated)
 
 This file is the cross-topic aggregator — the ≤8-rule cap that applies

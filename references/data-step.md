@@ -24,6 +24,16 @@ line-length, tabs, trailing whitespace, gremlins, encoded passwords)
 appear in a trailing `## File hygiene (sasjs/lint)` section so the
 DATA-step semantics lead the file.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [File hygiene (sasjs/lint)](#file-hygiene-sasjslint)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: MERGE silently overwrites same-named columns — rename on input, then coalesce (GWU §2)

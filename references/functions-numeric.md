@@ -25,6 +25,15 @@ For date and string functions see `functions-dates.md` and
 with the row-wise `MAX` / `MEAN` / `SUM` here) see `base-procs.md`
 (`PROC MEANS` / `PROC UNIVARIATE`) and `proc-sql.md`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `SUM(of x1-x5)` treats missing as zero; `x1+x2+x3+x4+x5` propagates missing — use `SUM` for missing-aware addition

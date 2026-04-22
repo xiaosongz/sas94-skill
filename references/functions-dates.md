@@ -25,6 +25,15 @@ For string and numeric functions see `functions-strings.md` and
 statements see `data-step.md`; for `%SYSFUNC(today(), ...)` see
 `macros.md`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `INTNX('interval', dt, 0)` with no `alignment` returns the **beginning** of the interval, not `dt` — use `'S'` (SAME) for same-day alignment

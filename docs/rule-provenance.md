@@ -76,14 +76,14 @@ uv --directory pipeline run python make_provenance.py > docs/rule-provenance.md
 | hash-tables.md | Critical Rules | 6 | `add()` fails on a duplicate key; `replace()` overwrites — pick deliberately | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-22 |
 | hash-tables.md | Critical Rules | 7 | The hash iterator (`hiter`) traverses in order — but `next()`/`prev()` only upd… | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-22 |
 | hash-tables.md | Critical Rules | 8 | Hash memory grows with the loaded rowcount — claims-scale lookups can OOM the s… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman `check()` + `add()` deduplication (hash cluster) | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman MULTIDATA + `find_next()` for one-to-many joins (hash cluster) | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman streaming reference-table lookup (hash cluster) | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman summary-less summarization with `find()` + `replace()` (hash cluster) | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler `LEFT JOIN` + `COALESCE` for reference-table attach (proc-sql cluster) | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler searched CASE for inline claim-cost bucketing (proc-sql cluster) | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lepp `%SUPERQ` for one-shot "freeze the value exactly" reads (macro-quoting clu… | https://www.lexjansen.com/phuse/2019/sm/SM04.pdf | 2026-04-22 |
-| idioms-from-lexjansen.md | Canonical Idioms | idiom | Whitlock `%NRSTR` + `%UNQUOTE` to build a macro object at run time (macro-quoti… | https://www.lexjansen.com/nesug/nesug09/bb/BB02.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman `check()` + `add()` deduplication | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman MULTIDATA + `find_next()` for one-to-many joins | https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman streaming reference-table lookup | https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Dorfman summary-less summarization with `find()` + `replace()` | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler `LEFT JOIN` + `COALESCE` for reference-table attach | https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lafler searched CASE for inline claim-cost bucketing | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Lepp `%SUPERQ` for one-shot "freeze the value exactly" reads | https://www.lexjansen.com/phuse/2019/sm/SM04.pdf | 2026-04-22 |
+| idioms-from-lexjansen.md | Canonical Idioms | idiom | Whitlock `%NRSTR` + `%UNQUOTE` to build a macro object at run time | https://www.lexjansen.com/nesug/nesug09/bb/BB02.pdf | 2026-04-22 |
 | idioms-from-lexjansen.md | Critical Rules | 1 | `%STR` / `%NRSTR` mask at compile time; `%BQUOTE` / `%NRBQUOTE` / `%SUPERQ` mas… | https://www.lexjansen.com/phuse/2019/sm/SM04.pdf | 2026-04-22 |
 | idioms-from-lexjansen.md | Critical Rules | 2 | Load the SMALL side into the hash and stream the LARGE side with `set` — never… | https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf | 2026-04-22 |
 | idioms-from-lexjansen.md | Critical Rules | 3 | Searched CASE is the general form; simple CASE is for equality buckets only — p… | https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf | 2026-04-22 |

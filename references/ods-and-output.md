@@ -36,6 +36,15 @@ only want an OUTPUT dataset, and `stat-procs.md` for the common
 ODS OUTPUT captures (ParameterEstimates, FitStatistics, etc.) used
 in modeling pipelines.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: Every `ODS destination FILE=...` must be paired with a matching `ODS destination CLOSE;`

@@ -177,6 +177,10 @@ Reviewers check:
   `### Hygiene N:` headings (file-level lint conventions, e.g. the
   `sasjs/lint` items in `references/data-step.md`) are tracked
   separately and do **not** count against the ≤8 Rules cap.
+  `references/idioms-from-lexjansen.md` is an idiom-heavy
+  cluster-by-author file; its `### Rule` count may be below 5 because
+  the authority lives in Idioms citing named-author conference papers,
+  not in `sasjs/lint`-style linter rules.
 - **No placeholder text** — `TBD`, `fabricate`, `TODO (source pending)`,
   or empty `Source:` strings in a PR that claims to populate a rule.
 - **Idempotence** — re-running `make_provenance.py` and

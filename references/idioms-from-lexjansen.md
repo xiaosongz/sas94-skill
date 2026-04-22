@@ -41,6 +41,23 @@ lookup against a 50M-row claims extract," "when do I reach for
 pattern." For authoritative syntax, follow the cross-links back to
 the topic reference file that cites the SAS docs directly.
 
+Unlike topic reference files, this file's weight is in the Idioms
+section rather than Rules — idioms here cite named-author papers
+from SUGI / NESUG / SESUG / PharmaSUG (Dorfman on hash, Lafler on
+PROC SQL, Whitlock on macro quoting) rather than `sasjs/lint`
+mechanical rules, and the rule-floor is intentionally lower than
+in topic files.
+
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Topic Cluster Summary](#topic-cluster-summary)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `%STR` / `%NRSTR` mask at compile time; `%BQUOTE` / `%NRBQUOTE` / `%SUPERQ` mask at execution time — pick by WHEN the offending symbol is seen, not by WHAT it is
@@ -155,7 +172,7 @@ quit;
 
 ## Canonical Idioms
 
-### Idiom: Dorfman streaming reference-table lookup (hash cluster)
+### Idiom: Dorfman streaming reference-table lookup
 
 Source: https://support.sas.com/resources/papers/proceedings/proceedings/sugi30/236-30.pdf
 
@@ -188,7 +205,7 @@ data claims_labeled;
 run;
 ```
 
-### Idiom: Dorfman MULTIDATA + `find_next()` for one-to-many joins (hash cluster)
+### Idiom: Dorfman MULTIDATA + `find_next()` for one-to-many joins
 
 Source: https://www.lexjansen.com/sesug/2015/94_Final_PDF.pdf
 
@@ -219,7 +236,7 @@ data claim_x_elig;
 run;
 ```
 
-### Idiom: Dorfman `check()` + `add()` deduplication (hash cluster)
+### Idiom: Dorfman `check()` + `add()` deduplication
 
 Source: https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf
 
@@ -247,7 +264,7 @@ data first_visit;
 run;
 ```
 
-### Idiom: Dorfman summary-less summarization with `find()` + `replace()` (hash cluster)
+### Idiom: Dorfman summary-less summarization with `find()` + `replace()`
 
 Source: https://www.lexjansen.com/nesug/nesug07/ff/ff03.pdf
 
@@ -281,7 +298,7 @@ data _null_;
 run;
 ```
 
-### Idiom: Lafler `LEFT JOIN` + `COALESCE` for reference-table attach (proc-sql cluster)
+### Idiom: Lafler `LEFT JOIN` + `COALESCE` for reference-table attach
 
 Source: https://www.lexjansen.com/mwsug/2015/RF/MWSUG-2015-RF-02.pdf
 
@@ -308,7 +325,7 @@ proc sql;
 quit;
 ```
 
-### Idiom: Lafler searched CASE for inline claim-cost bucketing (proc-sql cluster)
+### Idiom: Lafler searched CASE for inline claim-cost bucketing
 
 Source: https://www.lexjansen.com/wuss/2011/coders/Papers_Lafler_K_72492.pdf
 
@@ -339,7 +356,7 @@ proc sql;
 quit;
 ```
 
-### Idiom: Whitlock `%NRSTR` + `%UNQUOTE` to build a macro object at run time (macro-quoting cluster)
+### Idiom: Whitlock `%NRSTR` + `%UNQUOTE` to build a macro object at run time
 
 Source: https://www.lexjansen.com/nesug/nesug09/bb/BB02.pdf
 
@@ -368,7 +385,7 @@ code-generation macros that emit `%let &var = ...` targets where
 %set_and_read
 ```
 
-### Idiom: Lepp `%SUPERQ` for one-shot "freeze the value exactly" reads (macro-quoting cluster)
+### Idiom: Lepp `%SUPERQ` for one-shot "freeze the value exactly" reads
 
 Source: https://www.lexjansen.com/phuse/2019/sm/SM04.pdf
 

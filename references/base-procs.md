@@ -28,6 +28,15 @@ For statistical-modeling procs (REG, GLM, LOGISTIC, GLIMMIX,
 MIXED, ...) see `stat-procs.md`; for PROC SQL see `proc-sql.md`; for
 formats / informats see `formats-informats.md`.
 
+## Contents
+
+- [Critical Rules](#critical-rules)
+- [Canonical Idioms](#canonical-idioms)
+- [Function / Statement Quick Ref](#function--statement-quick-ref)
+- [Silent Pitfalls](#silent-pitfalls)
+- [Anti-patterns (STOP signs)](#anti-patterns-stop-signs)
+- [See Also](#see-also)
+
 ## Critical Rules
 
 ### Rule 1: `PROC FREQ TABLES a*b;` drops rows with missing in `a` or `b` by default — add `/ MISSING` to count them
