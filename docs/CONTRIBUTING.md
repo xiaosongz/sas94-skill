@@ -174,18 +174,21 @@ Reviewers check:
 - **CORRECT / WRONG examples** are SAS 9.4-valid — not fabricated,
   not copy-pasted from a different dialect, not silently altered from the
   source.
-- **File size budget** — keep each topic reference file at ≤8 Critical
-  Rules and ~30 lines per rule. Split into a new reference file if the
-  topic outgrows its scope. The only exception is
-  `references/sas-master-reference.md`, which aggregates across topic
-  files and is allowed to hold up to 20 cross-topic rules.
+- **File size budget** — keep each topic reference atom at ≤8 Critical
+  Rules and ~30 lines per rule. References live as per-concept atoms
+  under `references/<topic>/<atom>.md` (e.g.
+  `references/data-step/merge.md`, `references/macros/scope-and-quoting.md`).
+  Split into a new atom if a concept outgrows its scope.
+  SKILL.md is the authoritative router that maps tasks to atoms — no
+  aggregator file exists anymore; cross-topic rules live in each
+  relevant atom and are surfaced through SKILL.md's routing table.
   `### Hygiene N:` headings (file-level lint conventions, e.g. the
-  `sasjs/lint` items in `references/data-step.md`) are tracked
+  `sasjs/lint` items under `references/data-step/`) are tracked
   separately and do **not** count against the ≤8 Rules cap.
-  `references/idioms-from-lexjansen.md` is an idiom-heavy
-  cluster-by-author file; its `### Rule` count may be below 5 because
-  the authority lives in Idioms citing named-author conference papers,
-  not in `sasjs/lint`-style linter rules.
+  `references/idioms-from-lexjansen/` is an idiom-heavy
+  cluster-by-author directory; its `### Rule` count may be below 5
+  because the authority lives in Idioms citing named-author conference
+  papers, not in `sasjs/lint`-style linter rules.
 - **No placeholder text** — `TBD`, `fabricate`, `TODO (source pending)`,
   or empty `Source:` strings in a PR that claims to populate a rule.
 - **Idempotence** — re-running `make_provenance.py` and

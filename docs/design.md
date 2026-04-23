@@ -49,20 +49,19 @@ sas94-skill/
 │   ├── proc-sql-template.sas
 │   ├── macro-template.sas
 │   └── analysis-template.sas
-├── references/                           # Loaded on-demand per routing table
-│   ├── sas-master-reference.md           # Grammar overview + top 30 pitfalls (~15KB)
-│   ├── data-step.md                      # MERGE/BY/first./last., retain, arrays, PDV (~10KB)
-│   ├── proc-sql.md                       # Joins, dedup, INTO lists, RESET (~8KB)
-│   ├── macros.md                         # %let, %macro scope, quoting functions (~12KB)
-│   ├── base-procs.md                     # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE (~8KB)
-│   ├── stat-procs.md                     # LOGISTIC, GLM, MIXED, GENMOD, SURVEY* (~10KB)
-│   ├── hash-tables.md                    # declare hash, hashiter (~8KB)
-│   ├── ods-and-output.md                 # ODS OUTPUT, RTF, EXCEL, graphics (~6KB)
-│   ├── formats-informats.md              # PROC FORMAT, date/time, picture fmts (~5KB)
-│   ├── functions-dates.md                # Date/time/datetime functions (~10KB)
-│   ├── functions-strings.md              # String functions (~15KB)
-│   ├── functions-numeric.md              # Numeric and array functions (~12KB)
-│   └── idioms-from-lexjansen.md          # Real-world idioms distilled from SUGI (~6KB)
+├── references/                           # Per-topic atom dirs, loaded on-demand per SKILL.md routing
+│   ├── data-step/                        # merge, lag, append, sql-vs-merge, retain-pdv, where-vs-if, macro-quoting, file-hygiene
+│   ├── macros/                           # definition-syntax, scope-and-quoting, debugging, include-vs-macro, sysfunc-and-eval
+│   ├── proc-sql/                         # joins, dedup, into-macvar, case-expressions, reset-and-options
+│   ├── base-procs/                       # proc-freq, proc-means, proc-univariate, proc-sort, proc-transpose, proc-report, proc-print, proc-compare, schema-utils, file-io
+│   ├── stat-procs/                       # proc-logistic, proc-glm, proc-mixed, proc-genmod, proc-lifetest, proc-phreg, proc-surveymeans
+│   ├── hash-tables/                      # declare-and-length, find-check-rc, iteration, multidata, idioms
+│   ├── ods-and-output/                   # ods-output-capture, ods-destinations, ods-graphics, ods-select-exclude, ods-listing
+│   ├── formats-informats/                # put-vs-input, proc-format, date-formats, numeric-formats
+│   ├── functions-dates/                  # intnx-intck, construction, datetime-parts, date-arithmetic
+│   ├── functions-strings/                # concat, parse, clean, case-and-compare
+│   ├── functions-numeric/                # row-aggregates, arithmetic, arrays
+│   └── idioms-from-lexjansen/            # hash-idioms, sql-idioms, macro-idioms (SUGI corpus)
 ├── pipeline/                             # Build-time only. Not shipped to users.
 │   ├── fetch_github.py
 │   ├── fetch_sas_docs.py
@@ -90,10 +89,10 @@ sas94-skill/
 
 | Task / Trigger Phrase | Load Reference | Also Load If |
 |-----------------------|---------------|--------------|
-| New `.sas` file, study program skeleton | `sas-master-reference.md` | + domain file per section |
+| New `.sas` file, study program skeleton | SKILL.md routing table → per-topic atoms under `references/` | + domain atom(s) per section |
 | "MERGE", "BY processing", "first.", "last.", "retain", "array", "PDV" | `data-step.md` | `functions-dates.md` / `functions-strings.md` / `functions-numeric.md` if fns involved |
 | "PROC SQL", "join claims", "dedup", "INTO :macvar" | `proc-sql.md` | `macros.md` if INTO drives macro |
-| "%macro", "%let", "%sysfunc", quoting error, `&&var`, symget/symput | `macros.md` | `sas-master-reference.md` for scope rules |
+| "%macro", "%let", "%sysfunc", quoting error, `&&var`, symget/symput | `macros/definition-syntax.md` | `macros/scope-and-quoting.md` for scope rules |
 | PROC FREQ / MEANS / UNIVARIATE / SORT / TRANSPOSE / REPORT | `base-procs.md` | `ods-and-output.md` if capturing output |
 | PROC LOGISTIC / GLM / MIXED / GENMOD / SURVEY* / LIFETEST | `stat-procs.md` | `ods-and-output.md` for ODS OUTPUT |
 | "hash join", "hash lookup", `declare hash`, `definekey`, `hashiter` | `hash-tables.md` | `data-step.md` for DATA-step context |
@@ -195,7 +194,7 @@ Consistency rules:
 
 Phase 1 ships WITHOUT doc scraping. Reference files built from MIT GitHub sources alone:
 
-1. Extract all 15 `sasjs/lint` rules → seed `sas-master-reference.md` Critical Rules + distribute to file-specific rules
+1. Extract all 15 `sasjs/lint` rules → distribute into the relevant per-topic atoms (macro lint rules → `references/macros/definition-syntax.md`; file/line hygiene → `references/data-step/file-hygiene.md`)
 2. Extract `sasjs/core` `.sasjslint` config + Doxygen template → seed Canonical Idioms, Critical Rules across `macros.md`, `data-step.md`
 3. Hand-transcribe 5 items from `jphall663/GWU_data_mining`
 4. Phase 1 colleague review per-file

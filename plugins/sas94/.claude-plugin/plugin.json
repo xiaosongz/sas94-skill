@@ -1,7 +1,7 @@
 {
   "name": "sas94",
   "description": "Claude Code skill for writing, reviewing, and debugging SAS 9.4 code — DATA step, PROC SQL, macros, hash tables, stats procs, ODS",
-  "version": "0.0.1",
+  "version": "0.1.0-beta.1",
   "author": {
     "name": "Xiaosong Zhang"
   },

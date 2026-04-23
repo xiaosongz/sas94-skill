@@ -55,27 +55,40 @@ jobs:
                   print(f'FAIL: {skill_path} frontmatter missing `{key}`')
                   sys.exit(1)
 
-          # Reference filenames are quoted in backticks in the routing table.
-          refs_in_skill = set(re.findall(r'`([\w\-]+\.md)`', skill))
+          # Atom paths are quoted in backticks in the routing table, e.g.
+          # `references/base-procs/proc-freq.md`.
+          atom_path_re = re.compile(r'`(references/[\w\-]+/[\w\-]+\.md)`')
+          atoms_in_skill = set(atom_path_re.findall(skill))
 
           ref_dir = Path('plugins/sas94/skills/sas94/references')
-          refs_on_disk = {p.name for p in ref_dir.glob('*.md')}
+          atoms_on_disk = {
+              f'references/{p.parent.name}/{p.name}'
+              for p in ref_dir.glob('*/*.md')
+          }
 
-          missing = refs_in_skill - refs_on_disk
+          missing = atoms_in_skill - atoms_on_disk
           if missing:
-              print(f'FAIL: SKILL.md references missing files: {sorted(missing)}')
+              print(f'FAIL: SKILL.md references missing atoms: {sorted(missing)}')
               sys.exit(1)
 
-          if len(refs_on_disk) < 11:
+          topic_dirs = {p.name for p in ref_dir.iterdir() if p.is_dir()}
+          if len(topic_dirs) < 10:
               print(
-                  f'FAIL: references/ has {len(refs_on_disk)} .md files, '
-                  'expected at least 11'
+                  f'FAIL: references/ has {len(topic_dirs)} topic dirs, '
+                  'expected at least 10'
+              )
+              sys.exit(1)
+
+          if len(atoms_on_disk) < 40:
+              print(
+                  f'FAIL: references/ has {len(atoms_on_disk)} atom files, '
+                  'expected at least 40'
               )
               sys.exit(1)
 
           print(
               f'OK: SKILL.md frontmatter valid; '
-              f'{len(refs_on_disk)} reference files on disk; '
-              f'{len(refs_in_skill)} referenced in SKILL.md.'
+              f'{len(topic_dirs)} topic dirs, {len(atoms_on_disk)} atoms on disk; '
+              f'{len(atoms_in_skill)} atoms referenced in SKILL.md.'
           )
           PY

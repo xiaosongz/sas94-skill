@@ -9,7 +9,7 @@ on:
     - cron: '0 6 * * 1'  # Monday 06:00 UTC
   pull_request:
     paths:
-      - 'references/**/*.md'
+      - 'plugins/sas94/skills/sas94/references/**/*.md'
       - 'docs/rule-provenance.md'
       - 'pipeline/hooks/validate_source_urls.py'
   workflow_dispatch:

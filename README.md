@@ -10,10 +10,13 @@ sources (`sasjs/lint`, `sasjs/core`) plus hand-transcribed SAS-programmer
 pitfalls (GWU data-mining curriculum), and routes Claude Code to
 topic-specific reference files on demand.
 
-**Status:** `v0.0.1` pre-release. All 13 reference files are 100%
-populated across both REQUIRED sections (Overview, Critical Rules,
-Canonical Idioms, Function/Statement Quick Ref, See Also) and OPTIONAL
-sections (Silent Pitfalls, Anti-patterns). See
+**Status:** `v0.0.1` pre-release. Reference content is organized as
+per-topic atom directories under `references/`, with each atom covering
+one concept (e.g. `references/data-step/merge.md`,
+`references/macros/scope-and-quoting.md`). Atoms are populated across
+both REQUIRED sections (Overview, Critical Rules, Canonical Idioms,
+Function/Statement Quick Ref, See Also) and OPTIONAL sections (Silent
+Pitfalls, Anti-patterns). See
 [`docs/coverage-matrix.md`](docs/coverage-matrix.md) for per-file
 status.
 
@@ -124,20 +127,19 @@ sas94-skill/                                      # repo = marketplace
 │               │   ├── proc-sql-template.sas     # PROC SQL skeleton
 │               │   ├── macro-template.sas        # %macro / %mend skeleton with parenthesized sig
 │               │   └── analysis-template.sas     # End-to-end study-program scaffold
-│               └── references/                   # Loaded on-demand per routing table
-│                   ├── sas-master-reference.md   # Top-20 rules; load for new .sas files
-│                   ├── data-step.md              # MERGE/BY, first./last., retain, arrays, PDV
-│                   ├── macros.md                 # %let, %macro scope, quoting, &&var
-│                   ├── proc-sql.md               # Joins, dedup, INTO :macvar, RESET
-│                   ├── base-procs.md             # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE
-│                   ├── stat-procs.md             # LOGISTIC, GLM, MIXED, GENMOD, SURVEY*
-│                   ├── hash-tables.md            # declare hash, definekey, hashiter
-│                   ├── ods-and-output.md         # ODS RTF/EXCEL/PDF, ODS OUTPUT, GTL
-│                   ├── formats-informats.md      # PROC FORMAT, date/time, input()/put()
-│                   ├── functions-dates.md        # Date/time/datetime fns (INTNX, INTCK, MDY, DATEPART)
-│                   ├── functions-strings.md      # String fns (SCAN, SUBSTR, CATX, COMPRESS, TRANWRD)
-│                   ├── functions-numeric.md      # Numeric and array fns (SUM, ROUND, MOD, DIM)
-│                   └── idioms-from-lexjansen.md  # SUGI / SAS Global Forum idioms
+│               └── references/                   # Per-topic atom directories, loaded on-demand per SKILL.md routing table
+│                   ├── data-step/                # MERGE/BY, LAG, retain+PDV, APPEND, SQL-vs-MERGE, quoting, file hygiene
+│                   ├── macros/                   # %macro/%let, scope+quoting, debugging, %include, %sysfunc/%eval
+│                   ├── proc-sql/                 # Joins, dedup, INTO :macvar, CASE, RESET + options
+│                   ├── base-procs/               # FREQ, MEANS, UNIVARIATE, SORT, TRANSPOSE, REPORT, PRINT, COMPARE, file I/O
+│                   ├── stat-procs/               # LOGISTIC, GLM, MIXED, GENMOD, LIFETEST, PHREG, SURVEYMEANS
+│                   ├── hash-tables/              # declare+length, find/check rc, iteration, multidata, idioms
+│                   ├── ods-and-output/           # ODS OUTPUT capture, destinations, GRAPHICS, SELECT/EXCLUDE, LISTING
+│                   ├── formats-informats/        # PROC FORMAT, put-vs-input, date + numeric formats
+│                   ├── functions-dates/          # INTNX/INTCK, construction, datetime parts, date arithmetic
+│                   ├── functions-strings/        # concat, parse, clean, case + compare
+│                   ├── functions-numeric/        # row aggregates, arithmetic, arrays
+│                   └── idioms-from-lexjansen/    # SUGI / SAS Global Forum idioms (hash, SQL, macro)
 ├── docs/                                         # repo-level docs, not shipped with plugin
 │   ├── design.md                                 # Architecture and sourcing strategy
 │   ├── CONTRIBUTING.md                           # Reviewer workflow, PR + issue templates
@@ -150,11 +152,11 @@ sas94-skill/                                      # repo = marketplace
 ## Critical Rules (Summary)
 
 The top-5 rules below are enforced across every SAS file the skill
-writes. See
-[`plugins/sas94/skills/sas94/references/macros.md`](plugins/sas94/skills/sas94/references/macros.md) and
-[`plugins/sas94/skills/sas94/references/data-step.md`](plugins/sas94/skills/sas94/references/data-step.md) for the full set
-(6 + 6 rules plus 20 aggregated top-level rules in
-[`plugins/sas94/skills/sas94/references/sas-master-reference.md`](plugins/sas94/skills/sas94/references/sas-master-reference.md)).
+writes. See the per-topic atoms under
+[`plugins/sas94/skills/sas94/references/macros/`](plugins/sas94/skills/sas94/references/macros/) and
+[`plugins/sas94/skills/sas94/references/data-step/`](plugins/sas94/skills/sas94/references/data-step/)
+for the full rule set. SKILL.md's routing table is the authoritative
+entry point for mapping a task to the right atoms.
 
 | # | Rule | Reference |
 |---|------|-----------|

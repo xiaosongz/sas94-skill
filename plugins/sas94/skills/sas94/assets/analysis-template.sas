@@ -5,8 +5,9 @@
  * License:  MIT -- see LICENSE at repo root.
  *
  * This file is a template. Add your analysis logic below.
- * See references/sas-master-reference.md for study-program structure and
- * the routing table in SKILL.md for topic-specific references.
+ * For SAS 9.4 style/idiom rules, see the skill's topic atoms under
+ * references/ (one directory per topic); SKILL.md is the authoritative
+ * routing table that maps your task to the right atom(s).
  *****************************************************************************/
 
 /* ========================================================================== */
